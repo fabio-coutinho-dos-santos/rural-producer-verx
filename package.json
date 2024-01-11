@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/main.ts",
     "test": "jest",
+    "test:watch": "NODE_ENV=test jest --watch",
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/migrations/default",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run"
   },

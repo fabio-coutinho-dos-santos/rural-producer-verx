@@ -1,4 +1,4 @@
-import { PlantedCrops } from "../enum/planted-crops.enum";
+import { PlantedCrops } from "../../crop/enum/planted-crops.enum";
 import FarmAddress from "./farm-address.entity";
 import Farm from "./farm.entity";
 
@@ -18,9 +18,9 @@ describe('Farm unit tests', () => {
     expect(farm.totalArea).toBe(10)
     expect(farm.arableArea).toBe(4)
     expect(farm.vegetableArea).toBe(5)
-    expect(farm.plantedCrops).toBeInstanceOf(Array<PlantedCrops>)
-    expect(farm.plantedCrops).toContain(PlantedCrops.COFFE)
-    expect(farm.plantedCrops).toContain(PlantedCrops.CORN)
+    expect(farm.crops).toBeInstanceOf(Array<PlantedCrops>)
+    expect(farm.crops).toContain(PlantedCrops.COFFE)
+    expect(farm.crops).toContain(PlantedCrops.CORN)
   })
 
   it('should throw an error when name is invalid', () => {

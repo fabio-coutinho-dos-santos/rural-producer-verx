@@ -1,13 +1,18 @@
 import { DataSource } from "typeorm";
-import ProducerModel from "../entities/producer.entity";
+import ProducerEntity from "../entities/producer.entity";
+import FarmEntity from "../entities/farms.entity";
+import CropEntity from "../entities/crop";
 
 export function ormconfig (): any {
-  const config = {
+  const config = 
+  {
     type: 'sqlite',
-    // database: './data.sqlite',
     database: ':memory:',
-    // entities: [`${__dirname}/../**/entities/*{ts, js}`],
-    entities: [ProducerModel],
+    entities: [
+      ProducerEntity,
+      FarmEntity,
+      CropEntity
+    ],
     synchronize: true,
     logging: false,
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],

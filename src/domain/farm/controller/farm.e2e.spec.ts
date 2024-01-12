@@ -3,7 +3,6 @@ import express from 'express'
 import supertest from 'supertest'
 import routes from "../../../routes";
 import { httpError } from '../../../middlewares/http-errors';
-import ProducerModel from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';

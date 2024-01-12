@@ -1,6 +1,5 @@
 import { DeleteResult } from "typeorm";
 import { BadRequestError, InternalServerError, NotFoundError } from "../../../helpers/ApiErrors";
-import ProducerDeletedDto from "../dto/producer-deleted.dto";
 import ProducerDto from "../dto/producer.dto";
 import Producer from "../entity/producer.entity";
 import ProducerRepositoryInterface from "../repository/producer.repository.interface";
@@ -56,10 +55,15 @@ export default class ProducerController {
     const result: DeleteResult = await this.producerRepository.delete(producerId)
     const affected = result.affected;
     let deleted = false;
+    
     if (affected) {
       deleted = true ? affected.valueOf() > 0 : false
     }
-    const deletedDto = new ProducerDeletedDto(producerId, deleted)
-    return response.status(HttpStatus.OK).json(deletedDto);
+
+    if (deleted) {
+      return response.status(HttpStatus.NO_CONTENT).send();
+    }
+
+    return response.status(HttpStatus.OK).send();
   }
 }

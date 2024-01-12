@@ -2,7 +2,6 @@ import 'express-async-errors'
 import express from 'express'
 import supertest from 'supertest'
 import routes from "../../../routes";
-import { AppDataSource } from '../../../infrastructure/database/typeorm/postgres/data-source';
 import { httpError } from '../../../middlewares/http-errors';
 import ProducerModel from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
@@ -15,13 +14,21 @@ describe('Producer routes tests', () => {
   app.use(httpError)
   app.use(routes)
 
-  beforeEach(async () => {
-    await AppDataSource.initialize();
+  let validId='';
+  let producerStub = {
+    name: 'Producer Test',
+    document: '780.366.920-40'
+  }
+  const invalidId = '78f9731e-17d8-4e05-a71b-cde40b43d2f4'
+
+  beforeAll(async () => {
     await AppDataSourceTest.initialize();
+    const repository = AppDataSourceTest.getRepository(ProducerModel);
+    const producerStored = await repository.save(producerStub);
+    validId = producerStored.id
   })
 
-  afterEach(async () => {
-    await AppDataSource.close();
+  afterAll(async () => {
     const repository = AppDataSourceTest.getRepository(ProducerModel);
     await repository.clear();
     await AppDataSourceTest.close();
@@ -72,21 +79,23 @@ describe('Producer routes tests', () => {
 
   describe('Get By Id', () => {
     it('should return a Producer when is used a valid id', async () => {
-      const repository = AppDataSourceTest.getRepository(ProducerModel);
-      const producerStub = {
-        name: 'Producer Test',
-        document: '780.366.920-40'
-      } 
-      const producerStored = await repository.save(producerStub);
-      const validId = producerStored.id
       const response = await supertest(app).get(`/api/producers/${validId}`).expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Object)
       expect(response.body).toMatchObject(producerStub)
     })
 
     it('should return a not found exception with wrong producer id', async () => {
-      const invalidId = '78f9731e-17d8-4e05-a71b-cde40b43d2f4'
-      const producer = await supertest(app).get(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
+      await supertest(app).get(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
+    })
+  })
+
+  describe('Delete', () => {
+    it('shold reuturn true with valid id', async () => {
+      await supertest(app).delete(`/api/producers/${validId}`).expect(HttpStatus.NO_CONTENT);
+    })
+
+    it('should return a not found exception with wrong producer id', async () => {
+      await supertest(app).delete(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
     })
   })
 }) 

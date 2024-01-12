@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import CropEntity from "./crop"
-import { PlantedCrops } from "../../../../domain/crop/enum/planted-crops.enum"
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import Producer from "../../../../domain/producer/entity/producer.entity"
+import ProducerEntity from "./producer.entity"
 
 @Entity('farms')
 export default class FarmEntity {
@@ -9,6 +9,9 @@ export default class FarmEntity {
 
   @Column({nullable: false})
   name: string
+
+  @Column({nullable: false})
+  producerId: string
 
   @Column({nullable: false})
   city: string
@@ -34,6 +37,6 @@ export default class FarmEntity {
   @UpdateDateColumn()
   updatedAt: Date
 
-  // @OneToMany(() => CropEntity, crops => crops.farms)
-  // crops: PlantedCrops[];
+  @ManyToOne(() => ProducerEntity, producer => producer.farms)
+  producer: Producer
 }

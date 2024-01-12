@@ -6,4 +6,5 @@ export default interface RepositoryInterface<T> {
   delete(id: string): Promise<DeleteResult>
   findById(id: string): Promise<T>
   findAll(): Promise<T[]>
+  findWithRelations(relations: any): Promise<T[]>
 }

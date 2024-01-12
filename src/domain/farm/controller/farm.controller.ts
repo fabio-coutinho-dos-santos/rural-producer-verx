@@ -11,6 +11,7 @@ export class FarmController {
     private readonly producerRepository: ProducerRepositoryInterface,
   ) {
     this.createProducer = this.createProducer.bind(this);
+    this.getAll = this.getAll.bind(this);
   }
 
   async createProducer(request: Request, response: Response): Promise<unknown> {
@@ -25,6 +26,15 @@ export class FarmController {
       console.log(e);
       throw new BadRequestError(e.toString())
     }
+  }
 
+  async getAll(request: Request, response: Response): Promise<unknown> {
+    try {
+      const farms = await this.farmRepository.findWithRelations({relations:{producer: true}})
+      return response.status(201).json(farms);
+    } catch (e: any) {
+      console.log(e);
+      throw new BadRequestError(e.toString())
+    }
   }
 }

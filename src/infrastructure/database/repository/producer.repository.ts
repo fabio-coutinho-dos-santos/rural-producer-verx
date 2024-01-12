@@ -11,6 +11,10 @@ export class ProducerRepository implements ProducerRepositoryInterface {
     this.repository = dataSource.getRepository(ProducerEntity);
   }
 
+  async findWithRelations(relations: any): Promise<any[]> {
+    return await this.repository.find(relations);
+  }
+
   async create(entity: any): Promise<any> {
     const author = await this.repository.save(entity);
     return author;

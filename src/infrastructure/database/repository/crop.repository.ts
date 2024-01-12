@@ -2,6 +2,7 @@ import { DataSource, Repository } from "typeorm";
 import Farm from "../../../domain/farm/entity/farm.entity";
 import CropRepositoryInterface from "../../../domain/crop/repository/crop.repository.interface";
 import CropEntity from "../typeorm/entities/crop";
+import Crop from "../../../domain/crop/entity/crop.entity";
 
 export class CropRepository implements CropRepositoryInterface {
 
@@ -9,6 +10,10 @@ export class CropRepository implements CropRepositoryInterface {
 
   constructor(private readonly dataSource: DataSource) {
     this.repository = dataSource.getRepository(CropEntity);
+  }
+  
+  findWithRelations(relations: any): Promise<Crop[]> {
+    throw new Error("Method not implemented.");
   }
 
   async create(entity: any): Promise<any> {

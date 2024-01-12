@@ -39,7 +39,14 @@ export default class ProducerController {
 
   async getById(request: Request, response: Response): Promise<any> {
     const producerId = request.params.id;
-    const producerStored = await this.producerRepository.findById(producerId);
+    const producerStored = await this.producerRepository.findWithRelations({
+      where: {
+        id: producerId,
+      },
+      relations: {
+        farms: true,
+      },
+    });
     if (!producerStored) {
       throw new NotFoundError('Producer not found')
     }

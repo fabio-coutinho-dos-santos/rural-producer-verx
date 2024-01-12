@@ -13,12 +13,13 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async create(entity: Farm): Promise<any> {
-    const farmModel =  {
+    const farmModel = {
       name: entity.name,
       city: entity.address.city,
       state: entity.address.state,
       totalArea: entity.totalArea,
       arableArea: entity.arableArea,
+      producerId: entity.producerId,
       vegetationArea: entity.vegetableArea,
       crops: entity.crops
     };
@@ -42,6 +43,10 @@ export class FarmRepository implements FarmRepositoryInterface {
 
   async findAll(): Promise<any> {
     return await this.repository.find();
+  }
+
+  async findWithRelations(relations: any): Promise<any> {
+    return await this.repository.find(relations);
   }
 
 }

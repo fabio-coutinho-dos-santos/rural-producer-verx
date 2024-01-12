@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import CropEntity from "./crop"
-import { PlantedCrops } from "../../../../domain/farm/enum/planted-crops.enum"
+import { PlantedCrops } from "../../../../domain/crop/enum/planted-crops.enum"
 
 @Entity('farms')
 export default class FarmEntity {

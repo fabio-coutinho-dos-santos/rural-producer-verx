@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm"
-import { PlantedCrops } from "../../../../domain/farm/enum/planted-crops.enum"
 import FarmEntity from "./farms.entity"
+import { PlantedCrops } from "../../../../domain/crop/enum/planted-crops.enum"
 
 @Entity('crops')
 @Unique(['type'])

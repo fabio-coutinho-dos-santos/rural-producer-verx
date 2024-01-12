@@ -1,12 +1,13 @@
 import { DataSource } from "typeorm";
-import AuthorModel from "../entities/author.entity";
+import ProducerModel from "../entities/producer.entity";
 
 export function ormconfig (): any {
   const config = {
     type: 'sqlite',
     // database: './data.sqlite',
     database: ':memory:',
-    entities: [AuthorModel],
+    // entities: [`${__dirname}/../**/entities/*{ts, js}`],
+    entities: [ProducerModel],
     synchronize: true,
     logging: false,
     migrations: [`${__dirname}/**/migrations/*.{ts,js}`],

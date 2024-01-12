@@ -1,14 +1,14 @@
 import { DataSource, Repository } from "typeorm";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
-import ProducerModel from "../typeorm/entities/producer.entity";
 import Producer from "../typeorm/entities/farms.entity";
+import ProducerEntity from "../typeorm/entities/producer.entity";
 
 export class ProducerRepository implements ProducerRepositoryInterface {
 
-  private repository: Repository<ProducerModel>;
+  private repository: Repository<ProducerEntity>;
 
   constructor(private readonly dataSource: DataSource) {
-    this.repository = dataSource.getRepository(ProducerModel);
+    this.repository = dataSource.getRepository(ProducerEntity);
   }
 
   async create(entity: any): Promise<any> {  

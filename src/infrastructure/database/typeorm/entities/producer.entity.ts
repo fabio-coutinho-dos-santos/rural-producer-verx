@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity('producers')
-export default class ProducerModel {
+@Unique(["document"])
+export default class ProducerEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -10,4 +11,10 @@ export default class ProducerModel {
 
   @Column({nullable: false})
   document: string
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }

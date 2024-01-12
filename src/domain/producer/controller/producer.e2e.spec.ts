@@ -36,19 +36,24 @@ describe('Producer routes tests', () => {
 
   describe('Create', () => {
     it('should return a new Producer', async () => {
-      const producer = {
-        name: 'Producer Name',
-        document: '06535718603'
+      const newProducer = {
+        name: 'Producer Test',
+        document: '292.256.890-39'
       }
-      const response = await supertest(app).post('/api/producers').send(producer).expect(HttpStatus.CREATED);
+      const response = await supertest(app).post('/api/producers').send(newProducer).expect(HttpStatus.CREATED);
       expect(response.body).toBeInstanceOf(Object)
-      expect(response.body).toMatchObject(producer)
+      expect(response.body.name).toBe(newProducer.name)
+      expect(response.body.document).toBe(newProducer.document)
+    })
+
+    it('should return an Exception with same document', async () => {
+     await supertest(app).post('/api/producers').send(producerStub).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an Exception with name invalid', async () => {
       const producer = {
         name: '',
-        document: '06535718603'
+        document: '780.366.920-40'
       }
       await supertest(app).post('/api/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
     })
@@ -81,7 +86,8 @@ describe('Producer routes tests', () => {
     it('should return a Producer when is used a valid id', async () => {
       const response = await supertest(app).get(`/api/producers/${validId}`).expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Object)
-      expect(response.body).toMatchObject(producerStub)
+      expect(response.body.name).toBe(producerStub.name)
+      expect(response.body.document).toBe(producerStub.document)
     })
 
     it('should return a not found exception with wrong producer id', async () => {

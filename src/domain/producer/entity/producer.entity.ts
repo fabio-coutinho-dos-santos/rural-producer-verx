@@ -1,11 +1,10 @@
+import { ProducerConstants } from "../enum/producer.constants.enum";
+
 export default class Producer {
 
-  private SIZE_CPF: number = 11;
-  private SIZE_docNumbers: number = 14;
-
   constructor(
-    private _name: string,
-    private _document: string
+    public name: string,
+    public document: string
   ) {
     this.validateRequiredFields()
   }
@@ -22,14 +21,14 @@ export default class Producer {
   }
 
   private validateDocument() {
-    if (this._document.length === 0) {
+    if (this.document.length === 0) {
       throw new Error('CNPJ or CPF is required')
     }
 
-    const onlyNumbers: string = this._document.replace(/\D/g, '')
-    if (onlyNumbers.length === this.SIZE_CPF) {
+    const onlyNumbers: string = this.document.replace(/\D/g, '')
+    if (onlyNumbers.length === ProducerConstants.SIZE_CPF) {
       this.validateCPF(onlyNumbers)
-    } else if (onlyNumbers.length === this.SIZE_docNumbers) {
+    } else if (onlyNumbers.length === ProducerConstants.SIZE_CNPJ) {
       this.validateCNPJ(onlyNumbers)
     } else {
       throw new Error('Invalid document format')
@@ -98,13 +97,5 @@ export default class Producer {
     if (result2 !== parseInt(digits.charAt(1), 10)) {
       throw new Error('Invalid CNPJ');
     }
-  }
-
-  get name(): string {
-    return this._name
-  }
-
-  get document(): string {
-    return this._document
   }
 }

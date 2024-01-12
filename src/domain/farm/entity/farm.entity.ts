@@ -1,4 +1,4 @@
-import { PlantedCrops } from "../enum/planted-crops.enum";
+import { PlantedCrops } from "../../crop/enum/planted-crops.enum";
 import FarmAddress from "./farm-address.entity";
 
 export default class Farm {
@@ -6,16 +6,24 @@ export default class Farm {
   private _totalArea: number = 0;
   private _arableArea: number = 0;
   private _vegetationArea: number = 0;
-  private _plantedCrops: PlantedCrops[] = new Array<PlantedCrops>;
+  private _crops: PlantedCrops[] = new Array<PlantedCrops>;
 
   constructor(
     private _name: string,
     private _address: FarmAddress,
+    private _producerId: string,
   ) {
     this.validateRequiredFields()
   }
 
   private validateRequiredFields() {
+
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+    if(!uuidRegex.test(this._producerId)) {
+      throw new Error('Invalid producer id');
+    }
+
     if (this._name.length === 0) {
       throw new Error('Name is required');
     }
@@ -27,6 +35,11 @@ export default class Farm {
     if (this._address.state.length === 0) {
       throw new Error('State is required');
     }
+
+    if(this._producerId.length === 0) {
+      throw new Error('Producer id is required');
+    }
+
   }
 
   get name(): string {
@@ -49,8 +62,12 @@ export default class Farm {
     return this._vegetationArea;
   }
 
-  get plantedCrops(): PlantedCrops[] {
-    return this._plantedCrops;
+  get crops(): PlantedCrops[] {
+    return this._crops;
+  }
+
+  get producerId(): string {
+    return this._producerId;
   }
 
   public changeVegetationArea(value: number) {
@@ -72,7 +89,7 @@ export default class Farm {
     if (!Object.values(PlantedCrops).includes(type)) {
       throw new Error(`Invalid planted crop type: ${type}`)
     }
-    this._plantedCrops.push(type)
+    this._crops.push(type)
   }
 
   private checkAreaProportion(arableArea: number, vegetationArea: number, totalArea: number) {

@@ -3,9 +3,9 @@ import express from 'express'
 import supertest from 'supertest'
 import routes from "../../../routes";
 import { httpError } from '../../../middlewares/http-errors';
-import ProducerModel from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
+import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 
 describe('Producer routes tests', () => {
 
@@ -23,13 +23,13 @@ describe('Producer routes tests', () => {
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
-    const repository = AppDataSourceTest.getRepository(ProducerModel);
+    const repository = AppDataSourceTest.getRepository(ProducerEntity);
     const producerStored = await repository.save(producerStub);
     validId = producerStored.id
   })
 
   afterAll(async () => {
-    const repository = AppDataSourceTest.getRepository(ProducerModel);
+    const repository = AppDataSourceTest.getRepository(ProducerEntity);
     await repository.clear();
     await AppDataSourceTest.close();
   })

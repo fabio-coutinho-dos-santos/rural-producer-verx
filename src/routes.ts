@@ -12,7 +12,10 @@ routes.get('/api/producers', producerController.getAll)
 routes.get('/api/producers/:id', producerController.getById)
 routes.delete('/api/producers/:id', producerController.delete)
 
-const farmController = new FarmController(new FarmRepository(getDataSource()))
+const farmController = new FarmController(
+  new FarmRepository(getDataSource()),
+  new ProducerRepository(getDataSource())
+)
 routes.post('/api/farms', farmController.createProducer)
 
 export default routes;

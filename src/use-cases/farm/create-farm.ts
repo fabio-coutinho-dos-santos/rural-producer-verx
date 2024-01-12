@@ -2,14 +2,20 @@ import FarmRepositoryInterface from "../../domain/farm/repository/farm.repositor
 import Farm from "../../domain/farm/entity/farm.entity";
 import FarmAddress from "../../domain/farm/entity/farm-address.entity";
 import { BadRequestError } from "../../helpers/ApiErrors";
+import ProducerRepositoryInterface from "../../domain/producer/repository/producer.repository.interface";
 
 export default class CreateFarm {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
+    private readonly producerRepository: ProducerRepositoryInterface,
   ) { }
 
   async execute(requestBody: any) {
     try {
+      const producer = await(this.producerRepository.findById(requestBody.producerId))
+      if(!producer) {
+        throw new BadRequestError('Producer not found')
+      }
       const farmAddress = this.buildFarmAddress(requestBody);
       const farm = this.buildFarm(requestBody, farmAddress);
       const farmStored = await this.farmRepository.create(farm);
@@ -32,6 +38,7 @@ export default class CreateFarm {
     const farm = new Farm(
       requestBody.name,
       farmAddress,
+      requestBody.producerId
     );
 
     if(requestBody.crops) {

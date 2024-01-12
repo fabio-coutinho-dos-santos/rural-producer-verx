@@ -11,11 +11,19 @@ export default class Farm {
   constructor(
     private _name: string,
     private _address: FarmAddress,
+    private _producerId: string,
   ) {
     this.validateRequiredFields()
   }
 
   private validateRequiredFields() {
+
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+    if(!uuidRegex.test(this._producerId)) {
+      throw new Error('Invalid producer id');
+    }
+
     if (this._name.length === 0) {
       throw new Error('Name is required');
     }
@@ -27,6 +35,11 @@ export default class Farm {
     if (this._address.state.length === 0) {
       throw new Error('State is required');
     }
+
+    if(this._producerId.length === 0) {
+      throw new Error('Producer id is required');
+    }
+
   }
 
   get name(): string {
@@ -51,6 +64,10 @@ export default class Farm {
 
   get crops(): PlantedCrops[] {
     return this._crops;
+  }
+
+  get producerId(): string {
+    return this._producerId;
   }
 
   public changeVegetationArea(value: number) {

@@ -1,12 +1,14 @@
 import CreateFarm from "../../../use-cases/farm/create-farm";
 import { Response, Request } from "express";
 import FarmRepositoryInterface from "../repository/farm.repository.interface";
-import { InternalServerError } from "../../../helpers/ApiErrors";
+import { BadRequestError, InternalServerError } from "../../../helpers/ApiErrors";
 import FarmDto from "../dto/farm.dto";
+import ProducerRepositoryInterface from "../../producer/repository/producer.repository.interface";
 
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
+    private readonly producerRepository: ProducerRepositoryInterface,
   ) {
     this.createProducer = this.createProducer.bind(this);
   }
@@ -16,13 +18,12 @@ export class FarmController {
       const requestBody = request.body
       const farmDto = new FarmDto(requestBody);
       await farmDto.validate();
-      const farm = new CreateFarm(this.farmRepository)
+      const farm = new CreateFarm(this.farmRepository, this.producerRepository)
       const farmStored = await farm.execute(requestBody);
-      console.log(farmStored)
       return response.status(201).json(farmStored);
     } catch (e: any) {
       console.log(e);
-      throw new InternalServerError(e.toString())
+      throw new BadRequestError(e.toString())
     }
 
   }

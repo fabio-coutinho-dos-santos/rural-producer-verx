@@ -8,6 +8,9 @@ export default class FarmEntity {
   id: string
 
   @Column({nullable: false})
+  name: string
+
+  @Column({nullable: false})
   city: string
 
   @Column({nullable: false})
@@ -22,12 +25,15 @@ export default class FarmEntity {
   @Column({nullable: false})
   vegetationArea: number
 
+  @Column({ type: 'simple-array', nullable: false })
+  crops: string[];
+
   @CreateDateColumn()
   createdAt: Date
 
   @UpdateDateColumn()
   updatedAt: Date
 
-  @OneToMany(() => CropEntity, crops => crops.farms)
-  crops: PlantedCrops[];
+  // @OneToMany(() => CropEntity, crops => crops.farms)
+  // crops: PlantedCrops[];
 }

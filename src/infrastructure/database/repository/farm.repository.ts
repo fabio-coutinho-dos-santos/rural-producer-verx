@@ -2,6 +2,7 @@ import { DataSource, Repository } from "typeorm";
 import FarmRepositoryInterface from "../../../domain/farm/repository/farm.repository.interface";
 import FarmEntity from "../typeorm/entities/farms.entity";
 import Farm from "../../../domain/farm/entity/farm.entity";
+import { PlantedCrops } from "../../../domain/crop/enum/planted-crops.enum";
 
 export class FarmRepository implements FarmRepositoryInterface {
 
@@ -11,9 +12,18 @@ export class FarmRepository implements FarmRepositoryInterface {
     this.repository = dataSource.getRepository(FarmEntity);
   }
 
-  async create(entity: any): Promise<any> {  
-   const author =  await this.repository.save(entity);
-    return author;
+  async create(entity: Farm): Promise<any> {
+    const farmModel =  {
+      name: entity.name,
+      city: entity.address.city,
+      state: entity.address.state,
+      totalArea: entity.totalArea,
+      arableArea: entity.arableArea,
+      vegetationArea: entity.vegetableArea,
+      crops: entity.crops
+    };
+    const farm = await this.repository.save(farmModel);
+    return farm;
   }
 
   async update(entity: any | Partial<Farm>, id: string): Promise<any> {
@@ -26,7 +36,7 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async findById(id: any): Promise<any> {
-    const author = await this.repository.findOneBy({id: id});
+    const author = await this.repository.findOneBy({ id: id });
     return author;
   }
 

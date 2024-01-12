@@ -6,13 +6,12 @@ import CropEntity from "../entities/crop";
 
 export function ormconfig(): any {
   const config = {
-    type: 'sqlite',
-    database: ':memory:',
+    type: 'postgres',
+    url: process.env.POSTGRES_URL_LOCAL,
     // entities: [`${__dirname}/../**/entities/*{ts, js}`],
     entities: [
       ProducerEntity,
       FarmEntity,
-      CropEntity
     ],
     synchronize: true,
     logging: false,

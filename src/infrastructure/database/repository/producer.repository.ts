@@ -11,9 +11,8 @@ export class ProducerRepository implements ProducerRepositoryInterface {
     this.repository = dataSource.getRepository(ProducerEntity);
   }
 
-  async create(entity: any): Promise<any> {  
-    console.log(entity);
-   const author =  await this.repository.save(entity);
+  async create(entity: any): Promise<any> {
+    const author = await this.repository.save(entity);
     return author;
   }
 
@@ -27,7 +26,7 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   }
 
   async findById(id: any): Promise<any> {
-    const author = await this.repository.findOneBy({id: id});
+    const author = await this.repository.findOneBy({ id: id });
     return author;
   }
 

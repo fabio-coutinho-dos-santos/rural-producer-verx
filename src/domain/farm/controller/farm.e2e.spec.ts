@@ -1,17 +1,14 @@
 import 'express-async-errors'
 import express from 'express'
 import supertest from 'supertest'
-import routes from "../../producer/routes";
 import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import Producer from '../../producer/entity/producer.entity';
-import Farm from '../entity/farm.entity';
 import farmRoutes from '../routes';
 import { PlantedCrops } from '../../crop/enum/planted-crops.enum';
-import { Console } from 'console';
 
 describe('Farms routes tests', () => {
 
@@ -292,5 +289,19 @@ describe('Farms routes tests', () => {
       const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
+  })
+
+  describe('Delete Farm', () => {
+    it('should return no content with valid data', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+      await supertest(app).delete(`/api/farms/${farmId}`).expect(HttpStatus.NO_CONTENT)
+    })
+
+    it('should return an not found error with invalid id', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = 'db659f80-ba5e-435a-8b44-23a2d0667e73';
+      await supertest(app).delete(`/api/farms/${farmId}`).expect(HttpStatus.NOT_FOUND)
+    })
   })
 }) 

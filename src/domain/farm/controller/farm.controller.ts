@@ -1,12 +1,13 @@
 import CreateFarm from "../../../use-cases/farm/create-farm";
 import { Response, Request } from "express";
 import FarmRepositoryInterface from "../repository/farm.repository.interface";
-import { BadRequestError, InternalServerError } from "../../../helpers/ApiErrors";
+import { BadRequestError, InternalServerError, NotFoundError } from "../../../helpers/ApiErrors";
 import FarmDto from "../dto/farm.dto";
 import ProducerRepositoryInterface from "../../producer/repository/producer.repository.interface";
 import HttpStatus from 'http-status-codes'
 import UpdateFarm from "../../../use-cases/farm/update-farm";
 import UpdateFarmDto from "../dto/update-farm.dto";
+import { DeleteResult } from "typeorm";
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
@@ -15,6 +16,7 @@ export class FarmController {
     this.createFarm = this.createFarm.bind(this);
     this.getAll = this.getAll.bind(this);
     this.update = this.update.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   async createFarm(request: Request, response: Response): Promise<unknown> {
@@ -53,6 +55,34 @@ export class FarmController {
     } catch (e: any) {
       console.log(e);
       throw new BadRequestError(e.toString())
+    }
+  }
+
+  async delete(request: Request, response: Response): Promise<unknown> {
+    const farmId = request.params.id
+    const farmStored = await this.farmRepository.findById(farmId);
+    if (!farmStored) {
+      throw new NotFoundError('Farm not found')
+    }
+
+    try {
+      const result: DeleteResult = await this.farmRepository.delete(farmId)
+
+      const affected = result.affected;
+      let deleted = false;
+
+      if (affected) {
+        deleted = true ? affected.valueOf() > 0 : false
+      }
+
+      if (deleted) {
+        return response.status(HttpStatus.NO_CONTENT).send();
+      }
+
+      return response.status(HttpStatus.OK).send();
+    } catch (e: any) {
+      console.log(e)
+      throw new InternalServerError(e.toString())
     }
   }
 }

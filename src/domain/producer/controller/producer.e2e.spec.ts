@@ -110,4 +110,41 @@ describe('Producer routes tests', () => {
       await supertest(app).delete(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
     })
   })
+
+  describe('Update', () => {
+
+    it('shold return the producer updated with valid data', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "Producer Test Updated 3",
+        document: "944.910.590-12"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.OK);
+      expect(response.body).toMatchObject(producerUpdateValidBody)
+    })
+
+    it('shold return an error with invalid name', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "",
+        document: "944.910.590-12"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
+    })
+
+    it('shold return an error with invalid document', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "Name",
+        document: "944.910.590-11"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
+    })
+  })
 }) 

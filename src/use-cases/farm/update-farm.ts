@@ -67,6 +67,6 @@ export default class UpdateFarm {
       farm.changeVegetationArea(requestBody.vegetationArea)
     }
 
-    console.log(farm);
+    return farm;
   }
 }

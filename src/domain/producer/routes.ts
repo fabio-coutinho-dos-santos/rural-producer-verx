@@ -8,6 +8,7 @@ const producerController = new ProducerController(new ProducerRepository(getData
 producerRoutes.post('/api/producers', producerController.createProducer)
 producerRoutes.get('/api/producers', producerController.getAll)
 producerRoutes.get('/api/producers/:id', producerController.getById)
+producerRoutes.patch('/api/producers/:id', producerController.update)
 producerRoutes.delete('/api/producers/:id', producerController.delete)
 
 export default producerRoutes;

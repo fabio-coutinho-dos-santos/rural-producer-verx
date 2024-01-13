@@ -5,6 +5,8 @@ import Producer from "../entity/producer.entity";
 import ProducerRepositoryInterface from "../repository/producer.repository.interface";
 import { Response, Request } from "express";
 import HttpStatus from 'http-status-codes';
+import UpdateProducerDto from "../dto/update-producer.dto";
+import UpdateProducer from "../../../use-cases/producer/update-producer";
 export default class ProducerController {
 
   constructor(private readonly producerRepository: ProducerRepositoryInterface) {
@@ -12,6 +14,7 @@ export default class ProducerController {
     this.getAll = this.getAll.bind(this);
     this.getById = this.getById.bind(this);
     this.delete = this.delete.bind(this);
+    this.update = this.update.bind(this);
   }
 
   async createProducer(request: Request, response: Response): Promise<unknown> {
@@ -79,6 +82,20 @@ export default class ProducerController {
       console.log(e)
       throw new InternalServerError(e.toString())
     }
+  }
 
+  async update(request: Request, response: Response): Promise<unknown> {
+    try {
+      const requestBody = request.body
+      const producerId = request.params.id
+      const updateFarmDto = new UpdateProducerDto(requestBody);
+      await updateFarmDto.validate()
+      const producer = new UpdateProducer(this.producerRepository);
+      const producerUpdated = await producer.execute(requestBody, producerId)
+      return response.status(HttpStatus.OK).json(producerUpdated);
+    } catch (e: any) {
+      console.log(e);
+      throw new BadRequestError(e.toString())
+    }
   }
 }

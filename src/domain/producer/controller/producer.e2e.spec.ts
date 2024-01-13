@@ -1,36 +1,33 @@
 import 'express-async-errors'
 import express from 'express'
 import supertest from 'supertest'
-import routes from "../../../routes";
 import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
+import producerRoutes from '../routes';
 
 describe('Producer routes tests', () => {
 
   const app = express();
   app.use(express.json())
   app.use(httpError)
-  app.use(routes)
+  app.use(producerRoutes)
 
-  let validId='';
+  let validId = '';
   let producerStub = {
     name: 'Producer Test',
-    document: '780.366.920-40'
+    document: '438.630.640-46'
   }
   const invalidId = '78f9731e-17d8-4e05-a71b-cde40b43d2f4'
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
-    const repository = AppDataSourceTest.getRepository(ProducerEntity);
-    const producerStored = await repository.save(producerStub);
-    validId = producerStored.id
+    await AppDataSourceTest.getRepository(ProducerEntity).delete({})
   })
 
   afterAll(async () => {
-    const repository = AppDataSourceTest.getRepository(ProducerEntity);
-    await repository.clear();
+    await AppDataSourceTest.getRepository(ProducerEntity).delete({})
     await AppDataSourceTest.close();
   })
 
@@ -47,7 +44,10 @@ describe('Producer routes tests', () => {
     })
 
     it('should return an Exception with same document', async () => {
-     await supertest(app).post('/api/producers').send(producerStub).expect(HttpStatus.BAD_REQUEST);
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      await supertest(app).post('/api/producers').send(producerStub).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an Exception with name invalid', async () => {
@@ -84,7 +84,10 @@ describe('Producer routes tests', () => {
 
   describe('Get By Id', () => {
     it('should return a Producer when is used a valid id', async () => {
-      const response = await supertest(app).get(`/api/producers/${validId}`).expect(HttpStatus.OK);
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const response = await supertest(app).get(`/api/producers/${producerStored.id}`).expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Object)
       expect(response.body.name).toBe(producerStub.name)
       expect(response.body.document).toBe(producerStub.document)
@@ -97,11 +100,51 @@ describe('Producer routes tests', () => {
 
   describe('Delete', () => {
     it('shold reuturn true with valid id', async () => {
-      await supertest(app).delete(`/api/producers/${validId}`).expect(HttpStatus.NO_CONTENT);
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      await supertest(app).delete(`/api/producers/${producerStored.id}`).expect(HttpStatus.NO_CONTENT);
     })
 
     it('should return a not found exception with wrong producer id', async () => {
       await supertest(app).delete(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
+    })
+  })
+
+  describe('Update', () => {
+
+    it('shold return the producer updated with valid data', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "Producer Test Updated 3",
+        document: "944.910.590-12"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.OK);
+      expect(response.body).toMatchObject(producerUpdateValidBody)
+    })
+
+    it('shold return an error with invalid name', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "",
+        document: "944.910.590-12"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
+    })
+
+    it('shold return an error with invalid document', async () => {
+      const repository = AppDataSourceTest.getRepository(ProducerEntity)
+      await repository.delete({})
+      const producerStored = await repository.save(producerStub)
+      const producerUpdateValidBody = {
+        name: "Name",
+        document: "944.910.590-11"
+      }
+      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
     })
   })
 }) 

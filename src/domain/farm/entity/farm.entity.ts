@@ -1,4 +1,4 @@
-import { PlantedCrops } from "../../crop/enum/planted-crops.enum";
+import { PlantedCrops } from "../../producer/enum/planted-crops.enum";
 import FarmAddress from "./farm-address.entity";
 
 export default class Farm {

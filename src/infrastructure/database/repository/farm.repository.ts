@@ -2,7 +2,7 @@ import { DataSource, Repository } from "typeorm";
 import FarmRepositoryInterface from "../../../domain/farm/repository/farm.repository.interface";
 import FarmEntity from "../typeorm/entities/farms.entity";
 import Farm from "../../../domain/farm/entity/farm.entity";
-import { PlantedCrops } from "../../../domain/crop/enum/planted-crops.enum";
+import { PlantedCrops } from "../../../domain/producer/enum/planted-crops.enum";
 
 export class FarmRepository implements FarmRepositoryInterface {
 
@@ -13,12 +13,13 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async create(entity: Farm): Promise<any> {
-    const farmModel =  {
+    const farmModel = {
       name: entity.name,
       city: entity.address.city,
       state: entity.address.state,
       totalArea: entity.totalArea,
       arableArea: entity.arableArea,
+      producerId: entity.producerId,
       vegetationArea: entity.vegetableArea,
       crops: entity.crops
     };
@@ -42,6 +43,26 @@ export class FarmRepository implements FarmRepositoryInterface {
 
   async findAll(): Promise<any> {
     return await this.repository.find();
+  }
+
+  async findWithRelations(relations: any): Promise<any> {
+    return await this.repository.find(relations);
+  }
+
+  async getAmountFarms(): Promise<any> {
+    const result: any = await this.repository
+      .createQueryBuilder('farm')
+      .select('COUNT(farm.id) as amount')
+      .getRawOne();
+    return Promise.resolve(result)
+  }
+
+  async getTotalArea(): Promise<any> {
+    const result: any = await this.repository
+      .createQueryBuilder('farm')
+      .select('SUM(farm.totalArea) as total')
+      .getRawOne();
+    return Promise.resolve(result)
   }
 
 }

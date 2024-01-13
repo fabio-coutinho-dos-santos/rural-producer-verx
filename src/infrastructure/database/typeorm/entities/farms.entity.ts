@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import CropEntity from "./crop"
-import { PlantedCrops } from "../../../../domain/crop/enum/planted-crops.enum"
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import Producer from "../../../../domain/producer/entity/producer.entity"
+import ProducerEntity from "./producer.entity"
 
 @Entity('farms')
 export default class FarmEntity {
@@ -11,18 +11,21 @@ export default class FarmEntity {
   name: string
 
   @Column({nullable: false})
+  producerId: string
+
+  @Column({nullable: false})
   city: string
 
   @Column({nullable: false})
   state: string
 
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   totalArea: number
   
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   arableArea: number
 
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   vegetationArea: number
 
   @Column({ type: 'simple-array', nullable: false })
@@ -34,6 +37,6 @@ export default class FarmEntity {
   @UpdateDateColumn()
   updatedAt: Date
 
-  // @OneToMany(() => CropEntity, crops => crops.farms)
-  // crops: PlantedCrops[];
+  @ManyToOne(() => ProducerEntity, producer => producer.farms, { cascade: true })
+  producer: Producer
 }

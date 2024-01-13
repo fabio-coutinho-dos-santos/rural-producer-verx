@@ -24,8 +24,8 @@ describe('Producer routes tests', () => {
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
-    await AppDataSourceTest.getRepository(FarmEntity).clear();
-    await AppDataSourceTest.getRepository(ProducerEntity).clear();
+    await AppDataSourceTest.getRepository(FarmEntity).delete({});
+    await AppDataSourceTest.getRepository(ProducerEntity).delete({});
 
     farmRepository = new FarmRepository(AppDataSourceTest)
     producerRepository = new ProducerRepository(AppDataSourceTest)
@@ -46,7 +46,7 @@ describe('Producer routes tests', () => {
   })
 
   afterAll(async () => {
-    await AppDataSourceTest.getRepository(FarmEntity).clear();
+    await AppDataSourceTest.getRepository(FarmEntity).delete({});
   })
 
   describe('Create farm usecase unit test', () => {

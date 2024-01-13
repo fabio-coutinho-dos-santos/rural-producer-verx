@@ -1,4 +1,4 @@
-import { PlantedCrops } from "../../crop/enum/planted-crops.enum";
+import { PlantedCrops } from "../../producer/enum/planted-crops.enum";
 import FarmAddress from "./farm-address.entity";
 import Farm from "./farm.entity";
 
@@ -9,7 +9,7 @@ describe('Farm unit tests', () => {
   it('should return a new farm with valid data', () => {
     const address = new FarmAddress('City', 'State')
     const farm = new Farm('Farm name', address, uuidValid)
-    farm.changeTotalArea(10);
+    farm.changeTotalArea(10.5);
     farm.changeVegetationArea(5);
     farm.changeArableArea(4);
     farm.addPlantedCrop(PlantedCrops.COFFE)
@@ -18,7 +18,7 @@ describe('Farm unit tests', () => {
     expect(farm.name).toBe('Farm name')
     expect(farm.address.city).toBe('City')
     expect(farm.address.state).toBe('State')
-    expect(farm.totalArea).toBe(10)
+    expect(farm.totalArea).toBe(10.5)
     expect(farm.arableArea).toBe(4)
     expect(farm.vegetableArea).toBe(5)
     expect(farm.crops).toBeInstanceOf(Array<PlantedCrops>)
@@ -82,5 +82,17 @@ describe('Farm unit tests', () => {
       farm.addPlantedCrop(PlantedCrops.COFFE)
       farm.addPlantedCrop('rice')
     }).toThrow("Invalid planted crop type: rice");
+  })
+
+  it('should throw an error when producerId is invalid', () => {
+    expect(() => {
+      const address = new FarmAddress('City', 'State')
+      const farm = new Farm('Farm name', address, '')
+      farm.changeTotalArea(10);
+      farm.changeVegetationArea(4);
+      farm.changeArableArea(5);
+      farm.addPlantedCrop(PlantedCrops.COFFE)
+      farm.addPlantedCrop('rice')
+    }).toThrow("Invalid producer id");
   })
 })

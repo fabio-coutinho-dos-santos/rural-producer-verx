@@ -1,20 +1,22 @@
 import 'express-async-errors'
 import express from 'express'
 import supertest from 'supertest'
-import routes from "../../../routes";
+import routes from "../../producer/routes";
 import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import Producer from '../../producer/entity/producer.entity';
+import Farm from '../entity/farm.entity';
+import farmRoutes from '../routes';
 
 describe('Farms routes tests', () => {
 
   const app = express();
   app.use(express.json())
   app.use(httpError)
-  app.use(routes)
+  app.use(farmRoutes)
 
   let farmRepository: any
   let producerRepository: any
@@ -148,6 +150,14 @@ describe('Farms routes tests', () => {
         ]
       }
       const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+    })
+  })
+
+  describe('Get All', () => {
+    it('should return a farm array', async () => {
+      const response = await supertest(app).get('/api/farms').expect(HttpStatus.OK)
+      expect(response.body).toBeInstanceOf(Array)
+      expect(response.body[0]).toMatchObject(requestBodyStubValid)
     })
   })
 }) 

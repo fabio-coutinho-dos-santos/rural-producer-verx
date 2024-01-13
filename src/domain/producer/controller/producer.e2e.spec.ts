@@ -1,19 +1,18 @@
 import 'express-async-errors'
 import express from 'express'
 import supertest from 'supertest'
-import routes from "../../../routes";
 import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
-import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';
+import producerRoutes from '../routes';
 
 describe('Producer routes tests', () => {
 
   const app = express();
   app.use(express.json())
   app.use(httpError)
-  app.use(routes)
+  app.use(producerRoutes)
 
   let validId = '';
   let producerStub = {

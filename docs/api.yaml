@@ -1,0 +1,238 @@
+openapi: 3.0.1
+info:
+  title: Verx Test
+  version: 1.0.0
+  contact:
+    name: "Fabio Coutinho"
+    email: "fabio.santcou@gmail.com"
+    url: "https://portfolio-inky-six-97.vercel.app/"
+servers:
+  - url: "http://localhost:3000"
+    description: "Local Server"
+  - url: "https://shaw-and-partners-backend-p3vc.onrender.com"
+    description: "Production Server"
+
+paths:
+  /api/v1/producers:
+    get:
+      tags:
+        - Producers
+      summary: Get all
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProducerResource"
+
+    post:
+      tags:
+        - Producers
+      summary: Create new producer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProducerRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "Name"
+                  document:
+                    type: string
+                    example: "406.738.520-08"
+                  id:
+                    type: string
+                    format: uuid
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+  /api/v1/producers/{id}:
+    get:
+      tags:
+        - Producers
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+            format: "uuid"
+      summary: Get by Id
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProducerResource"
+        "404":
+          description: Producer Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+    patch:
+      tags:
+        - Producers
+      summary: Update producer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProducerUpdateRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProducerResource"
+
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+    delete:
+      tags:
+        - Producers
+      summary: Delete producer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Deleted
+
+        "404":
+          description: Producer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+components:
+  schemas:
+    ProducerResource:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Name"
+        document:
+          type: string
+          example: "406.738.520-08"
+        farms:
+          type: array
+          items:
+            $ref: "#/components/schemas/FarmsResource"
+
+    FarmsResource:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Farm Name
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+              example: City
+            state:
+              type: string
+              example: State
+        areas:
+          type: object
+          properties:
+            total:
+              type: number
+              example: 21.5
+            arable:
+              type: number
+              example: 10
+            vegetation:
+              type: string
+              example: 10
+        crops:
+          type: array
+          items:
+            enum: ["soy", "corn", "cotton", "coffe", "suggarCane"]
+
+    ErrorResource:
+      type: object
+      properties:
+        statusCode:
+          type: number
+        message:
+          type: string
+
+    ProducerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Name"
+        document:
+          type: string
+          example: "406.738.520-08"
+
+    ProducerUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Name"
+        document:
+          type: string
+          example: "406.738.520-08"
+        city:
+          type: string
+          example: City
+        state:
+          type: string
+          example: State
+        totalArea:
+          type: number
+          example: 22.3
+        arableArea:
+          type: string
+          example: 12
+        vegetationArea:
+          type: string
+          example: 9.1
+        crops:
+          type: array
+          items:
+            enum: ["soy", "corn", "cotton", "coffe", "suggarCane"]

@@ -16,7 +16,7 @@ const farmController = new FarmController(
   new FarmRepository(getDataSource()),
   new ProducerRepository(getDataSource())
 )
-routes.post('/api/farms', farmController.createProducer)
+routes.post('/api/farms', farmController.createFarm)
 routes.get('/api/farms', farmController.getAll)
 
 export default routes;

@@ -10,11 +10,11 @@ export class FarmController {
     private readonly farmRepository: FarmRepositoryInterface,
     private readonly producerRepository: ProducerRepositoryInterface,
   ) {
-    this.createProducer = this.createProducer.bind(this);
+    this.createFarm = this.createFarm.bind(this);
     this.getAll = this.getAll.bind(this);
   }
 
-  async createProducer(request: Request, response: Response): Promise<unknown> {
+  async createFarm(request: Request, response: Response): Promise<unknown> {
     try {
       const requestBody = request.body
       const farmDto = new FarmDto(requestBody);

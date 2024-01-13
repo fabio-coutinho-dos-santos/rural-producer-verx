@@ -46,7 +46,7 @@ describe('Producer routes tests', () => {
   })
 
   afterAll(async () => {
-    await AppDataSourceTest.getRepository(FarmEntity).clear();
+    await AppDataSourceTest.getRepository(FarmEntity).delete({});
   })
 
   describe('Create farm usecase unit test', () => {

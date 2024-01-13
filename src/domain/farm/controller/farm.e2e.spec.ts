@@ -26,6 +26,7 @@ describe('Farms routes tests', () => {
   )
 
   let requestBodyStubValid: any;
+  let requestBodyStubValid2: any;
   let producerStored: any;
 
   beforeAll(async () => {
@@ -42,6 +43,20 @@ describe('Farms routes tests', () => {
       state: 'State',
       producerId: producerStored.id,
       totalArea: 10,
+      arableArea: 2,
+      vegetationArea: 4,
+      crops: [
+        'cotton',
+        'coffe'
+      ]
+    }
+
+    requestBodyStubValid2 = {
+      name: 'Farm name',
+      city: 'City',
+      state: 'State',
+      producerId: producerStored.id,
+      totalArea: 25.5,
       arableArea: 2,
       vegetationArea: 4,
       crops: [
@@ -301,6 +316,26 @@ describe('Farms routes tests', () => {
       const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
       const farmId = 'db659f80-ba5e-435a-8b44-23a2d0667e73';
       await supertest(app).delete(`/api/farms/${farmId}`).expect(HttpStatus.NOT_FOUND)
+    })
+  })
+
+  describe('Get Amount Farms', () => {
+    it('should return an amount', async () => {
+      await AppDataSourceTest.getRepository(FarmEntity).delete({});
+      await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid2);
+      const response = await supertest(app).get('/api/farms/amount').expect(HttpStatus.OK)
+      expect(response.body.amountFarms).toBe(2)
+    })
+  })
+
+  describe('Get Total Area', () => {
+    it('should return an amount', async () => {
+      await AppDataSourceTest.getRepository(FarmEntity).delete({});
+      await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid2);
+      const response = await supertest(app).get('/api/farms/area/total').expect(HttpStatus.OK)
+      expect(response.body.totalArea).toBe(requestBodyStubValid.totalArea.valueOf() + requestBodyStubValid2.totalArea.valueOf())
     })
   })
 }) 

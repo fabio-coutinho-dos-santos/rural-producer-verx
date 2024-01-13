@@ -105,9 +105,9 @@ export class FarmController {
 
   async getTotalArea(request: Request, response: Response): Promise<unknown> {
     try {
-      const areaTotal = await this.farmRepository.getTotalArea()
+      const totalArea = await this.farmRepository.getTotalArea()
       const result = {
-        areaTotal: parseFloat(areaTotal.total.toFixed(2))
+        totalArea: parseFloat(totalArea.total.toFixed(2))
       }
       return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {

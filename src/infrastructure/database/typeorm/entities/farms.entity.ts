@@ -37,6 +37,6 @@ export default class FarmEntity {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @ManyToOne(() => ProducerEntity, producer => producer.farms)
+  @ManyToOne(() => ProducerEntity, producer => producer.farms, { cascade: true })
   producer: Producer
 }

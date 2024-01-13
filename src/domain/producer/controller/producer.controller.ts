@@ -59,18 +59,26 @@ export default class ProducerController {
     if (!producerStored) {
       throw new NotFoundError('Producer not found')
     }
-    const result: DeleteResult = await this.producerRepository.delete(producerId)
-    const affected = result.affected;
-    let deleted = false;
-    
-    if (affected) {
-      deleted = true ? affected.valueOf() > 0 : false
+
+    try {
+      const result: DeleteResult = await this.producerRepository.delete(producerId)
+
+      const affected = result.affected;
+      let deleted = false;
+
+      if (affected) {
+        deleted = true ? affected.valueOf() > 0 : false
+      }
+
+      if (deleted) {
+        return response.status(HttpStatus.NO_CONTENT).send();
+      }
+
+      return response.status(HttpStatus.OK).send();
+    } catch (e: any) {
+      console.log(e)
+      throw new InternalServerError(e.toString())
     }
 
-    if (deleted) {
-      return response.status(HttpStatus.NO_CONTENT).send();
-    }
-
-    return response.status(HttpStatus.OK).send();
   }
 }

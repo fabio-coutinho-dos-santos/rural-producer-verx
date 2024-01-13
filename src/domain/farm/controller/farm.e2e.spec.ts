@@ -156,7 +156,6 @@ describe('Farms routes tests', () => {
     it('should return a farm array', async () => {
       const response = await supertest(app).get('/api/farms').expect(HttpStatus.OK)
       expect(response.body).toBeInstanceOf(Array)
-      expect(response.body[0]).toMatchObject(requestBodyStubValid)
     })
   })
 

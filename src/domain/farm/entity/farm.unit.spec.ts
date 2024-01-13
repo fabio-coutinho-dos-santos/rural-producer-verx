@@ -9,7 +9,7 @@ describe('Farm unit tests', () => {
   it('should return a new farm with valid data', () => {
     const address = new FarmAddress('City', 'State')
     const farm = new Farm('Farm name', address, uuidValid)
-    farm.changeTotalArea(10);
+    farm.changeTotalArea(10.5);
     farm.changeVegetationArea(5);
     farm.changeArableArea(4);
     farm.addPlantedCrop(PlantedCrops.COFFE)
@@ -18,7 +18,7 @@ describe('Farm unit tests', () => {
     expect(farm.name).toBe('Farm name')
     expect(farm.address.city).toBe('City')
     expect(farm.address.state).toBe('State')
-    expect(farm.totalArea).toBe(10)
+    expect(farm.totalArea).toBe(10.5)
     expect(farm.arableArea).toBe(4)
     expect(farm.vegetableArea).toBe(5)
     expect(farm.crops).toBeInstanceOf(Array<PlantedCrops>)

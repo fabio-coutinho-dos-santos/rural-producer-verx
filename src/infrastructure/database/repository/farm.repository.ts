@@ -49,4 +49,20 @@ export class FarmRepository implements FarmRepositoryInterface {
     return await this.repository.find(relations);
   }
 
+  async getAmountFarms(): Promise<any> {
+    const result: any = await this.repository
+      .createQueryBuilder('farm')
+      .select('COUNT(farm.id) as amount')
+      .getRawOne();
+    return Promise.resolve(result)
+  }
+
+  async getTotalArea(): Promise<any> {
+    const result: any = await this.repository
+      .createQueryBuilder('farm')
+      .select('SUM(farm.totalArea) as total')
+      .getRawOne();
+    return Promise.resolve(result)
+  }
+
 }

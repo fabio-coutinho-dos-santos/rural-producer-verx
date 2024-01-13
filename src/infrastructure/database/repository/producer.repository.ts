@@ -12,6 +12,10 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   }
 
   async findWithRelations(relations: any): Promise<any> {
+    return await this.repository.find(relations);
+  }
+
+  async findOneWithRelations(relations: any): Promise<any> {
     return await this.repository.findOne(relations);
   }
 

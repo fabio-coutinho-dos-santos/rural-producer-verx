@@ -8,6 +8,8 @@ import HttpStatus from 'http-status-codes'
 import UpdateFarm from "../../../use-cases/farm/update-farm";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import { DeleteResult } from "typeorm";
+import FarmResourceDto from "../dto/farm-resource.dto";
+import FarmEntity from "../../../infrastructure/database/typeorm/entities/farms.entity";
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
@@ -17,6 +19,8 @@ export class FarmController {
     this.getAll = this.getAll.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
+    this.getAmount = this.getAmount.bind(this);
+    this.getTotalArea = this.getTotalArea.bind(this);
   }
 
   async createFarm(request: Request, response: Response): Promise<unknown> {
@@ -35,8 +39,8 @@ export class FarmController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const farms = await this.farmRepository.findWithRelations({ relations: { producer: true } })
-      return response.status(HttpStatus.OK).json(farms);
+      const farms: any = await this.farmRepository.findWithRelations({ relations: { producer: true } })
+      return response.status(HttpStatus.OK).json(new FarmResourceDto(farms));
     } catch (e: any) {
       console.log(e);
       throw new BadRequestError(e.toString())
@@ -80,6 +84,32 @@ export class FarmController {
       }
 
       return response.status(HttpStatus.OK).send();
+    } catch (e: any) {
+      console.log(e)
+      throw new InternalServerError(e.toString())
+    }
+  }
+
+  async getAmount(request: Request, response: Response): Promise<unknown> {
+    try {
+      const resp = await this.farmRepository.getAmountFarms()
+      const result = {
+        amountFarms: parseFloat(resp.amount)
+      }
+      return response.status(HttpStatus.OK).json(result);
+    } catch (e: any) {
+      console.log(e)
+      throw new InternalServerError(e.toString())
+    }
+  }
+
+  async getTotalArea(request: Request, response: Response): Promise<unknown> {
+    try {
+      const areaTotal = await this.farmRepository.getTotalArea()
+      const result = {
+        areaTotal: parseFloat(areaTotal.total.toFixed(2))
+      }
+      return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {
       console.log(e)
       throw new InternalServerError(e.toString())

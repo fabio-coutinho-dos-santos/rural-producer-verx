@@ -19,13 +19,13 @@ export default class FarmEntity {
   @Column({nullable: false})
   state: string
 
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   totalArea: number
   
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   arableArea: number
 
-  @Column({nullable: false})
+  @Column({nullable: false, type: 'float'})
   vegetationArea: number
 
   @Column({ type: 'simple-array', nullable: false })

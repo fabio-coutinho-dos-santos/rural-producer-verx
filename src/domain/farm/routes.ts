@@ -14,5 +14,7 @@ farmRoutes.post('/api/farms', farmController.createFarm)
 farmRoutes.get('/api/farms', farmController.getAll)
 farmRoutes.patch('/api/farms/:id', farmController.update)
 farmRoutes.delete('/api/farms/:id', farmController.delete)
+farmRoutes.get('/api/farms/amount', farmController.getAmount)
+farmRoutes.get('/api/farms/area/total', farmController.getTotalArea)
 
 export default farmRoutes;

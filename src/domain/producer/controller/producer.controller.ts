@@ -7,6 +7,8 @@ import { Response, Request } from "express";
 import HttpStatus from 'http-status-codes';
 import UpdateProducerDto from "../dto/update-producer.dto";
 import UpdateProducer from "../../../use-cases/producer/update-producer";
+import ProducerResourceDto from "../dto/producer-resource.dto";
+import ArrayProducerResourceDto from "../dto/producer-resource-all.dto";
 export default class ProducerController {
 
   constructor(private readonly producerRepository: ProducerRepositoryInterface) {
@@ -32,8 +34,8 @@ export default class ProducerController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const allProducers = await this.producerRepository.findAll()
-      return response.status(HttpStatus.OK).json(allProducers)
+      const allProducers = await this.producerRepository.findWithRelations({ relations: { farms: true } })
+      return response.status(HttpStatus.OK).json(new ArrayProducerResourceDto(allProducers))
     } catch (e: any) {
       console.log(e.toString());
       throw new InternalServerError(e.toString())
@@ -42,7 +44,7 @@ export default class ProducerController {
 
   async getById(request: Request, response: Response): Promise<any> {
     const producerId = request.params.id;
-    const producerStored = await this.producerRepository.findWithRelations({
+    const producerStored = await this.producerRepository.findOneWithRelations({
       where: {
         id: producerId,
       },
@@ -53,7 +55,7 @@ export default class ProducerController {
     if (!producerStored) {
       throw new NotFoundError('Producer not found')
     }
-    return response.status(HttpStatus.OK).json(producerStored)
+    return response.status(HttpStatus.OK).json(new ProducerResourceDto(producerStored))
   }
 
   async delete(request: Request, response: Response): Promise<any> {

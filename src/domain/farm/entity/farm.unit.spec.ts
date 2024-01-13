@@ -83,4 +83,16 @@ describe('Farm unit tests', () => {
       farm.addPlantedCrop('rice')
     }).toThrow("Invalid planted crop type: rice");
   })
+
+  it('should throw an error when producerId is invalid', () => {
+    expect(() => {
+      const address = new FarmAddress('City', 'State')
+      const farm = new Farm('Farm name', address, '')
+      farm.changeTotalArea(10);
+      farm.changeVegetationArea(4);
+      farm.changeArableArea(5);
+      farm.addPlantedCrop(PlantedCrops.COFFE)
+      farm.addPlantedCrop('rice')
+    }).toThrow("Invalid producer id");
+  })
 })

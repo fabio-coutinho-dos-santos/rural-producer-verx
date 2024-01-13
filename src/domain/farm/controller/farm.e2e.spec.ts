@@ -7,7 +7,7 @@ import HttpStatus from 'http-status-codes'
 import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import Producer from '../../producer/entity/producer.entity';
-import farmRoutes from '../routes';
+import farmRoutes from '../farm.routes';
 import { PlantedCrops } from '../../producer/enum/planted-crops.enum';
 
 describe('Farms routes tests', () => {

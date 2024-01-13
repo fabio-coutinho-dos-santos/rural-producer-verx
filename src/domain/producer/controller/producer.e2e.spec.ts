@@ -5,7 +5,7 @@ import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
-import producerRoutes from '../routes';
+import producerRoutes from '../producer.routes';
 
 describe('Producer routes tests', () => {
 

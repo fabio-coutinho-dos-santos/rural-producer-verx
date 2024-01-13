@@ -10,11 +10,11 @@ const farmController = new FarmController(
   new FarmRepository(getDataSource()),
   new ProducerRepository(getDataSource())
 )
-farmRoutes.post('/api/farms', farmController.createFarm)
-farmRoutes.get('/api/farms', farmController.getAll)
-farmRoutes.patch('/api/farms/:id', farmController.update)
-farmRoutes.delete('/api/farms/:id', farmController.delete)
-farmRoutes.get('/api/farms/amount', farmController.getAmount)
-farmRoutes.get('/api/farms/area/total', farmController.getTotalArea)
+farmRoutes.post('/api/v1/farms', farmController.createFarm)
+farmRoutes.get('/api/v1/farms', farmController.getAll)
+farmRoutes.patch('/api/v1/farms/:id', farmController.update)
+farmRoutes.delete('/api/v1/farms/:id', farmController.delete)
+farmRoutes.get('/api/v1/farms/count', farmController.getAmount)
+farmRoutes.get('/api/v1/farms/area/total', farmController.getTotalArea)
 
 export default farmRoutes;

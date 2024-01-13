@@ -104,7 +104,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProducerUpdateRequest"
+              $ref: "#/components/schemas/ProducerRequest"
       responses:
         "200":
           description: Updated
@@ -141,6 +141,139 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResource"
+
+  /api/v1/farms:
+    get:
+      tags:
+        - Farms
+      summary: Get all
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FarmsResource"
+
+    post:
+      tags:
+        - Farms
+      summary: Create Farm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FarmsRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmsResource"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+  /api/v1/farms/{id}:
+    patch:
+      tags:
+        - Farms
+      summary: Update Farm
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FarmsRequest"
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FarmsResource"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+        "404":
+          description: Farm not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+    delete:
+      tags:
+        - Farms
+      summary: Delete Farm
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        "204":
+          description: Farm deleted
+        "404":
+          description: Farm not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResource"
+
+  /api/v1/farms/count:
+    get:
+      tags:
+        - Farms
+      summary: Get total amount farms
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amountFarms:
+                    type: number
+                    example: 10
+
+  /api/v1/farms/area/total:
+    get:
+      tags:
+        - Farms
+      summary: Get the sum of all farms total areas
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalArea:
+                    type: number
+                    example: 100.4
 
 components:
   schemas:
@@ -183,7 +316,7 @@ components:
               type: number
               example: 10
             vegetation:
-              type: string
+              type: number
               example: 10
         crops:
           type: array
@@ -208,15 +341,15 @@ components:
           type: string
           example: "406.738.520-08"
 
-    ProducerUpdateRequest:
+    FarmsRequest:
       type: object
       properties:
         name:
           type: string
           example: "Name"
-        document:
+        producerId:
           type: string
-          example: "406.738.520-08"
+          format: uuid
         city:
           type: string
           example: City
@@ -227,10 +360,10 @@ components:
           type: number
           example: 22.3
         arableArea:
-          type: string
+          type: number
           example: 12
         vegetationArea:
-          type: string
+          type: number
           example: 9.1
         crops:
           type: array

@@ -241,7 +241,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResource"
 
-  /api/v1/farms/count:
+  /api/v1/farms/amount:
     get:
       tags:
         - Farms

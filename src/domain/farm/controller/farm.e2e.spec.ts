@@ -10,6 +10,8 @@ import ProducerEntity from '../../../infrastructure/database/typeorm/entities/pr
 import Producer from '../../producer/entity/producer.entity';
 import Farm from '../entity/farm.entity';
 import farmRoutes from '../routes';
+import { PlantedCrops } from '../../crop/enum/planted-crops.enum';
+import { Console } from 'console';
 
 describe('Farms routes tests', () => {
 
@@ -159,5 +161,136 @@ describe('Farms routes tests', () => {
       expect(response.body).toBeInstanceOf(Array)
       expect(response.body[0]).toMatchObject(requestBodyStubValid)
     })
+  })
+
+  describe('Update Farm', () => {
+    it('should return a updated farm with valid data', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: 'Farm name updated',
+        city: 'City updated',
+        state: 'State updated',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 4,
+        crops: [
+          PlantedCrops.COFFE,
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.OK)
+      const farmUpdated = response.body
+      expect(farmUpdated).toBeInstanceOf(Object)
+    })
+
+    it('should return an error with invalid name', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: '',
+        city: 'City updated',
+        state: 'State updated',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 4,
+        crops: [
+          PlantedCrops.COFFE,
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+    })
+
+    it('should return an error with invalid city', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: 'Name',
+        city: '',
+        state: 'State updated',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 4,
+        crops: [
+          PlantedCrops.COFFE,
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+    })
+
+    it('should return an error with invalid state', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: 'Name',
+        city: 'City updated',
+        state: '',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 4,
+        crops: [
+          PlantedCrops.COFFE,
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+    })
+
+    it('should return an error with invalid area proportion', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: 'Name',
+        city: 'City updated',
+        state: 'State',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 9,
+        crops: [
+          PlantedCrops.COFFE,
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+    })
+
+    it('should return an error with invalid crop', async () => {
+      const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
+      const farmId = farmStored.id;
+
+      const requestToUpdateFarm = {
+        name: 'Name',
+        city: 'City updated',
+        state: 'State',
+        totalArea: 15,
+        arableArea: 10,
+        vegetationArea: 9,
+        crops: [
+          'rice',
+          PlantedCrops.CORN,
+          PlantedCrops.COTTON,
+        ]
+      }
+
+      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+    })
+
   })
 }) 

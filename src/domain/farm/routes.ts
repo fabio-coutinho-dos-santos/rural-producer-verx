@@ -12,5 +12,6 @@ const farmController = new FarmController(
 )
 farmRoutes.post('/api/farms', farmController.createFarm)
 farmRoutes.get('/api/farms', farmController.getAll)
+farmRoutes.patch('/api/farms/:id', farmController.update)
 
 export default farmRoutes;

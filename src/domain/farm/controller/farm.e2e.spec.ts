@@ -8,7 +8,7 @@ import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import Producer from '../../producer/entity/producer.entity';
 import farmRoutes from '../routes';
-import { PlantedCrops } from '../../crop/enum/planted-crops.enum';
+import { PlantedCrops } from '../../producer/enum/planted-crops.enum';
 
 describe('Farms routes tests', () => {
 

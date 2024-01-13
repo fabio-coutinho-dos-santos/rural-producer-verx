@@ -2,7 +2,7 @@ import { DataSource, Repository } from "typeorm";
 import FarmRepositoryInterface from "../../../domain/farm/repository/farm.repository.interface";
 import FarmEntity from "../typeorm/entities/farms.entity";
 import Farm from "../../../domain/farm/entity/farm.entity";
-import { PlantedCrops } from "../../../domain/crop/enum/planted-crops.enum";
+import { PlantedCrops } from "../../../domain/producer/enum/planted-crops.enum";
 
 export class FarmRepository implements FarmRepositoryInterface {
 

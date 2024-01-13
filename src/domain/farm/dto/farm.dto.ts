@@ -1,6 +1,6 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUUID, ValidationError, validateOrReject } from "class-validator"
 import { BadRequestError } from "../../../helpers/ApiErrors"
-import { PlantedCrops } from "../../crop/enum/planted-crops.enum"
+import { PlantedCrops } from "../../producer/enum/planted-crops.enum"
 
 export default class FarmDto {
 

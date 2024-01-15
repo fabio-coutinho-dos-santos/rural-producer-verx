@@ -84,3 +84,14 @@ export const inputUpdateProducerStub = () => {
   }
 }
 
+export const amountFarmsStub = () => {
+  return {
+    amount: 10
+  }
+}
+
+export const totalAreaFarmsStub = () => {
+  return {
+    toal: 87.9
+  }
+}

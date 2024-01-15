@@ -5,7 +5,7 @@ import { httpError } from '../../../middlewares/http-errors';
 import { AppDataSourceTest } from '../../../infrastructure/database/typeorm/postgres/data-source-test';
 import HttpStatus from 'http-status-codes'
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
-import producerRoutes from '../routes';
+import producerRoutes from '../producer.routes';
 
 describe('Producer routes tests', () => {
 
@@ -37,7 +37,7 @@ describe('Producer routes tests', () => {
         name: 'Producer Test',
         document: '292.256.890-39'
       }
-      const response = await supertest(app).post('/api/producers').send(newProducer).expect(HttpStatus.CREATED);
+      const response = await supertest(app).post('/api/v1/producers').send(newProducer).expect(HttpStatus.CREATED);
       expect(response.body).toBeInstanceOf(Object)
       expect(response.body.name).toBe(newProducer.name)
       expect(response.body.document).toBe(newProducer.document)
@@ -47,7 +47,7 @@ describe('Producer routes tests', () => {
       const repository = AppDataSourceTest.getRepository(ProducerEntity)
       await repository.delete({})
       const producerStored = await repository.save(producerStub)
-      await supertest(app).post('/api/producers').send(producerStub).expect(HttpStatus.BAD_REQUEST);
+      await supertest(app).post('/api/v1/producers').send(producerStub).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an Exception with name invalid', async () => {
@@ -55,7 +55,7 @@ describe('Producer routes tests', () => {
         name: '',
         document: '780.366.920-40'
       }
-      await supertest(app).post('/api/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
+      await supertest(app).post('/api/v1/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an Exception with document invalid', async () => {
@@ -63,7 +63,7 @@ describe('Producer routes tests', () => {
         name: 'Name',
         document: ''
       }
-      await supertest(app).post('/api/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
+      await supertest(app).post('/api/v1/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an Exception with document in invalid format', async () => {
@@ -71,13 +71,13 @@ describe('Producer routes tests', () => {
         name: 'Name',
         document: '12345678901'
       }
-      await supertest(app).post('/api/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
+      await supertest(app).post('/api/v1/producers').send(producer).expect(HttpStatus.BAD_REQUEST);
     })
   })
 
   describe('Get All', () => {
     it('should return all Producers', async () => {
-      const response = await supertest(app).get('/api/producers').expect(HttpStatus.OK);
+      const response = await supertest(app).get('/api/v1/producers').expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Array)
     })
   })
@@ -87,14 +87,14 @@ describe('Producer routes tests', () => {
       const repository = AppDataSourceTest.getRepository(ProducerEntity)
       await repository.delete({})
       const producerStored = await repository.save(producerStub)
-      const response = await supertest(app).get(`/api/producers/${producerStored.id}`).expect(HttpStatus.OK);
+      const response = await supertest(app).get(`/api/v1/producers/${producerStored.id}`).expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Object)
       expect(response.body.name).toBe(producerStub.name)
       expect(response.body.document).toBe(producerStub.document)
     })
 
     it('should return a not found exception with wrong producer id', async () => {
-      await supertest(app).get(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
+      await supertest(app).get(`/api/v1/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -103,11 +103,11 @@ describe('Producer routes tests', () => {
       const repository = AppDataSourceTest.getRepository(ProducerEntity)
       await repository.delete({})
       const producerStored = await repository.save(producerStub)
-      await supertest(app).delete(`/api/producers/${producerStored.id}`).expect(HttpStatus.NO_CONTENT);
+      await supertest(app).delete(`/api/v1/producers/${producerStored.id}`).expect(HttpStatus.NO_CONTENT);
     })
 
     it('should return a not found exception with wrong producer id', async () => {
-      await supertest(app).delete(`/api/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
+      await supertest(app).delete(`/api/v1/producers/${invalidId}`).expect(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -121,7 +121,7 @@ describe('Producer routes tests', () => {
         name: "Producer Test Updated 3",
         document: "944.910.590-12"
       }
-      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.OK);
+      const response = await supertest(app).patch(`/api/v1/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.OK);
       expect(response.body).toMatchObject(producerUpdateValidBody)
     })
 
@@ -133,7 +133,7 @@ describe('Producer routes tests', () => {
         name: "",
         document: "944.910.590-12"
       }
-      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).patch(`/api/v1/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('shold return an error with invalid document', async () => {
@@ -144,7 +144,7 @@ describe('Producer routes tests', () => {
         name: "Name",
         document: "944.910.590-11"
       }
-      const response = await supertest(app).patch(`/api/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).patch(`/api/v1/producers/${producerStored.id}`).send(producerUpdateValidBody).expect(HttpStatus.BAD_REQUEST);
     })
   })
 }) 

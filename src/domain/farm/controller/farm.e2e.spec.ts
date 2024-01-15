@@ -7,7 +7,7 @@ import HttpStatus from 'http-status-codes'
 import FarmEntity from '../../../infrastructure/database/typeorm/entities/farms.entity';
 import ProducerEntity from '../../../infrastructure/database/typeorm/entities/producer.entity';
 import Producer from '../../producer/entity/producer.entity';
-import farmRoutes from '../routes';
+import farmRoutes from '../farm.routes';
 import { PlantedCrops } from '../../producer/enum/planted-crops.enum';
 
 describe('Farms routes tests', () => {
@@ -89,7 +89,7 @@ describe('Farms routes tests', () => {
           'coffe'
         ]
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.CREATED);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.CREATED);
     })
 
     it('should return an error with invalid producerId', async () => {
@@ -99,7 +99,7 @@ describe('Farms routes tests', () => {
         state: 'State',
         producerId: 'b1419ac5-0d1b-416f-b6d7-9fcdb12a8dc4',
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an error with invalid name', async () => {
@@ -109,7 +109,7 @@ describe('Farms routes tests', () => {
         state: 'State',
         producerId: producerStored.id,
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an error with invalid city', async () => {
@@ -119,7 +119,7 @@ describe('Farms routes tests', () => {
         state: 'State',
         producerId: producerStored.id,
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an error with invalid state', async () => {
@@ -129,7 +129,7 @@ describe('Farms routes tests', () => {
         state: '',
         producerId: producerStored.id,
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an error with invalid area proportion', async () => {
@@ -146,7 +146,7 @@ describe('Farms routes tests', () => {
           'coffe'
         ]
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
 
     it('should return an error with invalid crop', async () => {
@@ -163,13 +163,13 @@ describe('Farms routes tests', () => {
           'coffe'
         ]
       }
-      const response = await supertest(app).post('/api/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
+      const response = await supertest(app).post('/api/v1/farms').send(farmStubValid).expect(HttpStatus.BAD_REQUEST);
     })
   })
 
   describe('Get All', () => {
     it('should return a farm array', async () => {
-      const response = await supertest(app).get('/api/farms').expect(HttpStatus.OK)
+      const response = await supertest(app).get('/api/v1/farms').expect(HttpStatus.OK)
       expect(response.body).toBeInstanceOf(Array)
     })
   })
@@ -193,7 +193,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.OK)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.OK)
       const farmUpdated = response.body
       expect(farmUpdated).toBeInstanceOf(Object)
     })
@@ -216,7 +216,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
     it('should return an error with invalid city', async () => {
@@ -237,7 +237,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
     it('should return an error with invalid state', async () => {
@@ -258,7 +258,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
     it('should return an error with invalid area proportion', async () => {
@@ -279,7 +279,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
     it('should return an error with invalid crop', async () => {
@@ -300,7 +300,7 @@ describe('Farms routes tests', () => {
         ]
       }
 
-      const response = await supertest(app).patch(`/api/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
+      const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
 
   })
@@ -309,13 +309,13 @@ describe('Farms routes tests', () => {
     it('should return no content with valid data', async () => {
       const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
       const farmId = farmStored.id;
-      await supertest(app).delete(`/api/farms/${farmId}`).expect(HttpStatus.NO_CONTENT)
+      await supertest(app).delete(`/api/v1/farms/${farmId}`).expect(HttpStatus.NO_CONTENT)
     })
 
     it('should return an not found error with invalid id', async () => {
       const farmStored = await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
       const farmId = 'db659f80-ba5e-435a-8b44-23a2d0667e73';
-      await supertest(app).delete(`/api/farms/${farmId}`).expect(HttpStatus.NOT_FOUND)
+      await supertest(app).delete(`/api/v1/farms/${farmId}`).expect(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -324,7 +324,7 @@ describe('Farms routes tests', () => {
       await AppDataSourceTest.getRepository(FarmEntity).delete({});
       await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
       await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid2);
-      const response = await supertest(app).get('/api/farms/amount').expect(HttpStatus.OK)
+      const response = await supertest(app).get('/api/v1/farms/amount').expect(HttpStatus.OK)
       expect(response.body.amountFarms).toBe(2)
     })
   })
@@ -334,7 +334,7 @@ describe('Farms routes tests', () => {
       await AppDataSourceTest.getRepository(FarmEntity).delete({});
       await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid);
       await AppDataSourceTest.getRepository(FarmEntity).save(requestBodyStubValid2);
-      const response = await supertest(app).get('/api/farms/area/total').expect(HttpStatus.OK)
+      const response = await supertest(app).get('/api/v1/farms/area/total').expect(HttpStatus.OK)
       expect(response.body.totalArea).toBe(requestBodyStubValid.totalArea.valueOf() + requestBodyStubValid2.totalArea.valueOf())
     })
   })

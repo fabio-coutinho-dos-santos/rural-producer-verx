@@ -5,10 +5,10 @@ import { getDataSource } from "../../infrastructure/database/config";
 
 const producerRoutes = Router();
 const producerController = new ProducerController(new ProducerRepository(getDataSource()))
-producerRoutes.post('/api/producers', producerController.createProducer)
-producerRoutes.get('/api/producers', producerController.getAll)
-producerRoutes.get('/api/producers/:id', producerController.getById)
-producerRoutes.patch('/api/producers/:id', producerController.update)
-producerRoutes.delete('/api/producers/:id', producerController.delete)
+producerRoutes.post('/api/v1/producers', producerController.createProducer)
+producerRoutes.get('/api/v1/producers', producerController.getAll)
+producerRoutes.get('/api/v1/producers/:id', producerController.getById)
+producerRoutes.patch('/api/v1/producers/:id', producerController.update)
+producerRoutes.delete('/api/v1/producers/:id', producerController.delete)
 
 export default producerRoutes;

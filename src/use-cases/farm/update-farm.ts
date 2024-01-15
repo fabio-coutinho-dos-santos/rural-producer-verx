@@ -11,7 +11,7 @@ export default class UpdateFarm {
   ) { }
 
   async execute(requestBody: any, farmId: string) {
-    await this.updateProducerId(requestBody)
+    await this.validateProducer(requestBody)
     try {
       await this.buildCompleteFarm(requestBody, farmId);
       await this.farmRepository.update(requestBody, farmId);
@@ -23,7 +23,7 @@ export default class UpdateFarm {
     }
   }
 
-  async updateProducerId(requestBody: any) {
+  async validateProducer(requestBody: any) {
     if (requestBody.producerId) {
       const producer = await this.producerRepository.findById(requestBody.producerId)
       if (!producer) {

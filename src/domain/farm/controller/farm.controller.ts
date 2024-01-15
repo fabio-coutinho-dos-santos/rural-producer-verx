@@ -9,7 +9,6 @@ import UpdateFarm from "../../../use-cases/farm/update-farm";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import { DeleteResult } from "typeorm";
 import FarmResourceDto from "../dto/farm-resource.dto";
-import FarmEntity from "../../../infrastructure/database/typeorm/entities/farms.entity";
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,

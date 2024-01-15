@@ -302,7 +302,6 @@ describe('Farms routes tests', () => {
 
       const response = await supertest(app).patch(`/api/v1/farms/${farmId}`).send(requestToUpdateFarm).expect(HttpStatus.BAD_REQUEST)
     })
-
   })
 
   describe('Delete Farm', () => {

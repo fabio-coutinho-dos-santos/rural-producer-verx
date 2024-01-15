@@ -1,5 +1,5 @@
 import { PlantedCrops } from "../../producer/enum/planted-crops.enum";
-import FarmAddress from "./farm-address.entity";
+import FarmAddress from "../value-object/farm-address";
 import Farm from "./farm.entity";
 
 describe('Farm unit tests', () => {

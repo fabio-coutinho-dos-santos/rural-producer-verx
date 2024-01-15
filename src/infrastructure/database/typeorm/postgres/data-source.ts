@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import 'dotenv/config'
-import ProducerEntity from "../entities/producer.entity";
-import FarmEntity from "../entities/farms.entity";
+import ProducerEntity from "./entities/producer.entity";
+import FarmEntity from "./entities/farms.entity";
 
 export function ormconfig(): any {
   const config = {

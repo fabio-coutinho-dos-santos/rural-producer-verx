@@ -1,4 +1,4 @@
-import FarmAddress from "../../../domain/farm/entity/farm-address.entity"
+import FarmAddress from "../../../domain/farm/value-object/farm-address"
 import Farm from "../../../domain/farm/entity/farm.entity"
 import Producer from "../../../domain/producer/entity/producer.entity"
 

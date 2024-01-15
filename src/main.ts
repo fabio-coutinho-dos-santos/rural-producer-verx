@@ -1,11 +1,11 @@
 import 'express-async-errors'
 import express from 'express'
 import { AppDataSource } from './infrastructure/database/typeorm/postgres/data-source';
-import { httpError } from './middlewares/http-errors';
-import farmRoutes from './domain/farm/farm.routes';
-import producerRoutes from './domain/producer/producer.routes';
+import farmRoutes from './infrastructure/api/farm/farm.routes';
+import producerRoutes from './infrastructure/api/producer/producer.routes';
 import swaggerUI from "swagger-ui-express";
 import * as YAML from 'yamljs';
+import { httpError } from './infrastructure/api/middlewares/http-errors';
 
 const port = 3000;
 

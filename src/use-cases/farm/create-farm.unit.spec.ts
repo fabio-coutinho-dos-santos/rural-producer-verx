@@ -1,59 +1,28 @@
 import 'express-async-errors'
-import { AppDataSourceTest } from '../../infrastructure/database/typeorm/postgres/data-source-test';
-import FarmEntity from '../../infrastructure/database/typeorm/entities/farms.entity';
 import CreateFarm from './create-farm';
-import { FarmRepository } from '../../infrastructure/database/repository/farm.repository';
-import FarmRepositoryInterface from '../../domain/farm/repository/farm.repository.interface';
-import ProducerRepositoryInterface from '../../domain/producer/repository/producer.repository.interface';
-import ProducerEntity from '../../infrastructure/database/typeorm/entities/producer.entity';
-import { ProducerRepository } from '../../infrastructure/database/repository/producer.repository';
-import Producer from '../../domain/producer/entity/producer.entity';
+import { farmStub, inputCreateFarmStub, producerStub, validUuidFormat } from '../@shared/tests/stub';
+import { FarmMockRepository, ProducerMockRepository } from '../@shared/tests/mock/repository.mock';
 
 describe('Producer routes tests', () => {
 
-  let farmRepository: FarmRepositoryInterface
-  let producerRepository: ProducerRepositoryInterface
-
-  const producer = new Producer(
-    "Name",
-    "292.256.890-39"
-  )
-
-  let requestBodyStubValid: any;
-  let producerStored: any;
-
-  beforeAll(async () => {
-    await AppDataSourceTest.initialize();
-    await AppDataSourceTest.getRepository(FarmEntity).delete({});
-    await AppDataSourceTest.getRepository(ProducerEntity).delete({});
-
-    farmRepository = new FarmRepository(AppDataSourceTest)
-    producerRepository = new ProducerRepository(AppDataSourceTest)
-    producerStored = await producerRepository.create(producer)
-    requestBodyStubValid = {
-      name: 'Farm name',
-      city: 'City',
-      state: 'State',
-      producerId: producerStored.id,
-      totalArea: 10,
-      arableArea: 2,
-      vegetationArea: 4,
-      crops: [
-        'cotton',
-        'coffe'
-      ]
-    }
+  beforeEach(async () => {
+    jest.clearAllMocks()
   })
 
   afterAll(async () => {
-    await AppDataSourceTest.getRepository(FarmEntity).delete({});
   })
 
   describe('Create farm usecase unit test', () => {
     it('should return a new farm with valid request', async () => {
+      const producerRepository = ProducerMockRepository(true)
+      const farmRepository = FarmMockRepository()
       const createFarm = await new CreateFarm(farmRepository, producerRepository);
-      const resp = await createFarm.execute(requestBodyStubValid);
+      const resp = await createFarm.execute(inputCreateFarmStub());
       expect(createFarm).toBeDefined()
+      expect(resp).toBeDefined()
+      expect(resp.name).toBe(farmStub().name)
+      expect(resp.address.city).toBe(farmStub().address.city)
+      expect(resp.address.state).toBe(farmStub().address.state)
     })
 
     it('should return an error with invalid name', async () => {
@@ -62,7 +31,7 @@ describe('Producer routes tests', () => {
         city: 'City',
         state: 'State',
         totalArea: 10,
-        producerId: producerStored.id,
+        producerId: validUuidFormat(),
         arableArea: 2,
         vegetationArea: 4,
         crops: [
@@ -72,6 +41,8 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+        const producerRepository = ProducerMockRepository(true)
+        const farmRepository = FarmMockRepository()
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
@@ -85,7 +56,7 @@ describe('Producer routes tests', () => {
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
-        producerId: producerStored.id,
+        producerId: validUuidFormat(),
         crops: [
           'cotton',
           'coffe'
@@ -93,6 +64,8 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+        const producerRepository = ProducerMockRepository(true)
+        const farmRepository = FarmMockRepository()
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
@@ -106,7 +79,7 @@ describe('Producer routes tests', () => {
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
-        producerId: producerStored.id,
+        producerId: validUuidFormat(),
         crops: [
           'cotton',
           'coffe'
@@ -114,6 +87,8 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+        const producerRepository = ProducerMockRepository(true)
+        const farmRepository = FarmMockRepository()
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
@@ -127,7 +102,7 @@ describe('Producer routes tests', () => {
         totalArea: 10,
         arableArea: 5,
         vegetationArea: 6,
-        producerId: producerStored.id,
+        producerId: validUuidFormat(),
         crops: [
           'cotton',
           'coffe'
@@ -135,6 +110,8 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+        const producerRepository = ProducerMockRepository(true)
+        const farmRepository = FarmMockRepository()
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
@@ -148,7 +125,7 @@ describe('Producer routes tests', () => {
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
-        producerId: producerStored.id,
+        producerId: validUuidFormat(),
         crops: [
           'rice',
           'coffe'
@@ -156,6 +133,8 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+        const producerRepository = ProducerMockRepository(true)
+        const farmRepository = FarmMockRepository()
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
@@ -169,7 +148,7 @@ describe('Producer routes tests', () => {
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
-        producerId:'8d064745-cc9b-4ab4-b338-b7cf9a4514ec',
+        producerId: validUuidFormat(),
         crops: [
           'cotton',
           'coffe'
@@ -177,6 +156,9 @@ describe('Producer routes tests', () => {
       }
 
       expect(async () => {
+
+        const farmRepository = FarmMockRepository()
+        const producerRepository = ProducerMockRepository(false)
         const createFarm = await new CreateFarm(farmRepository, producerRepository);
         const resp = await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();

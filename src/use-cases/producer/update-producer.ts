@@ -3,10 +3,10 @@ import ProducerRepositoryInterface from "../../domain/producer/repository/produc
 import { NotFoundError } from "../../helpers/ApiErrors";
 
 export default class UpdateProducer {
-  constructor(private readonly producerRepository: ProducerRepositoryInterface){}
+  constructor(private readonly producerRepository: ProducerRepositoryInterface) { }
 
   async execute(requestBody: any, producerId: string) {
-    
+
     await this.buildNewProducer(requestBody, producerId)
     await this.producerRepository.update(requestBody, producerId)
     const producerUpdated = this.producerRepository.findById(producerId)
@@ -15,7 +15,7 @@ export default class UpdateProducer {
 
   async buildNewProducer(requestBody: any, producerId: string) {
     const producerStored = await this.producerRepository.findById(producerId)
-    if(!producerStored) {
+    if (!producerStored) {
       throw new NotFoundError('Producer not found')
     }
 

@@ -44,17 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: "Name"
-                  document:
-                    type: string
-                    example: "406.738.520-08"
-                  id:
-                    type: string
-                    format: uuid
+                $ref: "#/components/schemas/CreateProducerResource"
         "400":
           description: Bad Request
           content:
@@ -104,14 +94,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ProducerRequest"
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Producer name updated
       responses:
         "200":
           description: Updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProducerResource"
+                $ref: "#/components/schemas/CreateProducerResource"
 
         "400":
           description: Bad Request
@@ -173,7 +167,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FarmsResource"
+                $ref: "#/components/schemas/CreateFarmsResource"
         "400":
           description: Bad Request
           content:
@@ -202,11 +196,11 @@ paths:
               $ref: "#/components/schemas/FarmsRequest"
       responses:
         "200":
-          description: Created
+          description: Updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FarmsResource"
+                $ref: "#/components/schemas/CreateFarmsResource"
         "400":
           description: Bad Request
           content:
@@ -280,6 +274,9 @@ components:
     ProducerResource:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
           example: "Name"
@@ -291,9 +288,31 @@ components:
           items:
             $ref: "#/components/schemas/FarmsResource"
 
+    CreateProducerResource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Name"
+        document:
+          type: string
+          example: "406.738.520-08"
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date
+
     FarmsResource:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
           example: Farm Name
@@ -306,6 +325,9 @@ components:
             state:
               type: string
               example: State
+        producer:
+          type: string
+          example: Producer name
         areas:
           type: object
           properties:
@@ -369,3 +391,41 @@ components:
           type: array
           items:
             enum: ["soy", "corn", "cotton", "coffe", "suggarCane"]
+
+    CreateFarmsResource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Name"
+        producerId:
+          type: string
+          format: uuid
+        city:
+          type: string
+          example: City
+        state:
+          type: string
+          example: State
+        totalArea:
+          type: number
+          example: 22.3
+        arableArea:
+          type: number
+          example: 12
+        vegetationArea:
+          type: number
+          example: 9.1
+        crops:
+          type: array
+          items:
+            enum: ["soy", "corn", "cotton", "coffe", "suggarCane"]
+        createdAt:
+          type: string
+          format: date
+        updatedAt:
+          type: string
+          format: date

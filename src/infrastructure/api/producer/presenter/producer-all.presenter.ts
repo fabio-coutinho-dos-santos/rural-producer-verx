@@ -1,5 +1,5 @@
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
-import FarmResourceDto from "../../farm/presenter/farm.presenter";
+import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
 import ProducerResourceDto from "./producer.precenter";
 
 export default class ArrayProducerPresenter {
@@ -10,7 +10,7 @@ export default class ArrayProducerPresenter {
         id: producer.id,
         name: producer.name,
         document: producer.document,
-        farms: new FarmResourceDto(producer.farms)
+        farms: new ProducerFarmPresenter(producer.farms)
       }
       arrayProducers.push(resource)
     })

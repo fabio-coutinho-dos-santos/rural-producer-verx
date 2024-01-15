@@ -1,6 +1,6 @@
 import FarmEntity from "../../../database/typeorm/postgres/entities/farms.entity";
 
-export default class FarmPresenter {
+export default class ProducerFarmPresenter {
   constructor(farmStored: any) {
     let resourceArray = new Array<any>
 
@@ -12,7 +12,6 @@ export default class FarmPresenter {
           city: farm.city,
           state: farm.state,
         },
-        producer: farm.producer.name,
         areas: {
           total: farm.totalArea,
           arable: farm.arableArea,

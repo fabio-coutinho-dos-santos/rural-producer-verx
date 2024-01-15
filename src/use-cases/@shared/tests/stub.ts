@@ -49,6 +49,35 @@ export const inputCreateFarmStub = () => {
 }
 
 
+export const inputUpdateFarmStub = () => {
+  return {
+    name: 'Farm name',
+    city: 'City',
+    producerId: '97fc317b-8842-47d0-8914-80bd3b5eac3a',
+    state: 'State',
+    crops: [
+      'cotton',
+      'coffe'
+    ]
+  }
+}
+
+export const inputUpdateFarmStubInvalidArea = () => {
+  return {
+    name: 'Farm name',
+    city: 'City',
+    producerId: '97fc317b-8842-47d0-8914-80bd3b5eac3a',
+    state: 'State',
+    totalArea: 10,
+    arableArea: 2,
+    vegetationArea: 9,
+    crops: [
+      'cotton',
+      'coffe'
+    ]
+  }
+}
+
 export const inputUpdateProducerStub = () => {
   return {
     name: 'Producer Name'

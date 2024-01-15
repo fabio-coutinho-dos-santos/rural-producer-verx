@@ -5,9 +5,9 @@ import { farmStub, inputUpdateProducerStub, producerStub } from "../stub"
 export const FarmMockRepository = (): FarmRepositoryInterface => {
   return {
     create: jest.fn().mockResolvedValue(farmStub()),
-    update: jest.fn(),
+    update: jest.fn().mockResolvedValue(farmStub()),
     delete: jest.fn(),
-    findById: jest.fn(),
+    findById: jest.fn().mockResolvedValue(farmStub()),
     findAll: jest.fn(),
     findWithRelations: jest.fn(),
     getAmountFarms: jest.fn(),

@@ -9,6 +9,8 @@ import UpdateFarm from "../../../use-cases/farm/update-farm";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import { DeleteResult } from "typeorm";
 import FarmResourceDto from "../dto/farm-resource.dto";
+import { GetAmountFarms } from "../../../use-cases/farm/get-amount-farms";
+import { GetTotalAreaFarms } from "../../../use-cases/farm/get-total-area-farms";
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
@@ -91,9 +93,9 @@ export class FarmController {
 
   async getAmount(request: Request, response: Response): Promise<unknown> {
     try {
-      const resp = await this.farmRepository.getAmountFarms()
+      const amountFarms = await new GetAmountFarms(this.farmRepository).execute()
       const result = {
-        amountFarms: parseFloat(resp.amount)
+        amountFarms: parseFloat(amountFarms.amount)
       }
       return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {
@@ -104,7 +106,7 @@ export class FarmController {
 
   async getTotalArea(request: Request, response: Response): Promise<unknown> {
     try {
-      const totalArea = await this.farmRepository.getTotalArea()
+      const totalArea = await new GetTotalAreaFarms(this.farmRepository).execute()
       const result = {
         totalArea: parseFloat(totalArea.total.toFixed(2))
       }

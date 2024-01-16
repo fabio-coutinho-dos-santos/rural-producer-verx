@@ -41,7 +41,7 @@
   "dependencies": {
     "@types/cors": "2.8.17",
     "@types/yamljs": "0.2.34",
-    "class-validator": "0.14.0",
+    "class-validator": "^0.14.1",
     "cors": "2.8.5",
     "dotenv": "^16.3.1",
     "express-async-errors": "^3.1.1",

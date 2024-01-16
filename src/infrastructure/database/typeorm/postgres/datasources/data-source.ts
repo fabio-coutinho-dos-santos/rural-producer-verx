@@ -1,12 +1,12 @@
-import "dotenv/config";
 import { DataSource } from "typeorm";
-import ProducerEntity from "./entities/producer.entity";
-import FarmEntity from "./entities/farms.entity";
+import "dotenv/config";
+import ProducerEntity from "../entities/producer.entity";
+import FarmEntity from "../entities/farms.entity";
 
 export function ormconfig(): any {
   const config = {
     type: "postgres",
-    url: process.env.POSTGRES_TEST_URL_CONNECTION,
+    url: process.env.POSTGRES_URL_CONNECTION,
     entities: [ProducerEntity, FarmEntity],
     synchronize: true,
     logging: false,
@@ -15,4 +15,4 @@ export function ormconfig(): any {
   return config;
 }
 
-export const AppDataSourceTest = new DataSource(ormconfig());
+export const AppDataSource = new DataSource(ormconfig());

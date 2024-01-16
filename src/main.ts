@@ -1,6 +1,6 @@
 import "express-async-errors";
 import express from "express";
-import { AppDataSource } from "./infrastructure/database/typeorm/postgres/data-source";
+import { AppDataSource } from "./infrastructure/database/typeorm/postgres/datasources/data-source";
 import farmRoutes from "./infrastructure/api/farm/farm.routes";
 import producerRoutes from "./infrastructure/api/producer/producer.routes";
 import swaggerUI from "swagger-ui-express";
@@ -8,6 +8,7 @@ import * as YAML from "yamljs";
 import { httpError } from "./infrastructure/api/middlewares/http-errors";
 import cors from "cors";
 import { API_CONFIG } from "./infrastructure/api/config";
+import logger from "./infrastructure/logger/pino.logger";
 
 const port = API_CONFIG.port;
 
@@ -26,6 +27,6 @@ AppDataSource.initialize().then(() => {
   );
 
   return app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
+    logger.info(`App listening on port ${port}`);
   });
 });

@@ -1,4 +1,6 @@
-FROM node:18
+FROM node:18-alpine
+
+RUN apk update && apk upgrade
 
 WORKDIR /app
 
@@ -6,4 +8,4 @@ COPY . /app
 
 RUN npm install && npm run build
 
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/src/index.js"]

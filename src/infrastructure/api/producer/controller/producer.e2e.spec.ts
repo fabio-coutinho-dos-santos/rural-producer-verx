@@ -6,6 +6,7 @@ import HttpStatus from "http-status-codes";
 import producerRoutes from "../producer.routes";
 import { httpError } from "../../middlewares/http-errors";
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
+jest.setTimeout(20000);
 
 describe("Producer routes tests", () => {
   const app = express();

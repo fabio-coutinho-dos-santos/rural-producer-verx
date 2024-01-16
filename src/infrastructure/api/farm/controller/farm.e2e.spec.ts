@@ -10,6 +10,8 @@ import { httpError } from "../../middlewares/http-errors";
 import FarmEntity from "../../../database/typeorm/postgres/entities/farms.entity";
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
 
+jest.setTimeout(20000);
+
 describe("Farms routes tests", () => {
   const app = express();
   app.use(express.json());

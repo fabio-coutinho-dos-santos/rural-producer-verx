@@ -37,7 +37,7 @@ jobs:
         run: npm run lint
 
       - name: Unit Test Code
-        id: test
+        id: unit-test
         env:
           NODE_ENV: test
           PORT: ${{ secrets.PORT }}
@@ -47,7 +47,7 @@ jobs:
         run: npm run test unit
 
       - name: Integration Test Code
-        id: test
+        id: integration-test
         env:
           NODE_ENV: test
           PORT: ${{ secrets.PORT }}

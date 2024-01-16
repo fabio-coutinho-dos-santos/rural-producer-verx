@@ -1,7 +1,7 @@
 import "express-async-errors";
 import express from "express";
 import supertest from "supertest";
-import { AppDataSourceTest } from "../../../database/typeorm/postgres/data-source-test";
+import { AppDataSourceTest } from "../../../database/typeorm/postgres/datasources/data-source-test";
 import HttpStatus from "http-status-codes";
 import Producer from "../../../../domain/producer/entity/producer.entity";
 import farmRoutes from "../farm.routes";

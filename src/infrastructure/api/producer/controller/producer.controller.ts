@@ -13,6 +13,7 @@ import ProducerDto from "../dto/producer.dto";
 import UpdateProducerDto from "../dto/update-producer.dto";
 import ArrayProducerPresenter from "../presenter/producer-all.presenter";
 import ProducerResourcePresenter from "../presenter/producer.presenter";
+import customLogger from "../../../logger/pino.logger";
 export default class ProducerController {
   constructor(
     private readonly producerRepository: ProducerRepositoryInterface
@@ -32,21 +33,23 @@ export default class ProducerController {
       const producerStored = await this.producerRepository.create(producer);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: any) {
-      console.log(e.toString());
+      customLogger.error(e.toString());
       throw new BadRequestError(e);
     }
   }
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const allProducers: any = await this.producerRepository.findWithRelations({
-        relations: { farms: true },
-      });
+      const allProducers: any = await this.producerRepository.findWithRelations(
+        {
+          relations: { farms: true },
+        }
+      );
       return response
         .status(HttpStatus.OK)
         .json(new ArrayProducerPresenter(allProducers));
     } catch (e: any) {
-      console.log(e.toString());
+      customLogger.error(e.toString());
       throw new InternalServerError(e.toString());
     }
   }
@@ -94,7 +97,7 @@ export default class ProducerController {
 
       return response.status(HttpStatus.OK).send();
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new InternalServerError(e.toString());
     }
   }
@@ -109,7 +112,7 @@ export default class ProducerController {
       const producerUpdated = await producer.execute(requestBody, producerId);
       return response.status(HttpStatus.OK).json(producerUpdated);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError(e.toString());
     }
   }

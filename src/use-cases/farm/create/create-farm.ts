@@ -4,6 +4,7 @@ import FarmAddress from "../../../domain/farm/value-object/farm-address";
 import { BadRequestError } from "../../../infrastructure/api/helpers/ApiErrors";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
 import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
+import customLogger from "../../../infrastructure/logger/pino.logger";
 
 export default class CreateFarm {
   constructor(
@@ -24,7 +25,7 @@ export default class CreateFarm {
       const farmStored = await this.farmRepository.create(farm);
       return farmStored;
     } catch (e: unknown) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError(String(e));
     }
   }

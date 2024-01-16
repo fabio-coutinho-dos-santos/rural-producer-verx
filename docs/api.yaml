@@ -9,7 +9,7 @@ info:
 servers:
   - url: "http://localhost:3000"
     description: "Local Server"
-  - url: "https://shaw-and-partners-backend-p3vc.onrender.com"
+  - url: "https://test-verx-api.onrender.com/"
     description: "Production Server"
 
 paths:

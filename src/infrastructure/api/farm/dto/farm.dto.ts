@@ -8,6 +8,7 @@ import {
 } from "class-validator";
 import { PlantedCrops } from "../../../../domain/producer/enum/planted-crops.enum";
 import { BadRequestError } from "../../helpers/ApiErrors";
+import customLogger from "../../../logger/pino.logger";
 
 export default class FarmDto {
   @IsNotEmpty()
@@ -56,7 +57,7 @@ export default class FarmDto {
     try {
       await validateOrReject(this);
     } catch (e: unknown) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError("Invalid request body");
     }
   }

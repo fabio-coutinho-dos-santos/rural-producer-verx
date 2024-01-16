@@ -1,25 +1,33 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from "typeorm";
 import FarmEntity from "./farms.entity";
 import Farm from "../../../../../domain/farm/entity/farm.entity";
 
-@Entity('producers')
+@Entity("producers")
 @Unique(["document"])
 export default class ProducerEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @Column({nullable: false})
-  name: string
+  @Column({ nullable: false })
+  name: string;
 
-  @Column({nullable: false})
-  document: string
+  @Column({ nullable: false })
+  document: string;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 
-  @OneToMany(() => FarmEntity, farm => farm.producer)
-  farms: Farm[]
+  @OneToMany(() => FarmEntity, (farm) => farm.producer)
+  farms: Farm[];
 }

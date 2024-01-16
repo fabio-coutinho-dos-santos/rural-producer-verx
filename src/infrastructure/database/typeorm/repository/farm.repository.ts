@@ -4,7 +4,6 @@ import Farm from "../../../../domain/farm/entity/farm.entity";
 import FarmEntity from "../postgres/entities/farms.entity";
 
 export class FarmRepository implements FarmRepositoryInterface {
-
   private repository: Repository<FarmEntity>;
 
   constructor(private readonly dataSource: DataSource) {
@@ -20,14 +19,14 @@ export class FarmRepository implements FarmRepositoryInterface {
       arableArea: entity.arableArea,
       producerId: entity.producerId,
       vegetationArea: entity.vegetableArea,
-      crops: entity.crops
+      crops: entity.crops,
     };
     const farm = await this.repository.save(farmModel);
     return farm;
   }
 
   async update(entity: any | Partial<Farm>, id: string): Promise<any> {
-    await this.repository.update(id, entity)
+    await this.repository.update(id, entity);
     return await this.findById(id);
   }
 
@@ -50,18 +49,17 @@ export class FarmRepository implements FarmRepositoryInterface {
 
   async getAmountFarms(): Promise<any> {
     const result: any = await this.repository
-      .createQueryBuilder('farm')
-      .select('COUNT(farm.id) as amount')
+      .createQueryBuilder("farm")
+      .select("COUNT(farm.id) as amount")
       .getRawOne();
-    return Promise.resolve(result)
+    return Promise.resolve(result);
   }
 
   async getTotalArea(): Promise<any> {
     const result: any = await this.repository
-      .createQueryBuilder('farm')
-      .select('SUM(farm.totalArea) as total')
+      .createQueryBuilder("farm")
+      .select("SUM(farm.totalArea) as total")
       .getRawOne();
-    return Promise.resolve(result)
+    return Promise.resolve(result);
   }
-
 }

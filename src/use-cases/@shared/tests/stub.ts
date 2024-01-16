@@ -1,7 +1,6 @@
 import FarmAddress from "../../../domain/farm/value-object/farm-address";
 import Farm from "../../../domain/farm/entity/farm.entity";
 import Producer from "../../../domain/producer/entity/producer.entity";
-import ProducerDto from "../../../infrastructure/api/producer/dto/producer.dto";
 
 export const validUuidFormat = (): string => {
   return "97fc317b-8842-47d0-8914-80bd3b5eac3a";
@@ -59,7 +58,7 @@ export const inputUpdateFarmStubInvalidArea = () => {
   };
 };
 
-export const inputUpdateProducerStub = (): ProducerDto | any => {
+export const inputUpdateProducerStub = () => {
   return {
     name: "Producer Name",
   };

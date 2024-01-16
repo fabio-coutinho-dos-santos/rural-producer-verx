@@ -1,5 +1,5 @@
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
-import FarmPresenter from "../../farm/presenter/farm.presenter";
+import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
 
 export default class ProducerResourcePresenter {
   constructor(producerStored: ProducerEntity) {
@@ -7,7 +7,7 @@ export default class ProducerResourcePresenter {
       id: producerStored.id,
       name: producerStored.name,
       document: producerStored.document,
-      farms: new FarmPresenter(producerStored.farms) ?? [],
+      farms: new ProducerFarmPresenter(producerStored.farms) ?? [],
     };
     return resource;
   }

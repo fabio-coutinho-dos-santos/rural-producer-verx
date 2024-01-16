@@ -83,7 +83,7 @@ export class FarmController {
       let deleted = false;
 
       if (affected) {
-        deleted = true ? affected.valueOf() > 0 : false;
+        deleted = affected.valueOf() > 0;
       }
 
       if (deleted) {

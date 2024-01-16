@@ -21,7 +21,7 @@ describe("Update Farm use case", () => {
       const producerRepository: ProducerRepositoryInterface =
         ProducerMockRepository(returnProducerFlag);
       const updateFarm = new UpdateFarm(farmRepository, producerRepository);
-      const result = await updateFarm.validateProducer(inputUpdateFarmStub());
+      const result = await updateFarm.validateProducer(inputUpdateFarmStub() as FarmDto);
       expect(result).toBe(undefined);
     });
 
@@ -32,7 +32,7 @@ describe("Update Farm use case", () => {
         const producerRepository: ProducerRepositoryInterface =
           ProducerMockRepository(returnProducerFlag);
         const updateFarm = new UpdateFarm(farmRepository, producerRepository);
-        await updateFarm.validateProducer(inputUpdateFarmStub());
+        await updateFarm.validateProducer(inputUpdateFarmStub() as FarmDto);
       }).rejects.toThrow("Producer not found");
     });
   });

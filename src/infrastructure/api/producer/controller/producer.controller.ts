@@ -10,10 +10,9 @@ import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
 import UpdateProducer from "../../../../use-cases/producer/update/update-producer";
 import ProducerDto from "../dto/producer.dto";
-import ProducerResourceDto from "../presenter/producer.presenter";
 import UpdateProducerDto from "../dto/update-producer.dto";
-import ArrayProducerPresenterDto from "../presenter/producer-all.presenter";
 import ArrayProducerPresenter from "../presenter/producer-all.presenter";
+import ProducerResourcePresenter from "../presenter/producer.presenter";
 export default class ProducerController {
   constructor(
     private readonly producerRepository: ProducerRepositoryInterface
@@ -40,7 +39,7 @@ export default class ProducerController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const allProducers = await this.producerRepository.findWithRelations({
+      const allProducers: any = await this.producerRepository.findWithRelations({
         relations: { farms: true },
       });
       return response
@@ -67,7 +66,7 @@ export default class ProducerController {
     }
     return response
       .status(HttpStatus.OK)
-      .json(new ProducerResourceDto(producerStored));
+      .json(new ProducerResourcePresenter(producerStored));
   }
 
   async delete(request: Request, response: Response): Promise<any> {
@@ -86,7 +85,7 @@ export default class ProducerController {
       let deleted = false;
 
       if (affected) {
-        deleted = true ? affected.valueOf() > 0 : false;
+        deleted = affected.valueOf() > 0;
       }
 
       if (deleted) {

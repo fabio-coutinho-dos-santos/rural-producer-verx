@@ -21,13 +21,13 @@ export default class UpdateFarm {
       await this.farmRepository.update(requestBody, farmId);
       const farmUpdated = await this.farmRepository.findById(farmId);
       return farmUpdated;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log(e);
-      throw new InternalServerError(e.toString());
+      throw new InternalServerError();
     }
   }
 
-  async validateProducer(requestBody: any) {
+  async validateProducer(requestBody: FarmDto) {
     if (requestBody.producerId) {
       const producer = await this.producerRepository.findById(
         requestBody.producerId
@@ -38,7 +38,7 @@ export default class UpdateFarm {
     }
   }
 
-  async buildCompleteFarm(requestBody: any, farmId: string) {
+  async buildCompleteFarm(requestBody: FarmDto, farmId: string) {
     const farmStored = await this.farmRepository.findById(farmId);
     if (!farmStored) {
       throw new NotFoundError("Farm not found");

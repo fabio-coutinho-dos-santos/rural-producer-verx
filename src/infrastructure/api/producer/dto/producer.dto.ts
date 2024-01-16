@@ -2,7 +2,6 @@ import {
   IsNotEmpty,
   IsString,
   Length,
-  ValidationError,
   validateOrReject,
 } from "class-validator";
 import { ProducerConstants } from "../../../../domain/producer/enum/producer.constants.enum";
@@ -26,7 +25,7 @@ export default class ProducerDto {
   async validate() {
     try {
       await validateOrReject(this);
-    } catch (e: ValidationError | any) {
+    } catch (e: unknown) {
       console.log(e);
       throw new BadRequestError("Invalid request body");
     }

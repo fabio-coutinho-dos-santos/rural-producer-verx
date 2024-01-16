@@ -3,6 +3,7 @@ import Farm from "../../../domain/farm/entity/farm.entity";
 import FarmAddress from "../../../domain/farm/value-object/farm-address";
 import { BadRequestError } from "../../../infrastructure/api/helpers/ApiErrors";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
+import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
 
 export default class CreateFarm {
   constructor(
@@ -10,7 +11,7 @@ export default class CreateFarm {
     private readonly producerRepository: ProducerRepositoryInterface
   ) {}
 
-  async execute(requestBody: any) {
+  async execute(requestBody: FarmDto) {
     try {
       const producer = await this.producerRepository.findById(
         requestBody.producerId
@@ -22,18 +23,18 @@ export default class CreateFarm {
       const farm = this.buildFarm(requestBody, farmAddress);
       const farmStored = await this.farmRepository.create(farm);
       return farmStored;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log(e);
-      throw new BadRequestError(e.toString());
+      throw new BadRequestError(String(e));
     }
   }
 
-  private buildFarmAddress(requestBody: any): FarmAddress {
+  private buildFarmAddress(requestBody: FarmDto): FarmAddress {
     const farmAddress = new FarmAddress(requestBody.city, requestBody.state);
     return farmAddress;
   }
 
-  private buildFarm(requestBody: any, farmAddress: FarmAddress): Farm {
+  private buildFarm(requestBody: FarmDto, farmAddress: FarmAddress): Farm {
     const farm = new Farm(
       requestBody.name,
       farmAddress,

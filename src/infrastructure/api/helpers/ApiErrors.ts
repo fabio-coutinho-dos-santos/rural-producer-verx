@@ -21,8 +21,8 @@ export class NotFoundError extends ApiErrors {
 }
 
 export class InternalServerError extends ApiErrors {
-  constructor(message: string) {
-    super(message, HttpStatus.INTERNAL_SERVER_ERROR);
+  constructor(message?: string) {
+    super(message ?? "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
 

@@ -1,10 +1,10 @@
+import Producer from "../../../../domain/producer/entity/producer.entity";
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
 import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
 import ProducerResourcePresenter from "./producer.presenter";
-import ProducerResourceDto from "./producer.presenter";
 
 export default class ArrayProducerPresenter {
-  constructor(producers: ProducerEntity[]) {
+  constructor(producers: ProducerEntity[] | Producer[]) {
     const arrayProducers = new Array<ProducerResourcePresenter>();
     producers.forEach((producer: any) => {
       const resource = {

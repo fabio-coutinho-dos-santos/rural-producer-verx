@@ -5,7 +5,6 @@ import {
   IsOptional,
   IsString,
   IsUUID,
-  ValidationError,
   validateOrReject,
 } from "class-validator";
 import { PlantedCrops } from "../../../../domain/producer/enum/planted-crops.enum";
@@ -64,7 +63,7 @@ export default class UpdateFarmDto {
   async validate() {
     try {
       await validateOrReject(this);
-    } catch (e: ValidationError | any) {
+    } catch (e: unknown) {
       console.log(e);
       throw new BadRequestError("Invalid request body");
     }

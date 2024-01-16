@@ -29,7 +29,7 @@ describe("Farm unit tests", () => {
   it("should throw an error when name is invalid", () => {
     expect(() => {
       const address = new FarmAddress("City", "State");
-      const farm = new Farm("", address, uuidValid);
+      new Farm("", address, uuidValid);
     }).toThrow("Name is required");
   });
 

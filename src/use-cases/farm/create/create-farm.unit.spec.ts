@@ -9,6 +9,7 @@ import {
   FarmMockRepository,
   ProducerMockRepository,
 } from "../../@shared/tests/mock/repository.mock";
+import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
 
 describe("Producer routes tests", () => {
   beforeEach(async () => {
@@ -25,7 +26,7 @@ describe("Producer routes tests", () => {
         farmRepository,
         producerRepository
       );
-      const resp = await createFarm.execute(inputCreateFarmStub());
+      const resp = await createFarm.execute(inputCreateFarmStub() as FarmDto);
       expect(createFarm).toBeDefined();
       expect(resp).toBeDefined();
       expect(resp.name).toBe(farmStub().name);
@@ -52,7 +53,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
 
@@ -75,7 +76,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
 
@@ -98,7 +99,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
 
@@ -121,7 +122,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
 
@@ -144,7 +145,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
 
@@ -167,7 +168,7 @@ describe("Producer routes tests", () => {
           farmRepository,
           producerRepository
         );
-        await createFarm.execute(requestBodyStub);
+        await createFarm.execute(requestBodyStub as FarmDto);
       }).rejects.toThrow();
     });
   });

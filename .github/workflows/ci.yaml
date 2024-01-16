@@ -40,18 +40,18 @@ jobs:
         id: test
         env:
           NODE_ENV: test
-          PORT: ${{ secrets.port }}
-          API_VERSION: ${{ secrets.api-version }}
-          POSTGRES_URL_CONNECTION: ${{ secrets.postgres-url-connection }}
-          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.postgres-test-url-connection }}
+          PORT: ${{ secrets.PORT }}
+          API_VERSION: ${{ secrets.API_VERSION }}
+          POSTGRES_URL_CONNECTION: ${{ secrets.POSTGRES_URL_CONNECTION }}
+          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.POSTGRES_TEST_URL_CONNECTION }}
         run: npm run test unit
 
       - name: Integration Test Code
         id: test
         env:
           NODE_ENV: test
-          PORT: ${{ secrets.port }}
-          API_VERSION: ${{ secrets.api-version }}
-          POSTGRES_URL_CONNECTION: ${{ secrets.postgres-url-connection }}
-          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.postgres-test-url-connection }}
+          PORT: ${{ secrets.PORT }}
+          API_VERSION: ${{ secrets.API_VERSION }}
+          POSTGRES_URL_CONNECTION: ${{ secrets.POSTGRES_URL_CONNECTION }}
+          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.POSTGRES_TEST_URL_CONNECTION }}
         run: npm run test e2e

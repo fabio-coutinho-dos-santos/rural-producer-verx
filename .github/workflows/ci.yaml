@@ -1,0 +1,57 @@
+# reference guide => https://docs.github.com/en/actions/learn-github-actions
+
+name: ci-verx-test
+
+on:
+  push:
+    branches:
+      - development
+      - master
+      - feat/create-ci-pipelines
+
+  pull_request:
+    branches:
+      - development
+      - master
+
+jobs:
+  check-application-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        id: checkout
+
+      - name: Set Up Node.js
+        id: setup-node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        id: install
+        run: npm ci
+
+      - name: Lint
+        id: lint
+        run: npm run lint
+
+      - name: Unit Test Code
+        id: test
+        env:
+          NODE_ENV: test
+          PORT: ${{ secrets.port }}
+          API_VERSION: ${{ secrets.api-version }}
+          POSTGRES_URL_CONNECTION: ${{ secrets.postgres-url-connection }}
+          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.postgres-test-url-connection }}
+        run: npm run test unit
+
+      - name: Integration Test Code
+        id: test
+        env:
+          NODE_ENV: test
+          PORT: ${{ secrets.port }}
+          API_VERSION: ${{ secrets.api-version }}
+          POSTGRES_URL_CONNECTION: ${{ secrets.postgres-url-connection }}
+          POSTGRES_TEST_URL_CONNECTION: ${{ secrets.postgres-test-url-connection }}
+        run: npm run test e2e

@@ -7,7 +7,6 @@ on:
     branches:
       - development
       - master
-      - feat/create-ci-pipelines
 
   pull_request:
     branches:
@@ -15,7 +14,7 @@ on:
       - master
 
 jobs:
-  check-application-backend:
+  check-application:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

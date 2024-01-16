@@ -1,168 +1,174 @@
-import 'express-async-errors'
-import CreateFarm from './create-farm';
-import { farmStub, inputCreateFarmStub, validUuidFormat } from '../../@shared/tests/stub';
-import { FarmMockRepository, ProducerMockRepository } from '../../@shared/tests/mock/repository.mock';
+import "express-async-errors";
+import CreateFarm from "./create-farm";
+import {
+  farmStub,
+  inputCreateFarmStub,
+  validUuidFormat,
+} from "../../@shared/tests/stub";
+import {
+  FarmMockRepository,
+  ProducerMockRepository,
+} from "../../@shared/tests/mock/repository.mock";
 
-describe('Producer routes tests', () => {
-
+describe("Producer routes tests", () => {
   beforeEach(async () => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  afterAll(async () => {
-  })
+  afterAll(async () => {});
 
-  describe('Create farm usecase unit test', () => {
-    it('should return a new farm with valid request', async () => {
-      const producerRepository = ProducerMockRepository(true)
-      const farmRepository = FarmMockRepository()
-      const createFarm = await new CreateFarm(farmRepository, producerRepository);
+  describe("Create farm usecase unit test", () => {
+    it("should return a new farm with valid request", async () => {
+      const producerRepository = ProducerMockRepository(true);
+      const farmRepository = FarmMockRepository();
+      const createFarm = await new CreateFarm(
+        farmRepository,
+        producerRepository
+      );
       const resp = await createFarm.execute(inputCreateFarmStub());
-      expect(createFarm).toBeDefined()
-      expect(resp).toBeDefined()
-      expect(resp.name).toBe(farmStub().name)
-      expect(resp.address.city).toBe(farmStub().address.city)
-      expect(resp.address.state).toBe(farmStub().address.state)
-    })
+      expect(createFarm).toBeDefined();
+      expect(resp).toBeDefined();
+      expect(resp.name).toBe(farmStub().name);
+      expect(resp.address.city).toBe(farmStub().address.city);
+      expect(resp.address.state).toBe(farmStub().address.state);
+    });
 
-    it('should return an error with invalid name', async () => {
+    it("should return an error with invalid name", async () => {
       const requestBodyStub = {
-        name: '',
-        city: 'City',
-        state: 'State',
+        name: "",
+        city: "City",
+        state: "State",
         totalArea: 10,
         producerId: validUuidFormat(),
         arableArea: 2,
         vegetationArea: 4,
-        crops: [
-          'cotton',
-          'coffe'
-        ]
-      }
+        crops: ["cotton", "coffe"],
+      };
 
       expect(async () => {
-        const producerRepository = ProducerMockRepository(true)
-        const farmRepository = FarmMockRepository()
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const producerRepository = ProducerMockRepository(true);
+        const farmRepository = FarmMockRepository();
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
+    });
 
-    it('should return an error with invalid city', async () => {
+    it("should return an error with invalid city", async () => {
       const requestBodyStub = {
-        name: 'Name',
-        city: '',
-        state: 'State',
+        name: "Name",
+        city: "",
+        state: "State",
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
         producerId: validUuidFormat(),
-        crops: [
-          'cotton',
-          'coffe'
-        ]
-      }
+        crops: ["cotton", "coffe"],
+      };
 
       expect(async () => {
-        const producerRepository = ProducerMockRepository(true)
-        const farmRepository = FarmMockRepository()
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const producerRepository = ProducerMockRepository(true);
+        const farmRepository = FarmMockRepository();
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
+    });
 
-    it('should return an error with invalid state', async () => {
+    it("should return an error with invalid state", async () => {
       const requestBodyStub = {
-        name: 'Name',
-        city: 'City',
-        state: '',
+        name: "Name",
+        city: "City",
+        state: "",
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
         producerId: validUuidFormat(),
-        crops: [
-          'cotton',
-          'coffe'
-        ]
-      }
+        crops: ["cotton", "coffe"],
+      };
 
       expect(async () => {
-        const producerRepository = ProducerMockRepository(true)
-        const farmRepository = FarmMockRepository()
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const producerRepository = ProducerMockRepository(true);
+        const farmRepository = FarmMockRepository();
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
+    });
 
-    it('should return an error with invalid area proportion', async () => {
+    it("should return an error with invalid area proportion", async () => {
       const requestBodyStub = {
-        name: 'Name',
-        city: 'City',
-        state: 'State',
+        name: "Name",
+        city: "City",
+        state: "State",
         totalArea: 10,
         arableArea: 5,
         vegetationArea: 6,
         producerId: validUuidFormat(),
-        crops: [
-          'cotton',
-          'coffe'
-        ]
-      }
+        crops: ["cotton", "coffe"],
+      };
 
       expect(async () => {
-        const producerRepository = ProducerMockRepository(true)
-        const farmRepository = FarmMockRepository()
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const producerRepository = ProducerMockRepository(true);
+        const farmRepository = FarmMockRepository();
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
+    });
 
-    it('should return an error with invalid crops', async () => {
+    it("should return an error with invalid crops", async () => {
       const requestBodyStub = {
-        name: 'Name',
-        city: 'City',
-        state: 'State',
+        name: "Name",
+        city: "City",
+        state: "State",
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
         producerId: validUuidFormat(),
-        crops: [
-          'rice',
-          'coffe'
-        ]
-      }
+        crops: ["rice", "coffe"],
+      };
 
       expect(async () => {
-        const producerRepository = ProducerMockRepository(true)
-        const farmRepository = FarmMockRepository()
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const producerRepository = ProducerMockRepository(true);
+        const farmRepository = FarmMockRepository();
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
+    });
 
-    it('should return an error with invalid producer id', async () => {
+    it("should return an error with invalid producer id", async () => {
       const requestBodyStub = {
-        name: 'Name',
-        city: 'City',
-        state: 'State',
+        name: "Name",
+        city: "City",
+        state: "State",
         totalArea: 10,
         arableArea: 2,
         vegetationArea: 4,
         producerId: validUuidFormat(),
-        crops: [
-          'cotton',
-          'coffe'
-        ]
-      }
+        crops: ["cotton", "coffe"],
+      };
 
       expect(async () => {
-
-        const farmRepository = FarmMockRepository()
-        const producerRepository = ProducerMockRepository(false)
-        const createFarm = await new CreateFarm(farmRepository, producerRepository);
-        const resp = await createFarm.execute(requestBodyStub);
+        const farmRepository = FarmMockRepository();
+        const producerRepository = ProducerMockRepository(false);
+        const createFarm = await new CreateFarm(
+          farmRepository,
+          producerRepository
+        );
+        await createFarm.execute(requestBodyStub);
       }).rejects.toThrow();
-    })
-
-  })
-})
+    });
+  });
+});

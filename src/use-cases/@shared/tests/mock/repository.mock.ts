@@ -1,6 +1,12 @@
-import FarmRepositoryInterface from "../../../../domain/farm/repository/farm.repository.interface"
-import ProducerRepositoryInterface from "../../../../domain/producer/repository/producer.repository.interface"
-import { amountFarmsStub, farmStub, inputUpdateProducerStub, producerStub, totalAreaFarmsStub } from "../stub"
+import FarmRepositoryInterface from "../../../../domain/farm/repository/farm.repository.interface";
+import ProducerRepositoryInterface from "../../../../domain/producer/repository/producer.repository.interface";
+import {
+  amountFarmsStub,
+  farmStub,
+  inputUpdateProducerStub,
+  producerStub,
+  totalAreaFarmsStub,
+} from "../stub";
 
 export const FarmMockRepository = (): FarmRepositoryInterface => {
   return {
@@ -12,20 +18,24 @@ export const FarmMockRepository = (): FarmRepositoryInterface => {
     findWithRelations: jest.fn(),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),
-  }
-}
+  };
+};
 
-export const ProducerMockRepository = (returnProducer: boolean): ProducerRepositoryInterface => {
+export const ProducerMockRepository = (
+  returnProducer: boolean
+): ProducerRepositoryInterface => {
   return {
     create: jest.fn(),
     update: jest.fn().mockResolvedValue({
       name: inputUpdateProducerStub().name,
-      document: producerStub().document
+      document: producerStub().document,
     }),
     delete: jest.fn(),
-    findById: jest.fn().mockResolvedValue(returnProducer ? producerStub() : null),
+    findById: jest
+      .fn()
+      .mockResolvedValue(returnProducer ? producerStub() : null),
     findAll: jest.fn(),
     findWithRelations: jest.fn(),
     findOneWithRelations: jest.fn(),
-  }
-}
+  };
+};

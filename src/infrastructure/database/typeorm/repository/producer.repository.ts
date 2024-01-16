@@ -3,9 +3,7 @@ import ProducerRepositoryInterface from "../../../../domain/producer/repository/
 import Producer from "../../../../domain/producer/entity/producer.entity";
 import ProducerEntity from "../postgres/entities/producer.entity";
 
-
 export class ProducerRepository implements ProducerRepositoryInterface {
-
   private repository: Repository<ProducerEntity>;
 
   constructor(private readonly dataSource: DataSource) {
@@ -26,7 +24,7 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   }
 
   async update(entity: any | Partial<Producer>, id: string): Promise<any> {
-    await this.repository.update(id, entity)
+    await this.repository.update(id, entity);
     return await this.findById(id);
   }
 
@@ -42,5 +40,4 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   async findAll(): Promise<any> {
     return await this.repository.find();
   }
-
 }

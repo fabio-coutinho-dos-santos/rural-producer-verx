@@ -7,30 +7,29 @@ import ProducerRepositoryInterface from "../../../domain/producer/repository/pro
 export default class CreateFarm {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
-    private readonly producerRepository: ProducerRepositoryInterface,
-  ) { }
+    private readonly producerRepository: ProducerRepositoryInterface
+  ) {}
 
   async execute(requestBody: any) {
     try {
-      const producer = await(this.producerRepository.findById(requestBody.producerId))
-      if(!producer) {
-        throw new BadRequestError('Producer not found')
+      const producer = await this.producerRepository.findById(
+        requestBody.producerId
+      );
+      if (!producer) {
+        throw new BadRequestError("Producer not found");
       }
       const farmAddress = this.buildFarmAddress(requestBody);
       const farm = this.buildFarm(requestBody, farmAddress);
       const farmStored = await this.farmRepository.create(farm);
-      return farmStored
+      return farmStored;
     } catch (e: any) {
-      console.log(e)
+      console.log(e);
       throw new BadRequestError(e.toString());
     }
   }
 
   private buildFarmAddress(requestBody: any): FarmAddress {
-    const farmAddress = new FarmAddress(
-      requestBody.city,
-      requestBody.state
-    )
+    const farmAddress = new FarmAddress(requestBody.city, requestBody.state);
     return farmAddress;
   }
 
@@ -41,24 +40,24 @@ export default class CreateFarm {
       requestBody.producerId
     );
 
-    if(requestBody.crops) {
+    if (requestBody.crops) {
       requestBody.crops.map((crop: string) => {
-        farm.addPlantedCrop(crop)
+        farm.addPlantedCrop(crop);
       });
     }
 
-    if(requestBody.totalArea) {
-      farm.changeTotalArea(requestBody.totalArea)
+    if (requestBody.totalArea) {
+      farm.changeTotalArea(requestBody.totalArea);
     }
 
-    if(requestBody.arableArea) {
-      farm.changeArableArea(requestBody.arableArea)
+    if (requestBody.arableArea) {
+      farm.changeArableArea(requestBody.arableArea);
     }
 
-    if(requestBody.vegetationArea) {
-      farm.changeVegetationArea(requestBody.vegetationArea)
+    if (requestBody.vegetationArea) {
+      farm.changeVegetationArea(requestBody.vegetationArea);
     }
 
-    return farm
+    return farm;
   }
 }

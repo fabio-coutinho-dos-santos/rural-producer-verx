@@ -7,6 +7,7 @@ import {
 } from "class-validator";
 import { ProducerConstants } from "../../../../domain/producer/enum/producer.constants.enum";
 import { BadRequestError } from "../../helpers/ApiErrors";
+import customLogger from "../../../logger/pino.logger";
 
 export default class UpdateProducerDto {
   @IsNotEmpty()
@@ -29,7 +30,7 @@ export default class UpdateProducerDto {
     try {
       await validateOrReject(this);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError("Invalid request body");
     }
   }

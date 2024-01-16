@@ -1,5 +1,5 @@
-import { AppDataSource } from "./typeorm/postgres/data-source";
-import { AppDataSourceTest } from "./typeorm/postgres/data-source-test";
+import { AppDataSource } from "./typeorm/postgres/datasources/data-source";
+import { AppDataSourceTest } from "./typeorm/postgres/datasources/data-source-test";
 import("dotenv/config");
 
 export const getDataSource = () => {

@@ -15,6 +15,7 @@ import { GetTotalAreaFarms } from "../../../../use-cases/farm/find/get-total-are
 import FarmDto from "../dto/farm.dto";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import FarmPresenter from "../presenter/farm.presenter";
+import customLogger from "../../../logger/pino.logger";
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
@@ -37,7 +38,7 @@ export class FarmController {
       const farmStored = await farm.execute(requestBody);
       return response.status(HttpStatus.CREATED).json(farmStored);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError(e.toString());
     }
   }
@@ -49,7 +50,7 @@ export class FarmController {
       });
       return response.status(HttpStatus.OK).json(new FarmPresenter(farms));
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError(e.toString());
     }
   }
@@ -64,7 +65,7 @@ export class FarmController {
       const farmStored = await farm.execute(requestBody, farmId);
       return response.status(HttpStatus.OK).json(farmStored);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new BadRequestError(e.toString());
     }
   }
@@ -92,7 +93,7 @@ export class FarmController {
 
       return response.status(HttpStatus.OK).send();
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new InternalServerError(e.toString());
     }
   }
@@ -107,7 +108,7 @@ export class FarmController {
       };
       return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new InternalServerError(e.toString());
     }
   }
@@ -122,7 +123,7 @@ export class FarmController {
       };
       return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {
-      console.log(e);
+      customLogger.error(e);
       throw new InternalServerError(e.toString());
     }
   }

@@ -7,6 +7,7 @@ import {
   NotFoundError,
 } from "../../../infrastructure/api/helpers/ApiErrors";
 import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
+import customLogger from "../../../infrastructure/logger/pino.logger";
 
 export default class UpdateFarm {
   constructor(
@@ -22,7 +23,7 @@ export default class UpdateFarm {
       const farmUpdated = await this.farmRepository.findById(farmId);
       return farmUpdated;
     } catch (e: unknown) {
-      console.log(e);
+      customLogger.error(e);
       throw new InternalServerError();
     }
   }

@@ -6,7 +6,7 @@ import FarmEntity from "./entities/farms.entity";
 export function ormconfig(): any {
   const config = {
     type: "postgres",
-    url: process.env.POSTGRES_URL_LOCAL_TESTS,
+    url: process.env.POSTGRES_TEST_URL_CONNECTION,
     entities: [ProducerEntity, FarmEntity],
     synchronize: true,
     logging: false,

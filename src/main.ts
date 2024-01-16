@@ -9,17 +9,21 @@ import { httpError } from "./infrastructure/api/middlewares/http-errors";
 import cors from "cors";
 import { API_CONFIG } from "./infrastructure/api/config";
 
-const port =  API_CONFIG.port;
+const port = API_CONFIG.port;
 
 const swaggerDocument = YAML.load("./docs/api.yaml");
 AppDataSource.initialize().then(() => {
   const app = express();
+  app.use(cors({ origin: "*" }));
   app.use(express.json());
   app.use(producerRoutes);
   app.use(farmRoutes);
-  app.use(cors({ origin: "*" }));
   app.use(httpError);
-  app.use(`/api/${API_CONFIG.version}/doc`, swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+  app.use(
+    `/api/${API_CONFIG.version}/doc`,
+    swaggerUI.serve,
+    swaggerUI.setup(swaggerDocument)
+  );
 
   return app.listen(port, () => {
     console.log(`App listening on port ${port}`);

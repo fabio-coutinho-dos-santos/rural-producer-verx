@@ -8,4 +8,4 @@ COPY . /app
 
 RUN npm install && npm run build
 
-CMD ["node", "dist/src/index.js"]
+CMD ["node", "dist/main.js"]

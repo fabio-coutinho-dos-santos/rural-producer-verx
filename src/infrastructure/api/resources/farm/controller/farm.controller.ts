@@ -1,21 +1,18 @@
-import CreateFarm from "../../../../use-cases/farm/create/create-farm";
 import { Response, Request } from "express";
-import FarmRepositoryInterface from "../../../../domain/farm/repository/farm.repository.interface";
-import {
-  BadRequestError,
-  InternalServerError,
-  NotFoundError,
-} from "../../helpers/ApiErrors";
-import ProducerRepositoryInterface from "../../../../domain/producer/repository/producer.repository.interface";
+
 import HttpStatus from "http-status-codes";
-import UpdateFarm from "../../../../use-cases/farm/update/update-farm";
 import { DeleteResult } from "typeorm";
-import { GetAmountFarms } from "../../../../use-cases/farm/find/get-amount-farms";
-import { GetTotalAreaFarms } from "../../../../use-cases/farm/find/get-total-area-farms";
 import FarmDto from "../dto/farm.dto";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import FarmPresenter from "../presenter/farm.presenter";
-import customLogger from "../../../logger/pino.logger";
+import FarmRepositoryInterface from "../../../../../domain/farm/repository/farm.repository.interface";
+import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
+import CreateFarm from "../../../../../use-cases/farm/create/create-farm";
+import customLogger from "../../../../logger/pino.logger";
+import { BadRequestError, InternalServerError, NotFoundError } from "../../../helpers/ApiErrors";
+import UpdateFarm from "../../../../../use-cases/farm/update/update-farm";
+import { GetAmountFarms } from "../../../../../use-cases/farm/find/get-amount-farms";
+import { GetTotalAreaFarms } from "../../../../../use-cases/farm/find/get-total-area-farms";
 
 export class FarmController {
   constructor(

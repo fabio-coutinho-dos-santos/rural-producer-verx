@@ -1,9 +1,9 @@
 import FarmRepositoryInterface from "../../../domain/farm/repository/farm.repository.interface";
 import { BadRequestError } from "../../../infrastructure/api/helpers/ApiErrors";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
-import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
 import customLogger from "../../../infrastructure/logger/pino.logger";
 import FarmFactory from "../../../domain/farm/factory/farm.factory";
+import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
 
 export default class CreateFarm {
   constructor(

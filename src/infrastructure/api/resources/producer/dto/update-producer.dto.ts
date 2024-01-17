@@ -5,10 +5,11 @@ import {
   Length,
   validateOrReject,
 } from "class-validator";
-import { ProducerConstants } from "../../../../domain/producer/enum/producer.constants.enum";
-import { BadRequestError } from "../../helpers/ApiErrors";
-import customLogger from "../../../logger/pino.logger";
+
 import ProducerDto from "./producer.dto";
+import { ProducerConstants } from "../../../../../domain/producer/enum/producer.constants.enum";
+import customLogger from "../../../../logger/pino.logger";
+import { BadRequestError } from "../../../helpers/ApiErrors";
 
 export default class UpdateProducerDto {
   @IsNotEmpty()

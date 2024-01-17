@@ -1,7 +1,7 @@
-import Producer from "../../../../domain/producer/entity/producer.entity";
-import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
+import Producer from "../../../../../domain/producer/entity/producer.entity";
+import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+import { maskDocument } from "../../../helpers/mask-functions";
 import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
-import { maskDocument } from "../../helpers/mask-functions";
 import ProducerResourcePresenter from "./producer.presenter";
 
 export default class ArrayProducerPresenter {

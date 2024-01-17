@@ -9,7 +9,7 @@ import {
   FarmMockRepository,
   ProducerMockRepository,
 } from "../../@shared/tests/mock/repository.mock";
-import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
+import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
 
 describe("Producer routes tests", () => {
   beforeEach(async () => {

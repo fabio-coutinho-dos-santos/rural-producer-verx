@@ -1,12 +1,12 @@
 import "express-async-errors";
 import express from "express";
 import supertest from "supertest";
-import { AppDataSourceTest } from "../../../database/typeorm/postgres/datasources/data-source-test";
 import HttpStatus from "http-status-codes";
 import producerRoutes from "../producer.routes";
-import { httpError } from "../../middlewares/http-errors";
-import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
-import { maskDocument } from "../../helpers/mask-functions";
+import { httpError } from "../../../middlewares/http-errors";
+import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasources/data-source-test";
+import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+import { maskDocument } from "../../../helpers/mask-functions";
 jest.setTimeout(20000);
 
 describe("Producer routes tests", () => {

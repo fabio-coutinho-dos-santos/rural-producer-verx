@@ -1,4 +1,4 @@
-import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
+import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
 import Farm from "../entity/farm.entity";
 import FarmAddress from "../value-object/farm-address";
 
@@ -6,7 +6,7 @@ export default class FarmFactory {
   public create(input: FarmDto) {
     const farmAddress = this.buildFarmAddress(input);
     const farm = this.buildFarm(input, farmAddress);
-    return farm
+    return farm;
   }
 
   private buildFarmAddress(input: FarmDto): FarmAddress {

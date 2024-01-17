@@ -1,14 +1,15 @@
 import "express-async-errors";
 import express from "express";
 import supertest from "supertest";
-import { AppDataSourceTest } from "../../../database/typeorm/postgres/datasources/data-source-test";
 import HttpStatus from "http-status-codes";
-import Producer from "../../../../domain/producer/entity/producer.entity";
 import farmRoutes from "../farm.routes";
-import { PlantedCrops } from "../../../../domain/producer/enum/planted-crops.enum";
-import { httpError } from "../../middlewares/http-errors";
-import FarmEntity from "../../../database/typeorm/postgres/entities/farms.entity";
-import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
+import { httpError } from "../../../middlewares/http-errors";
+import Producer from "../../../../../domain/producer/entity/producer.entity";
+import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasources/data-source-test";
+import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
+import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
+
 
 jest.setTimeout(20000);
 

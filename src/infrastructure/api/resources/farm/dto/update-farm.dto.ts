@@ -7,9 +7,9 @@ import {
   IsUUID,
   validateOrReject,
 } from "class-validator";
-import { PlantedCrops } from "../../../../domain/producer/enum/planted-crops.enum";
-import { BadRequestError } from "../../helpers/ApiErrors";
-import customLogger from "../../../logger/pino.logger";
+import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
+import customLogger from "../../../../logger/pino.logger";
+import { BadRequestError } from "../../../helpers/ApiErrors";
 
 export default class UpdateFarmDto {
   @IsNotEmpty()

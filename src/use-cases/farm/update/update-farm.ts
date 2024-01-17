@@ -6,8 +6,8 @@ import {
   InternalServerError,
   NotFoundError,
 } from "../../../infrastructure/api/helpers/ApiErrors";
-import FarmDto from "../../../infrastructure/api/farm/dto/farm.dto";
 import customLogger from "../../../infrastructure/logger/pino.logger";
+import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
 
 export default class UpdateFarm {
   constructor(

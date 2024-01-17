@@ -1,6 +1,6 @@
-import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
+import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+import { maskDocument } from "../../../helpers/mask-functions";
 import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
-import { maskDocument } from "../../helpers/mask-functions";
 
 export default class ProducerResourcePresenter {
   constructor(producerStored: ProducerEntity) {

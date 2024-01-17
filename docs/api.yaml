@@ -268,7 +268,7 @@ components:
           example: "Name"
         document:
           type: string
-          example: "406.738.520-08"
+          example: "406******08"
         farms:
           type: array
           items:
@@ -285,7 +285,7 @@ components:
           example: "Name"
         document:
           type: string
-          example: "406.738.520-08"
+          example: "406******08"
         createdAt:
           type: string
           format: date

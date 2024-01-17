@@ -7,10 +7,10 @@ info:
     email: "fabio.santcou@gmail.com"
     url: "https://portfolio-inky-six-97.vercel.app/"
 servers:
-  - url: "http://localhost:3000"
-    description: "Local Server"
   - url: "https://test-verx-api.onrender.com/"
     description: "Production Server"
+  - url: "http://localhost:3000"
+    description: "Local Server"
 
 paths:
   /api/v1/producers:

@@ -25,8 +25,7 @@ export class FarmController {
     this.getAll = this.getAll.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
-    this.getAmount = this.getAmount.bind(this);
-    this.getTotalArea = this.getTotalArea.bind(this);
+    this.getFarmTotals = this.getFarmTotals.bind(this);
   }
 
   async createFarm(request: Request, response: Response): Promise<unknown> {
@@ -98,29 +97,18 @@ export class FarmController {
     }
   }
 
-  async getAmount(request: Request, response: Response): Promise<unknown> {
+  async getFarmTotals(request: Request, response: Response): Promise<unknown> {
     try {
-      const amountFarms = await new GetAmountFarms(
-        this.farmRepository
-      ).execute();
+      const [amountFarms, totalArea] = await Promise.all([
+        new GetAmountFarms(this.farmRepository).execute(),
+        new GetTotalAreaFarms(this.farmRepository).execute(),
+      ]);
+
       const result = {
         amountFarms: parseFloat(amountFarms.amount),
+        allFarmsArea: parseFloat(totalArea.total.toFixed(2)),
       };
-      return response.status(HttpStatus.OK).json(result);
-    } catch (e: any) {
-      customLogger.error(e);
-      throw new InternalServerError(e.toString());
-    }
-  }
 
-  async getTotalArea(request: Request, response: Response): Promise<unknown> {
-    try {
-      const totalArea = await new GetTotalAreaFarms(
-        this.farmRepository
-      ).execute();
-      const result = {
-        totalArea: parseFloat(totalArea.total.toFixed(2)),
-      };
       return response.status(HttpStatus.OK).json(result);
     } catch (e: any) {
       customLogger.error(e);

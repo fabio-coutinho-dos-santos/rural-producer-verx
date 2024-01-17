@@ -15,7 +15,6 @@ farmRoutes.post(`/api/${API_CONFIG.version}/farms`, farmController.createFarm);
 farmRoutes.get(`/api/${API_CONFIG.version}/farms`, farmController.getAll);
 farmRoutes.patch(`/api/${API_CONFIG.version}/farms/:id`, farmController.update);
 farmRoutes.delete(`/api/${API_CONFIG.version}/farms/:id`, farmController.delete);
-farmRoutes.get(`/api/${API_CONFIG.version}/farms/amount`, farmController.getAmount);
-farmRoutes.get(`/api/${API_CONFIG.version}/farms/area/total`, farmController.getTotalArea);
+farmRoutes.get(`/api/${API_CONFIG.version}/farms/totals`, farmController.getFarmTotals);
 
 export default farmRoutes;

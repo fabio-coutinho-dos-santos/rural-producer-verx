@@ -18,14 +18,14 @@ describe("Farms routes tests", () => {
   app.use(httpError);
   app.use(farmRoutes);
 
-  let farmRepository: any;
-  let producerRepository: any;
+  let farmRepository;
+  let producerRepository;
 
   const producer = new Producer("Name", "292.256.890-39");
 
+  let producerStored: ProducerEntity;
   let requestBodyStubValid: any;
   let requestBodyStubValid2: any;
-  let producerStored: any;
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();

@@ -1,5 +1,8 @@
-import { DataSource, Repository } from "typeorm";
-import FarmRepositoryInterface from "../../../../domain/farm/repository/farm.repository.interface";
+import { DataSource, DeleteResult, FindManyOptions, Repository } from "typeorm";
+import FarmRepositoryInterface, {
+  AmountFarms,
+  AreaTotalFarms,
+} from "../../../../domain/farm/repository/farm.repository.interface";
 import Farm from "../../../../domain/farm/entity/farm.entity";
 import FarmEntity from "../postgres/entities/farms.entity";
 
@@ -25,38 +28,43 @@ export class FarmRepository implements FarmRepositoryInterface {
     return farm;
   }
 
-  async update(entity: any | Partial<Farm>, id: string): Promise<any> {
+  async update(
+    entity: Partial<Farm>,
+    id: string
+  ): Promise<Farm | FarmEntity | null> {
     await this.repository.update(id, entity);
     return await this.findById(id);
   }
 
-  async delete(id: string): Promise<any> {
+  async delete(id: string): Promise<DeleteResult> {
     return await this.repository.delete(id);
   }
 
-  async findById(id: any): Promise<any> {
+  async findById(id: string): Promise<FarmEntity | null> {
     const author = await this.repository.findOneBy({ id: id });
     return author;
   }
 
-  async findAll(): Promise<any> {
+  async findAll(): Promise<FarmEntity[]> {
     return await this.repository.find();
   }
 
-  async findWithRelations(relations: any): Promise<any> {
+  async findWithRelations(
+    relations: FindManyOptions<FarmEntity>
+  ): Promise<FarmEntity[]> {
     return await this.repository.find(relations);
   }
 
-  async getAmountFarms(): Promise<any> {
-    const result: any = await this.repository
+  async getAmountFarms(): Promise<AmountFarms> {
+    const result = await this.repository
       .createQueryBuilder("farm")
       .select("COUNT(farm.id) as amount")
       .getRawOne();
     return Promise.resolve(result);
   }
 
-  async getTotalArea(): Promise<any> {
-    const result: any = await this.repository
+  async getTotalArea(): Promise<AreaTotalFarms> {
+    const result = await this.repository
       .createQueryBuilder("farm")
       .select("SUM(farm.totalArea) as total")
       .getRawOne();

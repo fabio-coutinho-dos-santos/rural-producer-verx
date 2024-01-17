@@ -29,8 +29,8 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   }
 
   async create(entity: Producer): Promise<Producer> {
-    const author = await this.repository.save(entity);
-    return author;
+    const producer = await this.repository.save(entity);
+    return producer;
   }
 
   async update(entity: Partial<Producer>, id: string): Promise<Producer | ProducerEntity | null> {

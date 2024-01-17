@@ -32,9 +32,9 @@ export default class ProducerController {
       const producer = new Producer(producerDto.name, producerDto.document);
       const producerStored = await this.producerRepository.create(producer);
       return response.status(HttpStatus.CREATED).json(producerStored);
-    } catch (e: any) {
-      customLogger.error(e.toString());
-      throw new BadRequestError(e);
+    } catch (e: unknown) {
+      customLogger.error(e);
+      throw new BadRequestError(String(e));
     }
   }
 
@@ -48,13 +48,13 @@ export default class ProducerController {
       return response
         .status(HttpStatus.OK)
         .json(new ArrayProducerPresenter(allProducers));
-    } catch (e: any) {
-      customLogger.error(e.toString());
-      throw new InternalServerError(e.toString());
+    } catch (e: unknown) {
+      customLogger.error(e);
+      throw new InternalServerError(String(e));
     }
   }
 
-  async getById(request: Request, response: Response): Promise<any> {
+  async getById(request: Request, response: Response): Promise<unknown> {
     const producerId = request.params.id;
     const producerStored = await this.producerRepository.findOneWithRelations({
       where: {
@@ -72,7 +72,7 @@ export default class ProducerController {
       .json(new ProducerResourcePresenter(producerStored));
   }
 
-  async delete(request: Request, response: Response): Promise<any> {
+  async delete(request: Request, response: Response): Promise<unknown> {
     const producerId = request.params.id;
     const producerStored = await this.producerRepository.findById(producerId);
     if (!producerStored) {
@@ -96,9 +96,9 @@ export default class ProducerController {
       }
 
       return response.status(HttpStatus.OK).send();
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new InternalServerError(e.toString());
+      throw new InternalServerError(String(e));
     }
   }
 
@@ -111,9 +111,9 @@ export default class ProducerController {
       const producer = new UpdateProducer(this.producerRepository);
       const producerUpdated = await producer.execute(requestBody, producerId);
       return response.status(HttpStatus.OK).json(producerUpdated);
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(e.toString());
+      throw new BadRequestError(String(e));
     }
   }
 }

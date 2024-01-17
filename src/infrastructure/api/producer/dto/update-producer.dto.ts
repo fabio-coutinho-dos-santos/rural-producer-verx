@@ -8,6 +8,7 @@ import {
 import { ProducerConstants } from "../../../../domain/producer/enum/producer.constants.enum";
 import { BadRequestError } from "../../helpers/ApiErrors";
 import customLogger from "../../../logger/pino.logger";
+import ProducerDto from "./producer.dto";
 
 export default class UpdateProducerDto {
   @IsNotEmpty()
@@ -18,10 +19,10 @@ export default class UpdateProducerDto {
   @IsNotEmpty()
   @IsString()
   @IsOptional()
-  @Length(ProducerConstants.SIZE_CPF, ProducerConstants.SIZE_CNPJ)
+  @Length(ProducerConstants.SIZE_CPF)
   document: string;
 
-  constructor(requestBody: any) {
+  constructor(requestBody: ProducerDto) {
     if (requestBody.name) this.name = requestBody.name;
     if (requestBody.document) this.name = requestBody.document;
   }
@@ -29,7 +30,7 @@ export default class UpdateProducerDto {
   async validate() {
     try {
       await validateOrReject(this);
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
       throw new BadRequestError("Invalid request body");
     }

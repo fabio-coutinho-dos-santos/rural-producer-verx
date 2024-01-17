@@ -15,7 +15,7 @@ export default class ProducerDto {
 
   @IsNotEmpty()
   @IsString()
-  @Length(ProducerConstants.SIZE_CPF, ProducerConstants.SIZE_CNPJ)
+  @Length(ProducerConstants.SIZE_CPF)
   document: string;
 
   constructor(requestBody: any) {

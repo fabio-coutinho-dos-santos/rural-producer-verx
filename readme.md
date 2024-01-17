@@ -73,6 +73,16 @@ O nível de maturidade adotado para elaboração da API foi o 2, já tornando-a 
 
 Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes automatizados de unidade para todas as funcionalidades providas pela aplicação, incluindo as regras de negócio. Além disso, também foram desenvolvidos testes de integração para todas as rotas da aplicação, para o qual foi utilizado ou outro banco de dados exclusivo para testes. 
 
+
+## Detalhes de implementação
+ - Altíssima cobertura de testes. Para verificar basta executar o comando **npm run test:cov** após configurar o projeto localmente.
+ - Utilizalção de git flow e conventional commits.
+ - Utilização de logs estruturados para facilitar o scrap de ferramentas de observabilidade
+ - Devido ao escopo ser uma aplicação de teste não foram adotadas:
+  - Paginação nas rotas que retornam todos os recursos
+  - Instrumentação de métricas, traces e logs para observabilidade
+  - Criaçao/Alteração das tabelas por meio de migrations. (***Foi utilizado o atributo syncronize do TypeORM com true, o que não deve ser feito em produção***)
+
 ## Ci-Cd
 
 - Como prática de Devops abrangendo construções e entregas contínuas, para escopo deste teste foi criado um pipeline de ci com github actions que realiza o build do projeto, executa a ferramenta de lint para conferência de errors estáticos do código e também executa os testes unitário e de integração em passos separados. 
@@ -105,6 +115,8 @@ Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes aut
 
 - Outra melhoria que poderia ser aplicada visando o desempenho e disponibilidade da aplicação seria a implementação de CQRS em conjunto com um streaming de eventos. Assim, sempre que fosse criado ou modificado um registro no sistema, poderia ser disparado um evento, via Kafka, SNS, SQS, RabbitMq, PubSub, etc. Esse evento seria capturado por uma funcção serverless, como uma lambda function por exemplo e, essa função manipularia os dados e gravaria os registros em outro formato mais adequado para visualização das informações, podendo utilizar outros bancos de dados para tal, como MongoDb ou DynamoDb. Após isso, réplicas de leituras desse novo banco de dados poderiam ser criados em diversas regiões da AWS por exemplo, diminuindo a latência das aplicações. Dessa forma, a implantação de CQRS facilitaria gravar/alterar dados em um formato e consumir esses dados em outro formato/banco de dados. Essa estratégia também pode ser executada em conjunto com bancos de cache como Redis e AWS Elasticache.
 
+- Como estratégias de autenticação e autorização poderiam ser utilizadas soluções gerenciadas como o Cognito(AWS) ou o Keycloak para serem os servidores de identidade da aplicação.
+
 ## Execução local
 
 ### Utilizando docker compose
@@ -134,7 +146,6 @@ Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes aut
   
  ***OBS*** Caso tenha o postgres também instalado localmente basta criar dois bancos distintos e configurar as variávei de ambiente no seguinte padrão:
   - postgres://user:password@host:5432/dbName
-
 
 ## Deploy no kubernetes
 

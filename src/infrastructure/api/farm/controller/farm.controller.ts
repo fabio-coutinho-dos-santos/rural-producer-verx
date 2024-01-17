@@ -16,6 +16,7 @@ import FarmDto from "../dto/farm.dto";
 import UpdateFarmDto from "../dto/update-farm.dto";
 import FarmPresenter from "../presenter/farm.presenter";
 import customLogger from "../../../logger/pino.logger";
+
 export class FarmController {
   constructor(
     private readonly farmRepository: FarmRepositoryInterface,
@@ -25,8 +26,7 @@ export class FarmController {
     this.getAll = this.getAll.bind(this);
     this.update = this.update.bind(this);
     this.delete = this.delete.bind(this);
-    this.getAmount = this.getAmount.bind(this);
-    this.getTotalArea = this.getTotalArea.bind(this);
+    this.getFarmTotals = this.getFarmTotals.bind(this);
   }
 
   async createFarm(request: Request, response: Response): Promise<unknown> {
@@ -37,9 +37,9 @@ export class FarmController {
       const farm = new CreateFarm(this.farmRepository, this.producerRepository);
       const farmStored = await farm.execute(requestBody);
       return response.status(HttpStatus.CREATED).json(farmStored);
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(e.toString());
+      throw new BadRequestError(String(e));
     }
   }
 
@@ -49,9 +49,9 @@ export class FarmController {
         relations: { producer: true },
       });
       return response.status(HttpStatus.OK).json(new FarmPresenter(farms));
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(e.toString());
+      throw new BadRequestError(String(e));
     }
   }
 
@@ -64,9 +64,9 @@ export class FarmController {
       const farm = new UpdateFarm(this.farmRepository, this.producerRepository);
       const farmStored = await farm.execute(requestBody, farmId);
       return response.status(HttpStatus.OK).json(farmStored);
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(e.toString());
+      throw new BadRequestError(String(e));
     }
   }
 
@@ -92,39 +92,32 @@ export class FarmController {
       }
 
       return response.status(HttpStatus.OK).send();
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new InternalServerError(e.toString());
+      throw new InternalServerError(String(e));
     }
   }
 
-  async getAmount(request: Request, response: Response): Promise<unknown> {
+  async getFarmTotals(request: Request, response: Response): Promise<unknown> {
     try {
-      const amountFarms = await new GetAmountFarms(
-        this.farmRepository
-      ).execute();
+      const [amountFarms, totalArea] = await Promise.all([
+        new GetAmountFarms(this.farmRepository).execute(),
+        new GetTotalAreaFarms(this.farmRepository).execute(),
+      ]);
+
+      const totalAreaConverted = totalArea.total
+        ? parseFloat(totalArea.total.toFixed(2))
+        : 0;
+
       const result = {
         amountFarms: parseFloat(amountFarms.amount),
+        allFarmsArea: totalAreaConverted,
       };
-      return response.status(HttpStatus.OK).json(result);
-    } catch (e: any) {
-      customLogger.error(e);
-      throw new InternalServerError(e.toString());
-    }
-  }
 
-  async getTotalArea(request: Request, response: Response): Promise<unknown> {
-    try {
-      const totalArea = await new GetTotalAreaFarms(
-        this.farmRepository
-      ).execute();
-      const result = {
-        totalArea: parseFloat(totalArea.total.toFixed(2)),
-      };
       return response.status(HttpStatus.OK).json(result);
-    } catch (e: any) {
+    } catch (e: unknown) {
       customLogger.error(e);
-      throw new InternalServerError(e.toString());
+      throw new InternalServerError(String(e));
     }
   }
 }

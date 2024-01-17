@@ -18,14 +18,14 @@ describe("Farms routes tests", () => {
   app.use(httpError);
   app.use(farmRoutes);
 
-  let farmRepository: any;
-  let producerRepository: any;
+  let farmRepository;
+  let producerRepository;
 
   const producer = new Producer("Name", "292.256.890-39");
 
+  let producerStored: ProducerEntity;
   let requestBodyStubValid: any;
   let requestBodyStubValid2: any;
-  let producerStored: any;
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
@@ -336,8 +336,8 @@ describe("Farms routes tests", () => {
     });
   });
 
-  describe("Get Amount Farms", () => {
-    it("should return an amount", async () => {
+  describe("Get Totals Farms", () => {
+    it("should return amount and area total", async () => {
       await AppDataSourceTest.getRepository(FarmEntity).delete({});
       await AppDataSourceTest.getRepository(FarmEntity).save(
         requestBodyStubValid
@@ -346,25 +346,10 @@ describe("Farms routes tests", () => {
         requestBodyStubValid2
       );
       const response = await supertest(app)
-        .get("/api/v1/farms/amount")
+        .get("/api/v1/farms/totals")
         .expect(HttpStatus.OK);
       expect(response.body.amountFarms).toBe(2);
-    });
-  });
-
-  describe("Get Total Area", () => {
-    it("should return an amount", async () => {
-      await AppDataSourceTest.getRepository(FarmEntity).delete({});
-      await AppDataSourceTest.getRepository(FarmEntity).save(
-        requestBodyStubValid
-      );
-      await AppDataSourceTest.getRepository(FarmEntity).save(
-        requestBodyStubValid2
-      );
-      const response = await supertest(app)
-        .get("/api/v1/farms/area/total")
-        .expect(HttpStatus.OK);
-      expect(response.body.totalArea).toBe(
+      expect(response.body.allFarmsArea).toBe(
         requestBodyStubValid.totalArea.valueOf() +
           requestBodyStubValid2.totalArea.valueOf()
       );

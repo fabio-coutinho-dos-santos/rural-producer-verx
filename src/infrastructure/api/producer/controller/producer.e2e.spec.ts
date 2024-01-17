@@ -6,6 +6,7 @@ import HttpStatus from "http-status-codes";
 import producerRoutes from "../producer.routes";
 import { httpError } from "../../middlewares/http-errors";
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
+import { maskDocument } from "../../helpers/mask-functions";
 jest.setTimeout(20000);
 
 describe("Producer routes tests", () => {
@@ -16,7 +17,7 @@ describe("Producer routes tests", () => {
 
   const producerStub = {
     name: "Producer Test",
-    document: "438.630.640-46",
+    document: "43863064046",
   };
   const invalidId = "78f9731e-17d8-4e05-a71b-cde40b43d2f4";
 
@@ -42,7 +43,7 @@ describe("Producer routes tests", () => {
         .expect(HttpStatus.CREATED);
       expect(response.body).toBeInstanceOf(Object);
       expect(response.body.name).toBe(newProducer.name);
-      expect(response.body.document).toBe(newProducer.document);
+      expect(response.body.document).toBe("292******39");
     });
 
     it("should return an Exception with same document", async () => {
@@ -108,7 +109,7 @@ describe("Producer routes tests", () => {
         .expect(HttpStatus.OK);
       expect(response.body).toBeInstanceOf(Object);
       expect(response.body.name).toBe(producerStub.name);
-      expect(response.body.document).toBe(producerStub.document);
+      expect(response.body.document).toBe(maskDocument(producerStub.document));
     });
 
     it("should return a not found exception with wrong producer id", async () => {
@@ -148,7 +149,10 @@ describe("Producer routes tests", () => {
         .patch(`/api/v1/producers/${producerStored.id}`)
         .send(producerUpdateValidBody)
         .expect(HttpStatus.OK);
-      expect(response.body).toMatchObject(producerUpdateValidBody);
+      expect(response.body.name).toBe(producerUpdateValidBody.name);
+      expect(response.body.document).toBe(
+        maskDocument(producerUpdateValidBody.document)
+      );
     });
 
     it("shold return an error with invalid name", async () => {

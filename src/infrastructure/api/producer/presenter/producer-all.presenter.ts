@@ -1,6 +1,7 @@
 import Producer from "../../../../domain/producer/entity/producer.entity";
 import ProducerEntity from "../../../database/typeorm/postgres/entities/producer.entity";
 import ProducerFarmPresenter from "../../farm/presenter/producer-farm.presenter";
+import { maskDocument } from "../../helpers/mask-functions";
 import ProducerResourcePresenter from "./producer.presenter";
 
 export default class ArrayProducerPresenter {
@@ -10,7 +11,7 @@ export default class ArrayProducerPresenter {
       const resource = {
         id: producer.id,
         name: producer.name,
-        document: producer.document,
+        document: maskDocument(producer.document),
         farms: new ProducerFarmPresenter(producer.farms),
       };
       arrayProducers.push(resource);

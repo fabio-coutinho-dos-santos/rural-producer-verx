@@ -1,0 +1,67 @@
+version: "3.8"
+services:
+  svc-farm-db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=local
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbFarms
+      - POSTGRES_HOST=local
+    ports:
+     - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - net-verx
+
+  svc-farm-db-test:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=local
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dbFarms
+      - POSTGRES_HOST=local
+    ports:
+     - "5434:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - net-verx
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "local", "-h", "localhost", "-p", "5432"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  svc-farm-app:
+    image: node:18
+    container_name: form-app
+    working_dir: /app
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+     - svc-farm-db
+     - svc-farm-db-test
+    volumes:
+      - .:/app
+    command: bash -c "npm i && npm run dev"
+    networks:
+      - net-verx
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  net-verx:
+    external:
+      name: net-verx
+
+
+  
+  

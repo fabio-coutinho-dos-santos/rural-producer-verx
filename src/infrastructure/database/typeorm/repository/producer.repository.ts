@@ -29,7 +29,11 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   }
 
   async create(entity: Producer): Promise<Producer> {
-    const producer = await this.repository.save(entity);
+    const model = {
+      name: entity.name,
+      document: entity.document.replace(/\D/g, "")
+    }
+    const producer = await this.repository.save(model as Producer);
     return producer;
   }
 

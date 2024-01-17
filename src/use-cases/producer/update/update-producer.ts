@@ -1,7 +1,7 @@
 import Producer from "../../../domain/producer/entity/producer.entity";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
 import { NotFoundError } from "../../../infrastructure/api/helpers/ApiErrors";
-import ProducerDto from "../../../infrastructure/api/producer/dto/producer.dto";
+import ProducerDto from "../../../infrastructure/api/resources/producer/dto/producer.dto";
 
 export default class UpdateProducer {
   constructor(

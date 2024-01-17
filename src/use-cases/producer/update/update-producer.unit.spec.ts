@@ -1,5 +1,5 @@
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
-import ProducerDto from "../../../infrastructure/api/producer/dto/producer.dto";
+import ProducerDto from "../../../infrastructure/api/resources/producer/dto/producer.dto";
 import { ProducerMockRepository } from "../../@shared/tests/mock/repository.mock";
 import {
   inputUpdateProducerStub,

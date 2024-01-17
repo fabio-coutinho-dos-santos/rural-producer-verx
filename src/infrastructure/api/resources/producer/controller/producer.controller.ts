@@ -1,20 +1,21 @@
 import { DeleteResult } from "typeorm";
-import {
-  BadRequestError,
-  InternalServerError,
-  NotFoundError,
-} from "../../helpers/ApiErrors";
-import Producer from "../../../../domain/producer/entity/producer.entity";
-import ProducerRepositoryInterface from "../../../../domain/producer/repository/producer.repository.interface";
+
 import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
-import UpdateProducer from "../../../../use-cases/producer/update/update-producer";
 import ProducerDto from "../dto/producer.dto";
 import UpdateProducerDto from "../dto/update-producer.dto";
 import ArrayProducerPresenter from "../presenter/producer-all.presenter";
 import ProducerResourcePresenter from "../presenter/producer.presenter";
-import customLogger from "../../../logger/pino.logger";
-import { maskDocument } from "../../helpers/mask-functions";
+import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
+import Producer from "../../../../../domain/producer/entity/producer.entity";
+import { maskDocument } from "../../../helpers/mask-functions";
+import customLogger from "../../../../logger/pino.logger";
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+} from "../../../helpers/ApiErrors";
+import UpdateProducer from "../../../../../use-cases/producer/update/update-producer";
 export default class ProducerController {
   constructor(
     private readonly producerRepository: ProducerRepositoryInterface
@@ -32,7 +33,7 @@ export default class ProducerController {
       await producerDto.validate();
       const producer = new Producer(producerDto.name, producerDto.document);
       let producerStored: any = await this.producerRepository.create(producer);
-      producerStored.document = maskDocument(producerStored.document)
+      producerStored.document = maskDocument(producerStored.document);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: unknown) {
       customLogger.error(e);
@@ -112,7 +113,7 @@ export default class ProducerController {
       await updateFarmDto.validate();
       const producer = new UpdateProducer(this.producerRepository);
       let producerUpdated = await producer.execute(requestBody, producerId);
-      producerUpdated.document = maskDocument(producerUpdated.document)
+      producerUpdated.document = maskDocument(producerUpdated.document);
       return response.status(HttpStatus.OK).json(producerUpdated);
     } catch (e: unknown) {
       customLogger.error(e);

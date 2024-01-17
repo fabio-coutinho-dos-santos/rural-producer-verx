@@ -1,4 +1,4 @@
-import FarmEntity from "../../../database/typeorm/postgres/entities/farms.entity";
+import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 
 export default class ProducerFarmPresenter {
   constructor(farmStored: any) {

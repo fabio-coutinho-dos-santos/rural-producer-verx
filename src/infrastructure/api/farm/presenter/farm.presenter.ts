@@ -1,8 +1,8 @@
 import FarmEntity from "../../../database/typeorm/postgres/entities/farms.entity";
 
 export default class FarmPresenter {
-  constructor(farmStored: any) {
-    const resourceArray = new Array<any>();
+  constructor(farmStored: FarmEntity[]) {
+    const resourceArray = new Array<unknown>();
 
     farmStored.map((farm: FarmEntity) => {
       const resource = {

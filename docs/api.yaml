@@ -235,11 +235,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResource"
 
-  /api/v1/farms/amount:
+  /api/v1/farms/totals:
     get:
       tags:
         - Farms
-      summary: Get total amount farms
+      summary: Get farms totals
       responses:
         "200":
           description: A successful response
@@ -251,21 +251,7 @@ paths:
                   amountFarms:
                     type: number
                     example: 10
-
-  /api/v1/farms/area/total:
-    get:
-      tags:
-        - Farms
-      summary: Get the sum of all farms total areas
-      responses:
-        "200":
-          description: A successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  totalArea:
+                  allFarmsArea:
                     type: number
                     example: 100.4
 
@@ -282,7 +268,7 @@ components:
           example: "Name"
         document:
           type: string
-          example: "406.738.520-08"
+          example: "406******08"
         farms:
           type: array
           items:
@@ -299,7 +285,7 @@ components:
           example: "Name"
         document:
           type: string
-          example: "406.738.520-08"
+          example: "406******08"
         createdAt:
           type: string
           format: date

@@ -6,6 +6,8 @@ import {
   inputUpdateProducerStub,
   producerStub,
   totalAreaFarmsStub,
+  totalFarmsGroupedByCropStub,
+  totalFarmsGroupedByStateStub,
 } from "../stub";
 
 export const FarmMockRepository = (): FarmRepositoryInterface => {
@@ -18,6 +20,8 @@ export const FarmMockRepository = (): FarmRepositoryInterface => {
     findWithRelations: jest.fn(),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),
+    getByCrop: jest.fn().mockResolvedValue(totalFarmsGroupedByCropStub()),
+    getByState: jest.fn().mockResolvedValue(totalFarmsGroupedByStateStub()),
   };
 };
 

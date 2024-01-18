@@ -10,7 +10,6 @@ import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasou
 import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
 
-
 jest.setTimeout(20000);
 
 describe("Farms routes tests", () => {
@@ -44,7 +43,7 @@ describe("Farms routes tests", () => {
       totalArea: 10,
       arableArea: 2,
       vegetationArea: 4,
-      crops: ["cotton", "coffe"],
+      crops: [PlantedCrops.COFFE, PlantedCrops.CORN],
     };
 
     requestBodyStubValid2 = {
@@ -55,7 +54,7 @@ describe("Farms routes tests", () => {
       totalArea: 25.5,
       arableArea: 2,
       vegetationArea: 4,
-      crops: ["cotton", "coffe"],
+      crops: [PlantedCrops.COFFE, PlantedCrops.SOY],
     };
   });
 
@@ -350,10 +349,38 @@ describe("Farms routes tests", () => {
         .get("/api/v1/farms/totals")
         .expect(HttpStatus.OK);
       expect(response.body.amountFarms).toBe(2);
-      expect(response.body.allFarmsArea).toBe(
+      expect(response.body.areas.total).toBe(
         requestBodyStubValid.totalArea.valueOf() +
           requestBodyStubValid2.totalArea.valueOf()
       );
+      expect(response.body.areas.vegetation).toBe(
+        requestBodyStubValid.vegetationArea.valueOf() +
+          requestBodyStubValid2.vegetationArea.valueOf()
+      );
+      expect(response.body.areas.arable).toBe(
+        requestBodyStubValid.arableArea.valueOf() +
+          requestBodyStubValid2.arableArea.valueOf()
+      );
+      expect(response.body.farmsByState).toMatchObject([
+        {
+          amount: 2,
+          state: "State",
+        },
+      ]);
+      expect(response.body.farmsByCrop).toMatchObject([
+        {
+          amount: 2,
+          crop: "coffe",
+        },
+        {
+          amount: 1,
+          crop: "soy",
+        },
+        {
+          amount: 1,
+          crop: "corn",
+        },
+      ]);
     });
   });
 });

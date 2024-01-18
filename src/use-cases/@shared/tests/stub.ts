@@ -1,6 +1,12 @@
 import FarmAddress from "../../../domain/farm/value-object/farm-address";
 import Farm from "../../../domain/farm/entity/farm.entity";
 import Producer from "../../../domain/producer/entity/producer.entity";
+import {
+  AmountFarms,
+  AreaTotalFarms,
+  FarmsByCrop,
+  FarmsByState,
+} from "../../../domain/farm/repository/farm.repository.interface";
 
 export const validUuidFormat = (): string => {
   return "97fc317b-8842-47d0-8914-80bd3b5eac3a";
@@ -64,14 +70,45 @@ export const inputUpdateProducerStub = () => {
   };
 };
 
-export const amountFarmsStub = () => {
+export const amountFarmsStub = (): AmountFarms => {
   return {
-    amount: 10,
+    amount: "10",
   };
 };
 
-export const totalAreaFarmsStub = () => {
+export const totalAreaFarmsStub = (): AreaTotalFarms => {
   return {
-    toal: 87.9,
+    total: 87.9,
+    arable: 23,
+    vegetation: 50,
   };
 };
+
+export const totalFarmsGroupedByStateStub = (): FarmsByState[] => {
+  const result = [
+    {
+      amount: 10,
+      state: "State1",
+    },
+    {
+      amount: 10,
+      state: "State2",
+    },
+  ];
+  return result
+};
+
+export const totalFarmsGroupedByCropStub = (): FarmsByCrop[] => {
+  const result = [
+    {
+      amount: 10,
+      crop: "coffe",
+    },
+    {
+      amount: 10,
+      crop: "soy",
+    },
+  ];
+  return result
+};
+

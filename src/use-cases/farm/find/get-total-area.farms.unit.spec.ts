@@ -7,10 +7,12 @@ describe("Get total area use case", () => {
   describe("execute function", () => {
     it("should return a totalArea object with valid data", async () => {
       const farmRepository: FarmRepositoryInterface = FarmMockRepository();
+      const spyRepository = jest.spyOn(farmRepository, "getTotalArea");
       const totalAreaFarms = await new GetTotalAreaFarms(
         farmRepository
       ).execute();
       expect(totalAreaFarms).toBeDefined();
+      expect(spyRepository).toHaveBeenCalledTimes(1);
       expect(totalAreaFarms).toMatchObject(totalAreaFarmsStub());
     });
   });

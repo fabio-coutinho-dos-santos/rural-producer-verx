@@ -1,5 +1,4 @@
 import { Response, Request } from "express";
-
 import HttpStatus from "http-status-codes";
 import { DeleteResult } from "typeorm";
 import FarmDto from "../dto/farm.dto";
@@ -9,10 +8,16 @@ import FarmRepositoryInterface from "../../../../../domain/farm/repository/farm.
 import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
 import CreateFarm from "../../../../../use-cases/farm/create/create-farm";
 import customLogger from "../../../../logger/pino.logger";
-import { BadRequestError, InternalServerError, NotFoundError } from "../../../helpers/ApiErrors";
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+} from "../../../helpers/ApiErrors";
 import UpdateFarm from "../../../../../use-cases/farm/update/update-farm";
 import { GetAmountFarms } from "../../../../../use-cases/farm/find/get-amount-farms";
 import { GetTotalAreaFarms } from "../../../../../use-cases/farm/find/get-total-area-farms";
+import { GetFamsGroupedByState } from "../../../../../use-cases/farm/find/get-farms-by-state";
+import { GetFamsGroupedByCrop } from "../../../../../use-cases/farm/find/get-farms-by-crops";
 
 export class FarmController {
   constructor(
@@ -97,18 +102,20 @@ export class FarmController {
 
   async getFarmTotals(request: Request, response: Response): Promise<unknown> {
     try {
-      const [amountFarms, totalArea] = await Promise.all([
-        new GetAmountFarms(this.farmRepository).execute(),
-        new GetTotalAreaFarms(this.farmRepository).execute(),
-      ]);
-
-      const totalAreaConverted = totalArea.total
-        ? parseFloat(totalArea.total.toFixed(2))
-        : 0;
+      const [amountFarms, areas, farmsByState, farmsByCrop] = await Promise.all(
+        [
+          new GetAmountFarms(this.farmRepository).execute(),
+          new GetTotalAreaFarms(this.farmRepository).execute(),
+          new GetFamsGroupedByState(this.farmRepository).execute(),
+          new GetFamsGroupedByCrop(this.farmRepository).execute(),
+        ]
+      );
 
       const result = {
         amountFarms: parseFloat(amountFarms.amount),
-        allFarmsArea: totalAreaConverted,
+        areas,
+        farmsByState,
+        farmsByCrop,
       };
 
       return response.status(HttpStatus.OK).json(result);

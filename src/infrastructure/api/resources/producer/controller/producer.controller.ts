@@ -32,7 +32,7 @@ export default class ProducerController {
       const producerDto: ProducerDto = new ProducerDto(request.body);
       await producerDto.validate();
       const producer = new Producer(producerDto.name, producerDto.document);
-      let producerStored: any = await this.producerRepository.create(producer);
+      const producerStored: any = await this.producerRepository.create(producer);
       producerStored.document = maskDocument(producerStored.document);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: unknown) {
@@ -112,7 +112,7 @@ export default class ProducerController {
       const updateFarmDto = new UpdateProducerDto(requestBody);
       await updateFarmDto.validate();
       const producer = new UpdateProducer(this.producerRepository);
-      let producerUpdated = await producer.execute(requestBody, producerId);
+      const producerUpdated = await producer.execute(requestBody, producerId);
       producerUpdated.document = maskDocument(producerUpdated.document);
       return response.status(HttpStatus.OK).json(producerUpdated);
     } catch (e: unknown) {

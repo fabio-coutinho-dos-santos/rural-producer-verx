@@ -245,15 +245,10 @@ paths:
           description: A successful response
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  amountFarms:
-                    type: number
-                    example: 10
-                  allFarmsArea:
-                    type: number
-                    example: 100.4
+              schema: 
+                $ref: "#/components/schemas/TotalsResource"
+
+
 
 components:
   schemas:
@@ -415,3 +410,46 @@ components:
         updatedAt:
           type: string
           format: date
+
+    TotalsResource:
+      type: object
+      properties:
+        amountFarms:
+          type: number
+          example: 10
+        areas:
+          type: array
+          items:
+            type: object
+            properties:
+              total:
+                type: number
+                example: 234.5
+              arable:
+                type: number
+                example: 120.4
+              vegetation:
+                type: number
+                example: 100.5
+        farmsByState:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                example: 2
+              state:
+                type:  string
+                example: Texas
+        farmsByCrop:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                example: 2
+              crop:
+                type:  string
+                example: coffe

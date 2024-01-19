@@ -19,6 +19,7 @@ import { GetTotalAreaFarms } from "../../../../../use-cases/farm/find/get-total-
 import { GetFamsGroupedByState } from "../../../../../use-cases/farm/find/get-farms-by-state";
 import { GetFamsGroupedByCrop } from "../../../../../use-cases/farm/find/get-farms-by-crops";
 import { validateOrReject } from "class-validator";
+import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 
 export class FarmController {
   constructor(
@@ -48,7 +49,7 @@ export class FarmController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const farms: any = await this.farmRepository.findWithRelations({
+      const farms: FarmEntity[] = await this.farmRepository.findWithRelations({
         relations: { producer: true },
       });
       return response.status(HttpStatus.OK).json(new FarmPresenter(farms));
@@ -75,7 +76,11 @@ export class FarmController {
 
   async delete(request: Request, response: Response): Promise<unknown> {
     const farmId = request.params.id;
-    const farmStored = await this.farmRepository.findById(farmId);
+
+    const farmStored = await this.farmRepository.findOneWithRelations({
+      where: { id: farmId },
+    });
+
     if (!farmStored) {
       throw new NotFoundError("Farm not found");
     }

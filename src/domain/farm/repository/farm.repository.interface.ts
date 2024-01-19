@@ -1,12 +1,14 @@
+import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
 import RepositoryInterface from "../../@shared/repository/repository.interface";
 import Farm from "../entity/farm.entity";
 
 export default interface FarmRepositoryInterface
-  extends RepositoryInterface<Farm> {
+  extends RepositoryInterface<FarmEntity> {
+  create(farm: Farm): Promise<FarmEntity>
   getAmountFarms(): Promise<AmountFarms>;
   getTotalArea(): Promise<AreaTotalFarms>;
-  getByState(): Promise<any>;
-  getByCrop(): Promise<any>;
+  getByState(): Promise<FarmsByState[]>;
+  getByCrop(): Promise<FarmsByCrop[]>;
 }
 
 export type AmountFarms = {

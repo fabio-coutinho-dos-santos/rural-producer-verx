@@ -83,11 +83,11 @@ export default class Farm {
     this._totalArea = value;
   }
 
-  public addPlantedCrop(type: any) {
-    if (!Object.values(PlantedCrops).includes(type)) {
+  public addPlantedCrop(type: string) {
+    if (!Object.values(PlantedCrops).includes(type as PlantedCrops)) {
       throw new Error(`Invalid planted crop type: ${type}`);
     }
-    this._crops.push(type);
+    this._crops.push(type as PlantedCrops);
   }
 
   private checkAreaProportion(

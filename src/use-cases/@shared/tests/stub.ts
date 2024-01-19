@@ -7,6 +7,8 @@ import {
   FarmsByCrop,
   FarmsByState,
 } from "../../../domain/farm/repository/farm.repository.interface";
+import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
+import { PlantedCrops } from "../../../domain/producer/enum/planted-crops.enum";
 
 export const validUuidFormat = (): string => {
   return "97fc317b-8842-47d0-8914-80bd3b5eac3a";
@@ -27,6 +29,20 @@ export const farmStub = (): Farm => {
 export const producerStub = (): Producer => {
   return new Producer("Name", validCpfFormat());
 };
+
+export const createFarmStub = (): Partial<FarmEntity> => {
+  return {
+    id: '97fc317b-8842-47d0-8914-80bd3b5eac3a',
+    name: "Farm name",
+    city: "City",
+    state: "State",
+    producerId: "97fc317b-8842-47d0-8914-80bd3b5eac3a",
+    totalArea: 10,
+    arableArea: 2,
+    vegetationArea: 4,
+    crops: [PlantedCrops.COTTON, PlantedCrops.COFFE],
+  }
+}
 
 export const inputCreateFarmStub = () => {
   return {

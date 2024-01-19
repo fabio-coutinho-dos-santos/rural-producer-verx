@@ -1,4 +1,4 @@
-import { DataSource, DeleteResult, FindManyOptions, Repository } from "typeorm";
+import { DataSource, DeleteResult, FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import FarmRepositoryInterface, {
   AmountFarms,
   AreaTotalFarms,
@@ -14,8 +14,14 @@ export class FarmRepository implements FarmRepositoryInterface {
   constructor(private readonly dataSource: DataSource) {
     this.repository = dataSource.getRepository(FarmEntity);
   }
+  
+  async findOneWithRelations(
+    relations: FindOneOptions<FarmEntity>
+  ): Promise<FarmEntity | null> {
+    return await this.repository.findOne(relations);
+  }
 
-  async create(entity: Farm): Promise<any> {
+  async create(entity: Farm): Promise<FarmEntity> {
     const farmModel = {
       name: entity.name,
       city: entity.address.city,
@@ -31,9 +37,9 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async update(
-    entity: Partial<Farm>,
+    entity: Partial<FarmEntity>,
     id: string
-  ): Promise<Farm | FarmEntity | null> {
+  ): Promise<FarmEntity | null> {
     await this.repository.update(id, entity);
     return await this.findById(id);
   }
@@ -42,9 +48,9 @@ export class FarmRepository implements FarmRepositoryInterface {
     return await this.repository.delete(id);
   }
 
-  async findById(id: string): Promise<FarmEntity | null> {
-    const author = await this.repository.findOneBy({ id: id });
-    return author;
+  async findById(id: string): Promise<FarmEntity> {
+    const farm = await this.repository.findOneOrFail({where:{id: id}});
+    return farm;
   }
 
   async findAll(): Promise<FarmEntity[]> {

@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import ProducerEntity from "./producer.entity";
-import Producer from "../../../../../domain/producer/entity/producer.entity";
+import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
 
 @Entity("farms")
 export default class FarmEntity {
@@ -36,7 +36,7 @@ export default class FarmEntity {
   vegetationArea: number;
 
   @Column({ type: "simple-array", nullable: false })
-  crops: string[];
+  crops: PlantedCrops[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -47,5 +47,5 @@ export default class FarmEntity {
   @ManyToOne(() => ProducerEntity, (producer) => producer.farms, {
     cascade: true,
   })
-  producer: Producer;
+  producer: ProducerEntity;
 }

@@ -7,6 +7,7 @@ import {
   IsUUID,
 } from "class-validator";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
+import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 
 export default class UpdateFarmDto {
   @IsNotEmpty()
@@ -46,7 +47,7 @@ export default class UpdateFarmDto {
   @IsOptional()
   crops: PlantedCrops[];
 
-  constructor(requestBody: any) {
+  constructor(requestBody: FarmEntity) {
     if (requestBody.name) this.name = requestBody.name;
     if (requestBody.city) this.city = requestBody.city;
     if (requestBody.state) this.state = requestBody.state;

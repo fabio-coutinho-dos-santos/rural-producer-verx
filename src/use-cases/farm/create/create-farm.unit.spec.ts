@@ -1,7 +1,7 @@
 import "express-async-errors";
 import CreateFarm from "./create-farm";
 import {
-  farmStub,
+  createFarmStub,
   inputCreateFarmStub,
   validUuidFormat,
 } from "../../@shared/tests/stub";
@@ -10,6 +10,7 @@ import {
   ProducerMockRepository,
 } from "../../@shared/tests/mock/repository.mock";
 import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
+import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
 
 describe("Producer routes tests", () => {
   beforeEach(async () => {
@@ -26,12 +27,12 @@ describe("Producer routes tests", () => {
         farmRepository,
         producerRepository
       );
-      const resp = await createFarm.execute(inputCreateFarmStub() as FarmDto);
+      const resp: FarmEntity = await createFarm.execute(inputCreateFarmStub() as FarmDto);
       expect(createFarm).toBeDefined();
       expect(resp).toBeDefined();
-      expect(resp.name).toBe(farmStub().name);
-      expect(resp.address.city).toBe(farmStub().address.city);
-      expect(resp.address.state).toBe(farmStub().address.state);
+      expect(resp.name).toBe(createFarmStub().name);
+      expect(resp.city).toBe(createFarmStub().city);
+      expect(resp.state).toBe(createFarmStub().state);
     });
 
     it("should return an error with invalid name", async () => {

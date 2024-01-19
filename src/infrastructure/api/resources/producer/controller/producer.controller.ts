@@ -1,5 +1,4 @@
 import { DeleteResult } from "typeorm";
-
 import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
 import ProducerDto from "../dto/producer.dto";
@@ -17,6 +16,8 @@ import {
 } from "../../../helpers/ApiErrors";
 import UpdateProducer from "../../../../../use-cases/producer/update/update-producer";
 import { validateOrReject } from "class-validator";
+import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+
 export default class ProducerController {
   constructor(
     private readonly producerRepository: ProducerRepositoryInterface
@@ -33,7 +34,7 @@ export default class ProducerController {
       const producerDto: ProducerDto = new ProducerDto(request.body);
       await validateOrReject(producerDto);
       const producer = new Producer(producerDto.name, producerDto.document);
-      const producerStored: any = await this.producerRepository.create(
+      const producerStored: ProducerEntity = await this.producerRepository.create(
         producer
       );
       producerStored.document = maskDocument(producerStored.document);
@@ -46,7 +47,7 @@ export default class ProducerController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const allProducers: any = await this.producerRepository.findWithRelations(
+      const allProducers: ProducerEntity[] = await this.producerRepository.findWithRelations(
         {
           relations: { farms: true },
         }
@@ -130,7 +131,9 @@ export default class ProducerController {
       await validateOrReject(updateFarmDto);
       const producer = new UpdateProducer(this.producerRepository);
       const producerUpdated = await producer.execute(requestBody, producerId);
-      producerUpdated.document = maskDocument(producerUpdated.document);
+      if (producerUpdated?.document) {
+        producerUpdated.document = maskDocument(producerUpdated.document);
+      }
       return response.status(HttpStatus.OK).json(producerUpdated);
     } catch (e: unknown) {
       customLogger.error(e);

@@ -16,6 +16,7 @@ import {
   NotFoundError,
 } from "../../../helpers/ApiErrors";
 import UpdateProducer from "../../../../../use-cases/producer/update/update-producer";
+import { validateOrReject } from "class-validator";
 export default class ProducerController {
   constructor(
     private readonly producerRepository: ProducerRepositoryInterface
@@ -30,9 +31,11 @@ export default class ProducerController {
   async createProducer(request: Request, response: Response): Promise<unknown> {
     try {
       const producerDto: ProducerDto = new ProducerDto(request.body);
-      await producerDto.validate();
+      await validateOrReject(producerDto);
       const producer = new Producer(producerDto.name, producerDto.document);
-      const producerStored: any = await this.producerRepository.create(producer);
+      const producerStored: any = await this.producerRepository.create(
+        producer
+      );
       producerStored.document = maskDocument(producerStored.document);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: unknown) {
@@ -77,9 +80,23 @@ export default class ProducerController {
 
   async delete(request: Request, response: Response): Promise<unknown> {
     const producerId = request.params.id;
-    const producerStored = await this.producerRepository.findById(producerId);
+    const producerStored = await this.producerRepository.findOneWithRelations({
+      where: {
+        id: producerId,
+      },
+      relations: {
+        farms: true,
+      },
+    });
+
     if (!producerStored) {
       throw new NotFoundError("Producer not found");
+    }
+
+    if (producerStored.farms.length > 0) {
+      throw new BadRequestError(
+        "This producer is linked to farms and cannot be excluded"
+      );
     }
 
     try {
@@ -110,7 +127,7 @@ export default class ProducerController {
       const requestBody = request.body;
       const producerId = request.params.id;
       const updateFarmDto = new UpdateProducerDto(requestBody);
-      await updateFarmDto.validate();
+      await validateOrReject(updateFarmDto);
       const producer = new UpdateProducer(this.producerRepository);
       const producerUpdated = await producer.execute(requestBody, producerId);
       producerUpdated.document = maskDocument(producerUpdated.document);

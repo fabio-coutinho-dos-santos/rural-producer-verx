@@ -5,11 +5,8 @@ import {
   IsOptional,
   IsString,
   IsUUID,
-  validateOrReject,
 } from "class-validator";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
-import customLogger from "../../../../logger/pino.logger";
-import { BadRequestError } from "../../../helpers/ApiErrors";
 
 export default class UpdateFarmDto {
   @IsNotEmpty()
@@ -59,14 +56,5 @@ export default class UpdateFarmDto {
     if (requestBody.vegetationArea)
       this.vegetationArea = requestBody.vegetationArea;
     if (requestBody.crops) this.crops = requestBody.crops;
-  }
-
-  async validate() {
-    try {
-      await validateOrReject(this);
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new BadRequestError("Invalid request body");
-    }
   }
 }

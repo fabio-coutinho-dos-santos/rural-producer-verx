@@ -9,6 +9,7 @@ import ProducerEntity from "../../../../database/typeorm/postgres/entities/produ
 import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasources/data-source-test";
 import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
+import UpdateFarmDto from "../dto/update-farm.dto";
 
 jest.setTimeout(20000);
 
@@ -24,8 +25,8 @@ describe("Farms routes tests", () => {
   const producer = new Producer("Name", "292.256.890-39");
 
   let producerStored: ProducerEntity;
-  let requestBodyStubValid: any;
-  let requestBodyStubValid2: any;
+  let requestBodyStubValid: UpdateFarmDto;
+  let requestBodyStubValid2: UpdateFarmDto;
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
@@ -369,16 +370,16 @@ describe("Farms routes tests", () => {
       ]);
       expect(response.body.farmsByCrop).toMatchObject([
         {
+          amount: 1,
+          crop: 'corn',
+        },
+        {
           amount: 2,
-          crop: "coffe",
+          crop: 'coffe',
         },
         {
           amount: 1,
-          crop: "soy",
-        },
-        {
-          amount: 1,
-          crop: "corn",
+          crop: 'soy',
         },
       ]);
     });

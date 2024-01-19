@@ -1,13 +1,5 @@
-import {
-  IsNotEmpty,
-  IsString,
-  Length,
-  validateOrReject,
-} from "class-validator";
+import { IsNotEmpty, IsString, Length } from "class-validator";
 import { ProducerConstants } from "../../../../../domain/producer/enum/producer.constants.enum";
-import customLogger from "../../../../logger/pino.logger";
-import { BadRequestError } from "../../../helpers/ApiErrors";
-
 
 export default class ProducerDto {
   @IsNotEmpty()
@@ -22,14 +14,5 @@ export default class ProducerDto {
   constructor(requestBody: any) {
     this.name = requestBody.name;
     this.document = requestBody.document;
-  }
-
-  async validate() {
-    try {
-      await validateOrReject(this);
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new BadRequestError("Invalid request body");
-    }
   }
 }

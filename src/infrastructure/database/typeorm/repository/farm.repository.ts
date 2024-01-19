@@ -1,7 +1,9 @@
-import { DataSource, DeleteResult, FindManyOptions, Repository } from "typeorm";
+import { DataSource, DeleteResult, FindManyOptions, FindOneOptions, Repository } from "typeorm";
 import FarmRepositoryInterface, {
   AmountFarms,
   AreaTotalFarms,
+  FarmsByCrop,
+  FarmsByState,
 } from "../../../../domain/farm/repository/farm.repository.interface";
 import Farm from "../../../../domain/farm/entity/farm.entity";
 import FarmEntity from "../postgres/entities/farms.entity";
@@ -12,8 +14,14 @@ export class FarmRepository implements FarmRepositoryInterface {
   constructor(private readonly dataSource: DataSource) {
     this.repository = dataSource.getRepository(FarmEntity);
   }
+  
+  async findOneWithRelations(
+    relations: FindOneOptions<FarmEntity>
+  ): Promise<FarmEntity | null> {
+    return await this.repository.findOne(relations);
+  }
 
-  async create(entity: Farm): Promise<any> {
+  async create(entity: Farm): Promise<FarmEntity> {
     const farmModel = {
       name: entity.name,
       city: entity.address.city,
@@ -29,9 +37,9 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async update(
-    entity: Partial<Farm>,
+    entity: Partial<FarmEntity>,
     id: string
-  ): Promise<Farm | FarmEntity | null> {
+  ): Promise<FarmEntity | null> {
     await this.repository.update(id, entity);
     return await this.findById(id);
   }
@@ -40,9 +48,9 @@ export class FarmRepository implements FarmRepositoryInterface {
     return await this.repository.delete(id);
   }
 
-  async findById(id: string): Promise<FarmEntity | null> {
-    const author = await this.repository.findOneBy({ id: id });
-    return author;
+  async findById(id: string): Promise<FarmEntity> {
+    const farm = await this.repository.findOneOrFail({where:{id: id}});
+    return farm;
   }
 
   async findAll(): Promise<FarmEntity[]> {
@@ -66,8 +74,35 @@ export class FarmRepository implements FarmRepositoryInterface {
   async getTotalArea(): Promise<AreaTotalFarms> {
     const result = await this.repository
       .createQueryBuilder("farm")
-      .select("SUM(farm.totalArea) as total")
+      .select(
+        "SUM(farm.totalArea) as total, SUM(farm.arableArea) as arable, SUM(farm.vegetationArea) as vegetation"
+      )
       .getRawOne();
+
+    result.total = result.total ? parseFloat(result.total.toFixed(2)) : 0;
+    result.arable = result.arable ? parseFloat(result.arable.toFixed(2)) : 0;
+    result.vegetation = result.vegetation
+      ? parseFloat(result.vegetation.toFixed(2))
+      : 0;
     return Promise.resolve(result);
+  }
+
+  async getByState(): Promise<FarmsByState[]> {
+    const results = await this.repository
+      .createQueryBuilder("farm")
+      .select("COUNT(*)::integer as amount, state")
+      .groupBy("state")
+      .getRawMany();
+    return Promise.resolve(results);
+  }
+
+  async getByCrop(): Promise<FarmsByCrop[]> {
+    const results = await this.repository
+      .createQueryBuilder("farm")
+      .select("UNNEST(string_to_array(farm.crops, ','))", "crop")
+      .addSelect("COUNT(farm.id)::integer", "amount")
+      .groupBy("crop")
+      .getRawMany();
+    return Promise.resolve(results);
   }
 }

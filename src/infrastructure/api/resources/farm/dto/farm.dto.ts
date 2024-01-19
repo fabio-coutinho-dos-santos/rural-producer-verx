@@ -4,11 +4,9 @@ import {
   IsNumber,
   IsString,
   IsUUID,
-  validateOrReject,
 } from "class-validator";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
-import customLogger from "../../../../logger/pino.logger";
-import { BadRequestError } from "../../../helpers/ApiErrors";
+import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 
 export default class FarmDto {
   @IsNotEmpty()
@@ -40,7 +38,7 @@ export default class FarmDto {
   @IsEnum(PlantedCrops, { each: true })
   crops: PlantedCrops[];
 
-  constructor(requestBody: any) {
+  constructor(requestBody: FarmEntity) {
     this.name = requestBody.name;
     this.city = requestBody.city;
     this.state = requestBody.state;
@@ -51,14 +49,5 @@ export default class FarmDto {
       ? requestBody.vegetationArea
       : 0;
     this.crops = requestBody.crops ? requestBody.crops : [];
-  }
-
-  async validate() {
-    try {
-      await validateOrReject(this);
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new BadRequestError("Invalid request body");
-    }
   }
 }

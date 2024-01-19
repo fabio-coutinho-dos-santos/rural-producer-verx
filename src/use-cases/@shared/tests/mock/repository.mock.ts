@@ -2,22 +2,28 @@ import FarmRepositoryInterface from "../../../../domain/farm/repository/farm.rep
 import ProducerRepositoryInterface from "../../../../domain/producer/repository/producer.repository.interface";
 import {
   amountFarmsStub,
+  createFarmStub,
   farmStub,
   inputUpdateProducerStub,
   producerStub,
   totalAreaFarmsStub,
+  totalFarmsGroupedByCropStub,
+  totalFarmsGroupedByStateStub,
 } from "../stub";
 
 export const FarmMockRepository = (): FarmRepositoryInterface => {
   return {
-    create: jest.fn().mockResolvedValue(farmStub()),
+    create: jest.fn().mockResolvedValue(createFarmStub()),
     update: jest.fn().mockResolvedValue(farmStub()),
     delete: jest.fn(),
     findById: jest.fn().mockResolvedValue(farmStub()),
     findAll: jest.fn(),
     findWithRelations: jest.fn(),
+    findOneWithRelations: jest.fn(),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),
+    getByCrop: jest.fn().mockResolvedValue(totalFarmsGroupedByCropStub()),
+    getByState: jest.fn().mockResolvedValue(totalFarmsGroupedByStateStub()),
   };
 };
 

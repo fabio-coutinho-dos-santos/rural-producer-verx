@@ -9,7 +9,7 @@ import ProducerEntity from "../../../../database/typeorm/postgres/entities/produ
 import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasources/data-source-test";
 import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
 import { PlantedCrops } from "../../../../../domain/producer/enum/planted-crops.enum";
-
+import UpdateFarmDto from "../dto/update-farm.dto";
 
 jest.setTimeout(20000);
 
@@ -25,8 +25,8 @@ describe("Farms routes tests", () => {
   const producer = new Producer("Name", "292.256.890-39");
 
   let producerStored: ProducerEntity;
-  let requestBodyStubValid: any;
-  let requestBodyStubValid2: any;
+  let requestBodyStubValid: UpdateFarmDto;
+  let requestBodyStubValid2: UpdateFarmDto;
 
   beforeAll(async () => {
     await AppDataSourceTest.initialize();
@@ -44,7 +44,7 @@ describe("Farms routes tests", () => {
       totalArea: 10,
       arableArea: 2,
       vegetationArea: 4,
-      crops: ["cotton", "coffe"],
+      crops: [PlantedCrops.COFFE, PlantedCrops.CORN],
     };
 
     requestBodyStubValid2 = {
@@ -55,7 +55,7 @@ describe("Farms routes tests", () => {
       totalArea: 25.5,
       arableArea: 2,
       vegetationArea: 4,
-      crops: ["cotton", "coffe"],
+      crops: [PlantedCrops.COFFE, PlantedCrops.SOY],
     };
   });
 
@@ -350,10 +350,25 @@ describe("Farms routes tests", () => {
         .get("/api/v1/farms/totals")
         .expect(HttpStatus.OK);
       expect(response.body.amountFarms).toBe(2);
-      expect(response.body.allFarmsArea).toBe(
+      expect(response.body.areas.total).toBe(
         requestBodyStubValid.totalArea.valueOf() +
           requestBodyStubValid2.totalArea.valueOf()
       );
+      expect(response.body.areas.vegetation).toBe(
+        requestBodyStubValid.vegetationArea.valueOf() +
+          requestBodyStubValid2.vegetationArea.valueOf()
+      );
+      expect(response.body.areas.arable).toBe(
+        requestBodyStubValid.arableArea.valueOf() +
+          requestBodyStubValid2.arableArea.valueOf()
+      );
+      expect(response.body.farmsByState).toMatchObject([
+        {
+          amount: 2,
+          state: "State",
+        },
+      ]);
+      expect(response.body.farmsByCrop).toBeInstanceOf(Array)
     });
   });
 });

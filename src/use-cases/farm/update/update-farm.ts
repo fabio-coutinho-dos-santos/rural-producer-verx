@@ -7,7 +7,7 @@ import {
   NotFoundError,
 } from "../../../infrastructure/api/helpers/ApiErrors";
 import customLogger from "../../../infrastructure/logger/pino.logger";
-import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
+import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
 
 export default class UpdateFarm {
   constructor(
@@ -15,7 +15,7 @@ export default class UpdateFarm {
     private readonly producerRepository: ProducerRepositoryInterface
   ) {}
 
-  async execute(requestBody: FarmDto, farmId: string) {
+  async execute(requestBody: FarmEntity, farmId: string) {
     await this.validateProducer(requestBody);
     try {
       await this.buildCompleteFarm(requestBody, farmId);
@@ -24,11 +24,11 @@ export default class UpdateFarm {
       return farmUpdated;
     } catch (e: unknown) {
       customLogger.error(e);
-      throw new InternalServerError();
+      throw new InternalServerError(String(e));
     }
   }
 
-  async validateProducer(requestBody: FarmDto) {
+  async validateProducer(requestBody: FarmEntity) {
     if (requestBody.producerId) {
       const producer = await this.producerRepository.findById(
         requestBody.producerId
@@ -39,7 +39,7 @@ export default class UpdateFarm {
     }
   }
 
-  async buildCompleteFarm(requestBody: FarmDto, farmId: string) {
+  async buildCompleteFarm(requestBody: FarmEntity, farmId: string) {
     const farmStored = await this.farmRepository.findById(farmId);
     if (!farmStored) {
       throw new NotFoundError("Farm not found");

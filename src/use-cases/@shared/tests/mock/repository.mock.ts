@@ -6,6 +6,7 @@ import {
   farmStub,
   inputUpdateProducerStub,
   producerStub,
+  producerWithFarmRelationStub,
   totalAreaFarmsStub,
   totalFarmsGroupedByCropStub,
   totalFarmsGroupedByStateStub,
@@ -42,8 +43,8 @@ export const ProducerMockRepository = (
     findById: jest
       .fn()
       .mockResolvedValue(returnProducer ? producerStub() : null),
-    findAll: jest.fn(),
-    findWithRelations: jest.fn(),
+    findAll: jest.fn().mockResolvedValue([producerStub()]),
+    findWithRelations: jest.fn().mockResolvedValue([producerWithFarmRelationStub()]),
     findOneWithRelations: jest.fn(),
   };
 };

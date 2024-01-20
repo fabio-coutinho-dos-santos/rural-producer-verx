@@ -86,6 +86,16 @@ export const inputUpdateProducerStub = () => {
   };
 };
 
+export const producerWithFarmRelationStub = () => {
+  const stub =   {
+    id: 'c931a50f-c7f7-4160-83a3-74d83c142497',
+    name: 'Name',
+    document: '416*********39',
+    farms: []
+  }
+  return stub
+}
+
 export const amountFarmsStub = (): AmountFarms => {
   return {
     amount: "10",

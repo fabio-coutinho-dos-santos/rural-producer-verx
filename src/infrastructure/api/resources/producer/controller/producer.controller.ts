@@ -15,12 +15,8 @@ import {
 } from "../../../helpers/ApiErrors";
 import UpdateProducer from "../../../../../use-cases/producer/update/update-producer";
 import { validateOrReject } from "class-validator";
-import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
-import PaginationMetadata, {
-  PaginationMetadataType,
-} from "../../@shared/pagination";
-import ArrayProducerPresenter from "../presenter/producer-all.presenter";
 import { CreateProducer } from "../../../../../use-cases/producer/create/create-producer";
+import { GetAllProducer } from "../../../../../use-cases/producer/find/get-all-producers";
 
 export default class ProducerController {
   constructor(
@@ -51,29 +47,10 @@ export default class ProducerController {
     try {
       const page: number = parseInt(request.query.page as string) || 1;
       const pageSize: number = parseInt(request.query.pageSize as string) || 10;
-
-      const metadata: PaginationMetadataType =
-        await new PaginationMetadata<ProducerEntity>(
-          this.producerRepository
-        ).buildMetadata(page, pageSize);
-
-      const items: ProducerEntity[] =
-        await this.producerRepository.findWithRelations({
-          skip: metadata.skip,
-          take: metadata.take,
-          relations: {
-            farms: true,
-          },
-          order: {
-            name: "ASC",
-          },
-        });
-
-      const producers = new ArrayProducerPresenter(items);
-      return response.status(HttpStatus.OK).json({
-        ...metadata,
-        producers,
-      });
+      const allProducersPaginated = await new GetAllProducer(
+        this.producerRepository
+      ).execute(page, pageSize);
+      return response.status(HttpStatus.OK).json(allProducersPaginated);
     } catch (e: unknown) {
       customLogger.error(e);
       throw new InternalServerError(String(e));

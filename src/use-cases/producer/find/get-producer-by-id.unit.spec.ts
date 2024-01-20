@@ -24,6 +24,7 @@ describe("Get producer by id use case tests", () => {
       producerRepository
     ).execute(validUuidFormat());
     console.log(producerStored);
+    expect(spy).toHaveBeenCalledTimes(1);
     expect(producerStored).toBeUndefined()
   });
 });

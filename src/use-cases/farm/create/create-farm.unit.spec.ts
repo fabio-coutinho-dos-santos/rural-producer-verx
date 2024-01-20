@@ -12,12 +12,10 @@ import {
 import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
 import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
 
-describe("Producer routes tests", () => {
+describe("Create Farm usecas unit test", () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
-
-  afterAll(async () => {});
 
   describe("Create farm usecase unit test", () => {
     it("should return a new farm with valid request", async () => {

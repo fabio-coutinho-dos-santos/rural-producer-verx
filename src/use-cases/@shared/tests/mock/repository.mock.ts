@@ -13,6 +13,7 @@ import {
 
 export const FarmMockRepository = (): FarmRepositoryInterface => {
   return {
+    count: jest.fn(),
     create: jest.fn().mockResolvedValue(createFarmStub()),
     update: jest.fn().mockResolvedValue(farmStub()),
     delete: jest.fn(),
@@ -31,6 +32,7 @@ export const ProducerMockRepository = (
   returnProducer: boolean
 ): ProducerRepositoryInterface => {
   return {
+    count: jest.fn(),
     create: jest.fn(),
     update: jest.fn().mockResolvedValue({
       name: inputUpdateProducerStub().name,

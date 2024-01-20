@@ -175,7 +175,7 @@ describe("Farms routes tests", () => {
       const response = await supertest(app)
         .get("/api/v1/farms")
         .expect(HttpStatus.OK);
-      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body).toBeInstanceOf(Object);
     });
   });
 

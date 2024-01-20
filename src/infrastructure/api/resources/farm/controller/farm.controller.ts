@@ -20,6 +20,9 @@ import { GetFamsGroupedByState } from "../../../../../use-cases/farm/find/get-fa
 import { GetFamsGroupedByCrop } from "../../../../../use-cases/farm/find/get-farms-by-crops";
 import { validateOrReject } from "class-validator";
 import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
+import PaginationMetadata, {
+  PaginationMetadataType,
+} from "../../@shared/pagination";
 
 export class FarmController {
   constructor(
@@ -49,10 +52,30 @@ export class FarmController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const farms: FarmEntity[] = await this.farmRepository.findWithRelations({
-        relations: { producer: true },
+      const page: number = parseInt(request.query.page as string) || 1;
+      const pageSize: number = parseInt(request.query.pageSize as string) || 10;
+
+      const metadata: PaginationMetadataType =
+        await new PaginationMetadata<FarmEntity>(
+          this.farmRepository
+        ).buildMetadata(page, pageSize);
+
+      const items: FarmEntity[] = await this.farmRepository.findWithRelations({
+        skip: metadata.skip,
+        take: metadata.take,
+        relations: {
+          producer: true,
+        },
+        order: {
+          name: "ASC",
+        },
       });
-      return response.status(HttpStatus.OK).json(new FarmPresenter(farms));
+
+      const farms = new FarmPresenter(items);
+      return response.status(HttpStatus.OK).json({
+        ...metadata,
+        farms,
+      });
     } catch (e: unknown) {
       customLogger.error(e);
       throw new BadRequestError(String(e));

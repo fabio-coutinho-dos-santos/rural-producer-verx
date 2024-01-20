@@ -3,7 +3,6 @@ import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
 import ProducerDto from "../dto/producer.dto";
 import UpdateProducerDto from "../dto/update-producer.dto";
-import ArrayProducerPresenter from "../presenter/producer-all.presenter";
 import ProducerResourcePresenter from "../presenter/producer.presenter";
 import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
 import Producer from "../../../../../domain/producer/entity/producer.entity";
@@ -17,6 +16,10 @@ import {
 import UpdateProducer from "../../../../../use-cases/producer/update/update-producer";
 import { validateOrReject } from "class-validator";
 import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
+import PaginationMetadata, {
+  PaginationMetadataType,
+} from "../../@shared/pagination";
+import ArrayProducerPresenter from "../presenter/producer-all.presenter";
 
 export default class ProducerController {
   constructor(
@@ -34,9 +37,8 @@ export default class ProducerController {
       const producerDto: ProducerDto = new ProducerDto(request.body);
       await validateOrReject(producerDto);
       const producer = new Producer(producerDto.name, producerDto.document);
-      const producerStored: ProducerEntity = await this.producerRepository.create(
-        producer
-      );
+      const producerStored: ProducerEntity =
+        await this.producerRepository.create(producer);
       producerStored.document = maskDocument(producerStored.document);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: unknown) {
@@ -47,14 +49,31 @@ export default class ProducerController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const allProducers: ProducerEntity[] = await this.producerRepository.findWithRelations(
-        {
-          relations: { farms: true },
-        }
-      );
-      return response
-        .status(HttpStatus.OK)
-        .json(new ArrayProducerPresenter(allProducers));
+      const page: number = parseInt(request.query.page as string) || 1;
+      const pageSize: number = parseInt(request.query.pageSize as string) || 10;
+
+      const metadata: PaginationMetadataType =
+        await new PaginationMetadata<ProducerEntity>(
+          this.producerRepository
+        ).buildMetadata(page, pageSize);
+
+      const items: ProducerEntity[] =
+        await this.producerRepository.findWithRelations({
+          skip: metadata.skip,
+          take: metadata.take,
+          relations: {
+            farms: true,
+          },
+          order: {
+            name: "ASC",
+          },
+        });
+
+      const producers = new ArrayProducerPresenter(items);
+      return response.status(HttpStatus.OK).json({
+        ...metadata,
+        producers,
+      });
     } catch (e: unknown) {
       customLogger.error(e);
       throw new InternalServerError(String(e));

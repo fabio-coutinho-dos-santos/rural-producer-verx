@@ -20,6 +20,7 @@ import PaginationMetadata, {
   PaginationMetadataType,
 } from "../../@shared/pagination";
 import ArrayProducerPresenter from "../presenter/producer-all.presenter";
+import { CreateProducer } from "../../../../../use-cases/producer/create/create-producer";
 
 export default class ProducerController {
   constructor(
@@ -36,10 +37,9 @@ export default class ProducerController {
     try {
       const producerDto: ProducerDto = new ProducerDto(request.body);
       await validateOrReject(producerDto);
-      const producer = new Producer(producerDto.name, producerDto.document);
-      const producerStored: ProducerEntity =
-        await this.producerRepository.create(producer);
-      producerStored.document = maskDocument(producerStored.document);
+      const producerStored = await new CreateProducer(
+        this.producerRepository
+      ).execute(producerDto);
       return response.status(HttpStatus.CREATED).json(producerStored);
     } catch (e: unknown) {
       customLogger.error(e);

@@ -33,7 +33,7 @@ export const ProducerMockRepository = (
 ): ProducerRepositoryInterface => {
   return {
     count: jest.fn(),
-    create: jest.fn(),
+    create: jest.fn().mockResolvedValue(producerStub()),
     update: jest.fn().mockResolvedValue({
       name: inputUpdateProducerStub().name,
       document: producerStub().document,

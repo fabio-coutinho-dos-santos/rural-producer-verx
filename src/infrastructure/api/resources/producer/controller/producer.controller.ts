@@ -1,4 +1,3 @@
-import { DeleteResult } from "typeorm";
 import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
 import ProducerDto from "../dto/producer.dto";
@@ -17,6 +16,7 @@ import { validateOrReject } from "class-validator";
 import { CreateProducer } from "../../../../../use-cases/producer/create/create-producer";
 import { GetAllProducer } from "../../../../../use-cases/producer/find/get-all-producers";
 import { GetProducerById } from "../../../../../use-cases/producer/find/get-producer-by-id";
+import { DeleteProducer } from "../../../../../use-cases/producer/delete/delete-producer";
 
 export default class ProducerController {
   constructor(
@@ -75,46 +75,15 @@ export default class ProducerController {
 
   async delete(request: Request, response: Response): Promise<unknown> {
     const producerId = request.params.id;
-    const producerStored = await this.producerRepository.findOneWithRelations({
-      where: {
-        id: producerId,
-      },
-      relations: {
-        farms: true,
-      },
-    });
+    const deleted: boolean = await new DeleteProducer(
+      this.producerRepository
+    ).execute(producerId);
 
-    if (!producerStored) {
-      throw new NotFoundError("Producer not found");
+    if (deleted) {
+      return response.status(HttpStatus.NO_CONTENT).send();
     }
 
-    if (producerStored.farms.length > 0) {
-      throw new BadRequestError(
-        "This producer is linked to farms and cannot be excluded"
-      );
-    }
-
-    try {
-      const result: DeleteResult = await this.producerRepository.delete(
-        producerId
-      );
-
-      const affected = result.affected;
-      let deleted = false;
-
-      if (affected) {
-        deleted = affected.valueOf() > 0;
-      }
-
-      if (deleted) {
-        return response.status(HttpStatus.NO_CONTENT).send();
-      }
-
-      return response.status(HttpStatus.OK).send();
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new InternalServerError(String(e));
-    }
+    return response.status(HttpStatus.OK).send();
   }
 
   async update(request: Request, response: Response): Promise<unknown> {

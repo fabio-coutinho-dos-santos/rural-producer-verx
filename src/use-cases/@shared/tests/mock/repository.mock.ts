@@ -39,7 +39,7 @@ export const ProducerMockRepository = (
       name: inputUpdateProducerStub().name,
       document: producerStub().document,
     }),
-    delete: jest.fn(),
+    delete: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
     findById: jest
       .fn()
       .mockResolvedValue(returnProducer ? producerStub() : null),

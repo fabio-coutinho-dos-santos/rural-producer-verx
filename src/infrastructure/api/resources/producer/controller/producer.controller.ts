@@ -5,7 +5,6 @@ import ProducerDto from "../dto/producer.dto";
 import UpdateProducerDto from "../dto/update-producer.dto";
 import ProducerResourcePresenter from "../presenter/producer.presenter";
 import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
-import Producer from "../../../../../domain/producer/entity/producer.entity";
 import { maskDocument } from "../../../helpers/mask-functions";
 import customLogger from "../../../../logger/pino.logger";
 import {
@@ -17,6 +16,7 @@ import UpdateProducer from "../../../../../use-cases/producer/update/update-prod
 import { validateOrReject } from "class-validator";
 import { CreateProducer } from "../../../../../use-cases/producer/create/create-producer";
 import { GetAllProducer } from "../../../../../use-cases/producer/find/get-all-producers";
+import { GetProducerById } from "../../../../../use-cases/producer/find/get-producer-by-id";
 
 export default class ProducerController {
   constructor(
@@ -59,17 +59,15 @@ export default class ProducerController {
 
   async getById(request: Request, response: Response): Promise<unknown> {
     const producerId = request.params.id;
-    const producerStored = await this.producerRepository.findOneWithRelations({
-      where: {
-        id: producerId,
-      },
-      relations: {
-        farms: true,
-      },
-    });
+
+    const producerStored = await new GetProducerById(
+      this.producerRepository
+    ).execute(producerId);
+
     if (!producerStored) {
       throw new NotFoundError("Producer not found");
     }
+
     return response
       .status(HttpStatus.OK)
       .json(new ProducerResourcePresenter(producerStored));

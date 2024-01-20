@@ -44,7 +44,13 @@ export const ProducerMockRepository = (
       .fn()
       .mockResolvedValue(returnProducer ? producerStub() : null),
     findAll: jest.fn().mockResolvedValue([producerStub()]),
-    findWithRelations: jest.fn().mockResolvedValue([producerWithFarmRelationStub()]),
-    findOneWithRelations: jest.fn(),
+    findWithRelations: jest
+      .fn()
+      .mockResolvedValue([producerWithFarmRelationStub()]),
+    findOneWithRelations: jest
+      .fn()
+      .mockResolvedValue(
+        returnProducer ? producerWithFarmRelationStub() : undefined
+      ),
   };
 };

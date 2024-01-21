@@ -33,11 +33,11 @@ Api RESTful desenvolvida para o cadastro de produtores rurais e suas fazendas co
 
 ## Arquitetura
 
-Toda a construção da api assim como a hierarquia de pastas foram definidos aplicando práticas de modelagem do Domain Driven Design (DDD) em conjunto com Clean Architecture. Dessa forma, a arquitetura proteje as regras de negócio com as entidades referentes ao dominio principal da aplicação no nucleo, matendo as partes agregadas ao negócio nas extremidades da arquitetura, como sugerem as arquiteturas limpa e hexagonal.
+Toda a construção da api assim como a hierarquia de pastas foram definidos aplicando práticas de modelagem do Domain Driven Design (DDD) em conjunto com Clean Architecture. Dessa forma, a arquitetura proteje as regras de negócio, com as entidades referentes ao dominio principal da aplicação no nucleo, matendo as partes agregadas ao negócio nas extremidades da arquitetura, como sugerem as arquiteturas limpa e hexagonal.
 
-Como parte das práticas do DDD, destaca-se a criação das entidades de domínio contendo suas respectivas validações oriundas das regras de negócio, assim como a construção de value objects quando se fez necessário. Além disso, toda a estrutura da hierarquia de pastas adotada e manutenção da linguagem ubiqua.
+Como parte das práticas do DDD, destaca-se a criação das entidades de domínio contendo suas respectivas validações oriundas das regras de negócio, assim como a construção de value objects quando se fez necessário. Além disso, toda a estrutura da hierarquia de pastas adotada mantendo uma linguagem ubiqua.
 
-Por outro lado, destaca-se como práticas referentes a arquitetura limpa a criação de camadas anticorrupção entre os elementos de dominio e as partes agregadas da aplicação, possibilitando tanto a injeçao de dependências quanto a inversão dessas dependencias tornando o código mais desacoplado.
+Por outro lado, destaca-se como práticas referentes a arquitetura limpa a criação de camadas anticorrupção entre os elementos de dominio e as partes agregadas da aplicação, possibilitando tanto a injeçao de dependências quanto a inversão dessas dependencias, tornando o código mais desacoplado.
 
 ## Descrição
 
@@ -54,7 +54,7 @@ Para realizar as tarefas de CRUD destas entidades e suas respectivas regras de n
   - createAt
   - updatedAt
 
-- **farms**, conten os colunas:
+- **farms**, contendo os colunas:
   - id
   - name
   - city
@@ -71,7 +71,7 @@ Para realizar as tarefas de CRUD destas entidades e suas respectivas regras de n
 
 O nível de maturidade adotado para elaboração da API foi o 2, já tornando-a RESTful e combinando o verbos HTTP com seus respectivos significados semânticos, assim como utilizando de forma expressiva os recursos a ações a serem executadas nas rotas da aplicação.
 
-Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes automatizados de unidade para todas as funcionalidades providas pela aplicação, incluindo as regras de negócio. Além disso, também foram desenvolvidos testes de integração para todas as rotas da aplicação, para o qual foi utilizado ou outro banco de dados exclusivo para testes. 
+Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes automatizados de unidade para todas as funcionalidades providas pela aplicação. Além disso, também foram desenvolvidos testes de integração para todas as rotas da aplicação, para o qual foi utilizado ou outro banco de dados exclusivo para testes. 
 
 
 ## Detalhes de implementação
@@ -89,7 +89,7 @@ Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes aut
 
 - Por outro lado, como entrega contínua, a aplicação é implantada no provedor Render que é vinculado ao repositório do projeto e, quando ocorre uma atualização no branch main é construída uma nova versão a partir da imagem docker, descrita no Dockerfile e, essa nova versão já fica disponível em produção. 
 
-- Para proteção do deploy utilizando essa estratégia basta configurar o repositório no github para não aceitar push diretamente no branch main, sendo que isso śo poderá ocorrer via aprovação de PR e, também configurar que a PR só porderá ser aprovada após a execuçaõ do pipeline. Por questões de agilidade, e por se tratar de uma aplicação com escopo de teste, não foram aplicadas essas configurações
+- Para proteção do deploy utilizando essa estratégia basta configurar o repositório no github para não aceitar push diretamente no branch main, sendo que isso śo poderá ocorrer via aprovação de PR e, também configurar que a PR só porderá ser aprovada após a execução do pipeline. Por questões de agilidade, e por se tratar de uma aplicação com escopo de teste, não foram aplicadas essas configurações
 
 - Outra estratégia, que não foi adotada devido a envolver custos e escopo, é a integração do pipeline de ci com o sonarqube onde podem ser inferidas regras para barrar códigos mal escritos e com baixa porcentagem de cobertura de testes.
 
@@ -144,7 +144,7 @@ Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes aut
    - **npm install**
    - **npm run dev**
   
- ***OBS*** Caso tenha o postgres também instalado localmente basta criar dois bancos distintos e configurar as variávei de ambiente no seguinte padrão:
+ ***OBS*** Caso tenha o postgres também instalado localmente basta criar dois bancos distintos e configurar as variáveis de ambiente no seguinte padrão:
   - postgres://user:password@host:5432/dbName
 
 ## Deploy no kubernetes

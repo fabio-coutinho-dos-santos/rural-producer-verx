@@ -1,7 +1,7 @@
 import { ProducerConstants } from "../enum/producer.constants.enum";
 
 export default class Producer {
-  constructor(public name: string, public document: string) {
+  constructor(private _name: string, private _document: string) {
     this.validateRequiredFields();
   }
 
@@ -96,5 +96,17 @@ export default class Producer {
     if (result2 !== parseInt(digits.charAt(1), 10)) {
       throw new Error("Invalid CNPJ");
     }
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get document(): string {
+    return this._document;
+  }
+
+  set document(value: string) {
+    this._document = value
   }
 }

@@ -32,7 +32,7 @@ export const producerStub = (): Producer => {
 
 export const createFarmStub = (): Partial<FarmEntity> => {
   return {
-    id: '97fc317b-8842-47d0-8914-80bd3b5eac3a',
+    id: "97fc317b-8842-47d0-8914-80bd3b5eac3a",
     name: "Farm name",
     city: "City",
     state: "State",
@@ -41,8 +41,8 @@ export const createFarmStub = (): Partial<FarmEntity> => {
     arableArea: 2,
     vegetationArea: 4,
     crops: [PlantedCrops.COTTON, PlantedCrops.COFFE],
-  }
-}
+  };
+};
 
 export const inputCreateFarmStub = () => {
   return {
@@ -86,6 +86,36 @@ export const inputUpdateProducerStub = () => {
   };
 };
 
+export const producerWithFarmRelationStub = () => {
+  const stub = {
+    id: "c931a50f-c7f7-4160-83a3-74d83c142497",
+    name: "Name",
+    document: "416*********39",
+    farms: [],
+  };
+  return stub;
+};
+
+export const farmsWithProducerRelation = () => {
+  const stub = {
+    id: "20a7ccdf-6711-4096-996c-9896edade3d2",
+    name: "ZName Updated",
+    producerId: "47b5fa1d-6bab-4fec-8723-4ee33e41770c",
+    city: "City",
+    state: "State",
+    totalArea: 22.3,
+    arableArea: 12,
+    vegetationArea: 9.1,
+    crops: ["soy"],
+    producer: {
+      id: "47b5fa1d-6bab-4fec-8723-4ee33e41770c",
+      name: "Producer name updated",
+      document: "406.738.520-08",
+    },
+  };
+  return stub;
+};
+
 export const amountFarmsStub = (): AmountFarms => {
   return {
     amount: "10",
@@ -111,7 +141,7 @@ export const totalFarmsGroupedByStateStub = (): FarmsByState[] => {
       state: "State2",
     },
   ];
-  return result
+  return result;
 };
 
 export const totalFarmsGroupedByCropStub = (): FarmsByCrop[] => {
@@ -125,6 +155,5 @@ export const totalFarmsGroupedByCropStub = (): FarmsByCrop[] => {
       crop: "soy",
     },
   ];
-  return result
+  return result;
 };
-

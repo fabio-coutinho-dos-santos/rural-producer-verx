@@ -7,6 +7,7 @@ import { httpError } from "../../../middlewares/http-errors";
 import { AppDataSourceTest } from "../../../../database/typeorm/postgres/datasources/data-source-test";
 import ProducerEntity from "../../../../database/typeorm/postgres/entities/producer.entity";
 import { maskDocument } from "../../../helpers/mask-functions";
+
 jest.setTimeout(20000);
 
 describe("Producer routes tests", () => {
@@ -95,7 +96,7 @@ describe("Producer routes tests", () => {
       const response = await supertest(app)
         .get("/api/v1/producers")
         .expect(HttpStatus.OK);
-      expect(response.body).toBeInstanceOf(Array);
+      expect(response.body).toBeInstanceOf(Object);
     });
   });
 

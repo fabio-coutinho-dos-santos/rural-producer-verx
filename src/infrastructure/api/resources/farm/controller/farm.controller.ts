@@ -1,9 +1,7 @@
 import { Response, Request } from "express";
 import HttpStatus from "http-status-codes";
-import { DeleteResult } from "typeorm";
 import FarmDto from "../dto/farm.dto";
 import UpdateFarmDto from "../dto/update-farm.dto";
-import FarmPresenter from "../presenter/farm.presenter";
 import FarmRepositoryInterface from "../../../../../domain/farm/repository/farm.repository.interface";
 import ProducerRepositoryInterface from "../../../../../domain/producer/repository/producer.repository.interface";
 import CreateFarm from "../../../../../use-cases/farm/create/create-farm";
@@ -11,15 +9,15 @@ import customLogger from "../../../../logger/pino.logger";
 import {
   BadRequestError,
   InternalServerError,
-  NotFoundError,
 } from "../../../helpers/ApiErrors";
 import UpdateFarm from "../../../../../use-cases/farm/update/update-farm";
-import { GetAmountFarms } from "../../../../../use-cases/farm/find/get-amount-farms";
-import { GetTotalAreaFarms } from "../../../../../use-cases/farm/find/get-total-area-farms";
-import { GetFamsGroupedByState } from "../../../../../use-cases/farm/find/get-farms-by-state";
-import { GetFamsGroupedByCrop } from "../../../../../use-cases/farm/find/get-farms-by-crops";
+import { GetAmountFarms } from "../../../../../use-cases/farm/totals/get-amount-farms";
+import { GetTotalAreaFarms } from "../../../../../use-cases/farm/totals/get-total-area-farms";
+import { GetFamsGroupedByState } from "../../../../../use-cases/farm/totals/get-farms-by-state";
+import { GetFamsGroupedByCrop } from "../../../../../use-cases/farm/totals/get-farms-by-crops";
 import { validateOrReject } from "class-validator";
-import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.entity";
+import { GetAllFarms } from "../../../../../use-cases/farm/find/get-all-farms";
+import { DeleteFarm } from "../../../../../use-cases/farm/delete/delete-farm";
 
 export class FarmController {
   constructor(
@@ -49,13 +47,15 @@ export class FarmController {
 
   async getAll(request: Request, response: Response): Promise<unknown> {
     try {
-      const farms: FarmEntity[] = await this.farmRepository.findWithRelations({
-        relations: { producer: true },
-      });
-      return response.status(HttpStatus.OK).json(new FarmPresenter(farms));
+      const page: number = parseInt(request.query.page as string) || 1;
+      const pageSize: number = parseInt(request.query.pageSize as string) || 10;
+      const allFarmsPaginated = await new GetAllFarms(
+        this.farmRepository
+      ).execute(page, pageSize);
+      return response.status(HttpStatus.OK).json(allFarmsPaginated);
     } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(String(e));
+      throw new InternalServerError(String(e));
     }
   }
 
@@ -77,33 +77,15 @@ export class FarmController {
   async delete(request: Request, response: Response): Promise<unknown> {
     const farmId = request.params.id;
 
-    const farmStored = await this.farmRepository.findOneWithRelations({
-      where: { id: farmId },
-    });
+    const deleted: boolean = await new DeleteFarm(this.farmRepository).execute(
+      farmId
+    );
 
-    if (!farmStored) {
-      throw new NotFoundError("Farm not found");
+    if (deleted) {
+      return response.status(HttpStatus.NO_CONTENT).send();
     }
 
-    try {
-      const result: DeleteResult = await this.farmRepository.delete(farmId);
-
-      const affected = result.affected;
-      let deleted = false;
-
-      if (affected) {
-        deleted = affected.valueOf() > 0;
-      }
-
-      if (deleted) {
-        return response.status(HttpStatus.NO_CONTENT).send();
-      }
-
-      return response.status(HttpStatus.OK).send();
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new InternalServerError(String(e));
-    }
+    return response.status(HttpStatus.OK).send();
   }
 
   async getFarmTotals(request: Request, response: Response): Promise<unknown> {

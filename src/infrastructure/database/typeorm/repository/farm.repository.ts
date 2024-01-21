@@ -1,4 +1,10 @@
-import { DataSource, DeleteResult, FindManyOptions, FindOneOptions, Repository } from "typeorm";
+import {
+  DataSource,
+  DeleteResult,
+  FindManyOptions,
+  FindOneOptions,
+  Repository,
+} from "typeorm";
 import FarmRepositoryInterface, {
   AmountFarms,
   AreaTotalFarms,
@@ -14,7 +20,11 @@ export class FarmRepository implements FarmRepositoryInterface {
   constructor(private readonly dataSource: DataSource) {
     this.repository = dataSource.getRepository(FarmEntity);
   }
-  
+
+  async count(): Promise<number> {
+    return await this.repository.count();
+  }
+
   async findOneWithRelations(
     relations: FindOneOptions<FarmEntity>
   ): Promise<FarmEntity | null> {
@@ -49,7 +59,7 @@ export class FarmRepository implements FarmRepositoryInterface {
   }
 
   async findById(id: string): Promise<FarmEntity> {
-    const farm = await this.repository.findOneOrFail({where:{id: id}});
+    const farm = await this.repository.findOneOrFail({ where: { id: id } });
     return farm;
   }
 

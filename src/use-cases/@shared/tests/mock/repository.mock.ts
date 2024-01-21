@@ -4,8 +4,10 @@ import {
   amountFarmsStub,
   createFarmStub,
   farmStub,
+  farmsWithProducerRelation,
   inputUpdateProducerStub,
   producerStub,
+  producerWithFarmRelationStub,
   totalAreaFarmsStub,
   totalFarmsGroupedByCropStub,
   totalFarmsGroupedByStateStub,
@@ -13,13 +15,16 @@ import {
 
 export const FarmMockRepository = (): FarmRepositoryInterface => {
   return {
+    count: jest.fn(),
     create: jest.fn().mockResolvedValue(createFarmStub()),
     update: jest.fn().mockResolvedValue(farmStub()),
-    delete: jest.fn(),
+    delete: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
     findById: jest.fn().mockResolvedValue(farmStub()),
     findAll: jest.fn(),
-    findWithRelations: jest.fn(),
-    findOneWithRelations: jest.fn(),
+    findWithRelations: jest
+      .fn()
+      .mockResolvedValue([farmsWithProducerRelation()]),
+    findOneWithRelations: jest.fn().mockResolvedValue(farmsWithProducerRelation()),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),
     getByCrop: jest.fn().mockResolvedValue(totalFarmsGroupedByCropStub()),
@@ -31,17 +36,24 @@ export const ProducerMockRepository = (
   returnProducer: boolean
 ): ProducerRepositoryInterface => {
   return {
-    create: jest.fn(),
+    count: jest.fn(),
+    create: jest.fn().mockResolvedValue(producerStub()),
     update: jest.fn().mockResolvedValue({
       name: inputUpdateProducerStub().name,
       document: producerStub().document,
     }),
-    delete: jest.fn(),
+    delete: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
     findById: jest
       .fn()
       .mockResolvedValue(returnProducer ? producerStub() : null),
-    findAll: jest.fn(),
-    findWithRelations: jest.fn(),
-    findOneWithRelations: jest.fn(),
+    findAll: jest.fn().mockResolvedValue([producerStub()]),
+    findWithRelations: jest
+      .fn()
+      .mockResolvedValue([producerWithFarmRelationStub()]),
+    findOneWithRelations: jest
+      .fn()
+      .mockResolvedValue(
+        returnProducer ? producerWithFarmRelationStub() : undefined
+      ),
   };
 };

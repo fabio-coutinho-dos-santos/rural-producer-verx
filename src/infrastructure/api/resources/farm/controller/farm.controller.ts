@@ -23,6 +23,7 @@ import FarmEntity from "../../../../database/typeorm/postgres/entities/farms.ent
 import PaginationMetadata, {
   PaginationMetadataType,
 } from "../../@shared/pagination";
+import { GetAllFarms } from "../../../../../use-cases/farm/find/get-all-farms";
 
 export class FarmController {
   constructor(
@@ -54,31 +55,13 @@ export class FarmController {
     try {
       const page: number = parseInt(request.query.page as string) || 1;
       const pageSize: number = parseInt(request.query.pageSize as string) || 10;
-
-      const metadata: PaginationMetadataType =
-        await new PaginationMetadata<FarmEntity>(
-          this.farmRepository
-        ).buildMetadata(page, pageSize);
-
-      const items: FarmEntity[] = await this.farmRepository.findWithRelations({
-        skip: metadata.skip,
-        take: metadata.take,
-        relations: {
-          producer: true,
-        },
-        order: {
-          name: "ASC",
-        },
-      });
-
-      const farms = new FarmPresenter(items);
-      return response.status(HttpStatus.OK).json({
-        ...metadata,
-        farms,
-      });
+      const allFarmsPaginated = await new GetAllFarms(
+        this.farmRepository
+      ).execute(page, pageSize);
+      return response.status(HttpStatus.OK).json(allFarmsPaginated);
     } catch (e: unknown) {
       customLogger.error(e);
-      throw new BadRequestError(String(e));
+      throw new InternalServerError(String(e));
     }
   }
 

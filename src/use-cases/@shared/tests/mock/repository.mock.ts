@@ -4,6 +4,7 @@ import {
   amountFarmsStub,
   createFarmStub,
   farmStub,
+  farmsWithProducerRelation,
   inputUpdateProducerStub,
   producerStub,
   producerWithFarmRelationStub,
@@ -20,7 +21,9 @@ export const FarmMockRepository = (): FarmRepositoryInterface => {
     delete: jest.fn(),
     findById: jest.fn().mockResolvedValue(farmStub()),
     findAll: jest.fn(),
-    findWithRelations: jest.fn(),
+    findWithRelations: jest
+      .fn()
+      .mockResolvedValue([farmsWithProducerRelation()]),
     findOneWithRelations: jest.fn(),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),

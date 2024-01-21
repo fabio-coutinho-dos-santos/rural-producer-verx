@@ -7,7 +7,7 @@ export default class PaginationMetadata<T> {
     const totalItems = await this.repository.count();
     const totalPages = Math.ceil(totalItems / pageSize);
     const currentPage = Math.min(page, totalPages);
-    const skip = (currentPage - 1) * pageSize;
+    const skip = currentPage > 0 ? ((currentPage - 1) * pageSize) : 0;
     const take = pageSize;
     const metadata: PaginationMetadataType = {
       totalItems,

@@ -18,13 +18,13 @@ export const FarmMockRepository = (): FarmRepositoryInterface => {
     count: jest.fn(),
     create: jest.fn().mockResolvedValue(createFarmStub()),
     update: jest.fn().mockResolvedValue(farmStub()),
-    delete: jest.fn(),
+    delete: jest.fn().mockResolvedValue({ raw: [], affected: 1 }),
     findById: jest.fn().mockResolvedValue(farmStub()),
     findAll: jest.fn(),
     findWithRelations: jest
       .fn()
       .mockResolvedValue([farmsWithProducerRelation()]),
-    findOneWithRelations: jest.fn(),
+    findOneWithRelations: jest.fn().mockResolvedValue(farmsWithProducerRelation()),
     getAmountFarms: jest.fn().mockResolvedValue(amountFarmsStub()),
     getTotalArea: jest.fn().mockResolvedValue(totalAreaFarmsStub()),
     getByCrop: jest.fn().mockResolvedValue(totalFarmsGroupedByCropStub()),

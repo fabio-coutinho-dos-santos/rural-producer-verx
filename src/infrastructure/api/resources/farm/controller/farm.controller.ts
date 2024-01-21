@@ -24,6 +24,7 @@ import PaginationMetadata, {
   PaginationMetadataType,
 } from "../../@shared/pagination";
 import { GetAllFarms } from "../../../../../use-cases/farm/find/get-all-farms";
+import { DeleteFarm } from "../../../../../use-cases/farm/delete/delete-farm";
 
 export class FarmController {
   constructor(
@@ -83,33 +84,15 @@ export class FarmController {
   async delete(request: Request, response: Response): Promise<unknown> {
     const farmId = request.params.id;
 
-    const farmStored = await this.farmRepository.findOneWithRelations({
-      where: { id: farmId },
-    });
+    const deleted: boolean = await new DeleteFarm(this.farmRepository).execute(
+      farmId
+    );
 
-    if (!farmStored) {
-      throw new NotFoundError("Farm not found");
+    if (deleted) {
+      return response.status(HttpStatus.NO_CONTENT).send();
     }
 
-    try {
-      const result: DeleteResult = await this.farmRepository.delete(farmId);
-
-      const affected = result.affected;
-      let deleted = false;
-
-      if (affected) {
-        deleted = affected.valueOf() > 0;
-      }
-
-      if (deleted) {
-        return response.status(HttpStatus.NO_CONTENT).send();
-      }
-
-      return response.status(HttpStatus.OK).send();
-    } catch (e: unknown) {
-      customLogger.error(e);
-      throw new InternalServerError(String(e));
-    }
+    return response.status(HttpStatus.OK).send();
   }
 
   async getFarmTotals(request: Request, response: Response): Promise<unknown> {

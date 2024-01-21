@@ -1,9 +1,9 @@
-import { DataSource } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 import "dotenv/config";
 import ProducerEntity from "../entities/producer.entity";
 import FarmEntity from "../entities/farms.entity";
 
-export function ormconfig(): any {
+export function ormconfig() {
   const config = {
     type: "postgres",
     url: process.env.POSTGRES_URL_CONNECTION,
@@ -15,4 +15,4 @@ export function ormconfig(): any {
   return config;
 }
 
-export const AppDataSource = new DataSource(ormconfig());
+export const AppDataSource = new DataSource(ormconfig() as DataSourceOptions);

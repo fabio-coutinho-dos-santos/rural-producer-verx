@@ -15,6 +15,9 @@ export class ProducerRepository implements ProducerRepositoryInterface {
   constructor(private readonly dataSource: DataSource) {
     this.repository = dataSource.getRepository(ProducerEntity);
   }
+  async count(): Promise<number> {
+    return await this.repository.count();
+  }
 
   async findWithRelations(
     relations: FindManyOptions<ProducerEntity>
@@ -28,16 +31,19 @@ export class ProducerRepository implements ProducerRepositoryInterface {
     return await this.repository.findOne(relations);
   }
 
-  async create(entity: Producer): Promise<Producer> {
+  async create(entity: Producer): Promise<ProducerEntity> {
     const model = {
       name: entity.name,
-      document: entity.document.replace(/\D/g, "")
-    }
+      document: entity.document.replace(/\D/g, ""),
+    };
     const producer = await this.repository.save(model as Producer);
     return producer;
   }
 
-  async update(entity: Partial<Producer>, id: string): Promise<Producer | ProducerEntity | null> {
+  async update(
+    entity: Partial<ProducerEntity>,
+    id: string
+  ): Promise<ProducerEntity | null> {
     await this.repository.update(id, entity);
     const producerUpdated = await this.repository.findOneBy({ id: id });
     return producerUpdated;
@@ -47,8 +53,8 @@ export class ProducerRepository implements ProducerRepositoryInterface {
     return await this.repository.delete(id);
   }
 
-  async findById(id: string): Promise<ProducerEntity | null> {
-    const producer = await this.repository.findOneBy({ id: id });
+  async findById(id: string): Promise<ProducerEntity> {
+    const producer = await this.repository.findOneOrFail({ where: { id: id } });
     return producer;
   }
 

@@ -1,5 +1,5 @@
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
-import ProducerDto from "../../../infrastructure/api/resources/producer/dto/producer.dto";
+import ProducerEntity from "../../../infrastructure/database/typeorm/postgres/entities/producer.entity";
 import { ProducerMockRepository } from "../../@shared/tests/mock/repository.mock";
 import {
   inputUpdateProducerStub,
@@ -19,7 +19,7 @@ describe("Update producer use case", () => {
         ProducerMockRepository(true);
       const updateProducer = new UpdateProducer(producerRepository);
       const producerBuilded = await updateProducer.buildNewProducer(
-        inputUpdateProducerStub() as ProducerDto,
+        inputUpdateProducerStub() as ProducerEntity,
         validUuidFormat()
       );
       expect(producerBuilded).toBeDefined();
@@ -33,7 +33,7 @@ describe("Update producer use case", () => {
           ProducerMockRepository(false);
         const updateProducer = new UpdateProducer(producerRepository);
         await updateProducer.buildNewProducer(
-          inputUpdateProducerStub() as ProducerDto,
+          inputUpdateProducerStub() as ProducerEntity,
           validUuidFormat()
         );
       }).rejects.toThrow("Producer not found");
@@ -50,7 +50,7 @@ describe("Update producer use case", () => {
         "buildNewProducer"
       );
       const producerUpdated = await updateProducer.execute(
-        inputUpdateProducerStub() as ProducerDto,
+        inputUpdateProducerStub() as ProducerEntity,
         validUuidFormat()
       );
       expect(producerUpdated).toBeDefined();
@@ -69,7 +69,7 @@ describe("Update producer use case", () => {
           ProducerMockRepository(false);
         const updateProducer = new UpdateProducer(producerRepository);
         await updateProducer.buildNewProducer(
-          inputUpdateProducerStub() as ProducerDto,
+          inputUpdateProducerStub() as ProducerEntity,
           validUuidFormat()
         );
       }).rejects.toThrow("Producer not found");

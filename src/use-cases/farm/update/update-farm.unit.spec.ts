@@ -1,6 +1,6 @@
 import FarmRepositoryInterface from "../../../domain/farm/repository/farm.repository.interface";
 import ProducerRepositoryInterface from "../../../domain/producer/repository/producer.repository.interface";
-import FarmDto from "../../../infrastructure/api/resources/farm/dto/farm.dto";
+import FarmEntity from "../../../infrastructure/database/typeorm/postgres/entities/farms.entity";
 import {
   FarmMockRepository,
   ProducerMockRepository,
@@ -22,7 +22,7 @@ describe("Update Farm use case", () => {
         ProducerMockRepository(returnProducerFlag);
       const updateFarm = new UpdateFarm(farmRepository, producerRepository);
       const result = await updateFarm.validateProducer(
-        inputUpdateFarmStub() as FarmDto
+        inputUpdateFarmStub() as FarmEntity
       );
       expect(result).toBe(undefined);
     });
@@ -34,7 +34,7 @@ describe("Update Farm use case", () => {
         const producerRepository: ProducerRepositoryInterface =
           ProducerMockRepository(returnProducerFlag);
         const updateFarm = new UpdateFarm(farmRepository, producerRepository);
-        await updateFarm.validateProducer(inputUpdateFarmStub() as FarmDto);
+        await updateFarm.validateProducer(inputUpdateFarmStub() as FarmEntity);
       }).rejects.toThrow("Producer not found");
     });
   });
@@ -51,7 +51,7 @@ describe("Update Farm use case", () => {
       const spyBuildCompleteFarm = jest.spyOn(updateFarm, "buildCompleteFarm");
 
       const farmUpdated = await updateFarm.execute(
-        inputUpdateFarmStub() as FarmDto,
+        inputUpdateFarmStub() as FarmEntity,
         validUuidFormat()
       );
 
@@ -75,7 +75,7 @@ describe("Update Farm use case", () => {
           ProducerMockRepository(returnProducerFlag);
         const updateFarm = new UpdateFarm(farmRepository, producerRepository);
         await updateFarm.execute(
-          inputUpdateFarmStub() as FarmDto,
+          inputUpdateFarmStub() as FarmEntity,
           validUuidFormat()
         );
       }).rejects.toThrow("Producer not found");
@@ -89,7 +89,7 @@ describe("Update Farm use case", () => {
           ProducerMockRepository(returnProducerFlag);
         const updateFarm = new UpdateFarm(farmRepository, producerRepository);
         await updateFarm.execute(
-          inputUpdateFarmStubInvalidArea() as FarmDto,
+          inputUpdateFarmStubInvalidArea() as FarmEntity,
           validUuidFormat()
         );
       }).rejects.toThrow();

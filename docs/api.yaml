@@ -18,6 +18,20 @@ paths:
       tags:
         - Producers
       summary: Get all
+      parameters:
+        - name: page
+          in: "query"
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: pageSize
+          in: "query"
+          required: false
+          schema:
+            type: number
+            example: 10
+
       responses:
         "200":
           description: A successful response
@@ -26,7 +40,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProducerResource"
+                  $ref: "#/components/schemas/PaginationProducerResource"
 
     post:
       tags:
@@ -140,6 +154,19 @@ paths:
     get:
       tags:
         - Farms
+      parameters:
+        - name: page
+          in: "query"
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: pageSize
+          in: "query"
+          required: false
+          schema:
+            type: number
+            example: 10
       summary: Get all
       responses:
         "200":
@@ -149,7 +176,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/FarmsResource"
+                  $ref: "#/components/schemas/PaginationFarmResource"
 
     post:
       tags:
@@ -245,15 +272,8 @@ paths:
           description: A successful response
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  amountFarms:
-                    type: number
-                    example: 10
-                  allFarmsArea:
-                    type: number
-                    example: 100.4
+              schema: 
+                $ref: "#/components/schemas/TotalsResource"
 
 components:
   schemas:
@@ -415,3 +435,92 @@ components:
         updatedAt:
           type: string
           format: date
+
+    TotalsResource:
+      type: object
+      properties:
+        amountFarms:
+          type: number
+          example: 10
+        areas:
+          type: array
+          items:
+            type: object
+            properties:
+              total:
+                type: number
+                example: 234.5
+              arable:
+                type: number
+                example: 120.4
+              vegetation:
+                type: number
+                example: 100.5
+        farmsByState:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                example: 2
+              state:
+                type:  string
+                example: Texas
+        farmsByCrop:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                example: 2
+              crop:
+                type:  string
+                example: coffe
+
+    PaginationFarmResource:
+      type: object
+      properties:
+        totalItems:
+          type: number
+          example: 10
+        totalPages:
+          type: number
+          example: 2
+        currentPage:
+          type: number
+          example: 1
+        skip: 
+          type: number
+          example: 0
+        take:
+          type: number
+          example: 10
+        farms:
+          type: array
+          items: 
+            $ref: "#/components/schemas/FarmsResource"
+                    
+    PaginationProducerResource:
+      type: object
+      properties:
+        totalItems:
+          type: number
+          example: 10
+        totalPages:
+          type: number
+          example: 2
+        currentPage:
+          type: number
+          example: 1
+        skip: 
+          type: number
+          example: 0
+        take:
+          type: number
+          example: 10
+        producers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProducerResource"

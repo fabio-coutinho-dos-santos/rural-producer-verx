@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import FarmEntity from "./farms.entity";
-import Farm from "../../../../../domain/farm/entity/farm.entity";
 
 @Entity("producers")
 @Unique(["document"])
@@ -29,5 +28,5 @@ export default class ProducerEntity {
   updatedAt: Date;
 
   @OneToMany(() => FarmEntity, (farm) => farm.producer)
-  farms: Farm[];
+  farms: FarmEntity[];
 }

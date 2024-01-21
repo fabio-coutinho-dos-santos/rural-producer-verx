@@ -7,9 +7,11 @@ describe("Get amount farms use case", () => {
   describe("execute function", () => {
     it("should return a amount object with valid data", async () => {
       const farmRepository: FarmRepositoryInterface = FarmMockRepository();
+      const spyRepository = jest.spyOn(farmRepository, "getAmountFarms");
       const amountFarms = await new GetAmountFarms(farmRepository).execute();
       expect(amountFarms).toBeDefined();
       expect(amountFarms).toMatchObject(amountFarmsStub());
+      expect(spyRepository).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -76,10 +76,10 @@ Todo o desenvolvimento foi guiado por testes. Assim, foram elaborados testes aut
 
 ## Detalhes de implementação
  - Altíssima cobertura de testes. Para verificar basta executar o comando **npm run test:cov** após configurar o projeto localmente.
+ - Paginação nas rotas que retornam todos os recursos
  - Utilizalção de git flow e conventional commits.
  - Utilização de logs estruturados para facilitar o scrap de ferramentas de observabilidade
  - Devido ao escopo ser uma aplicação de teste não foram adotadas:
-  - Paginação nas rotas que retornam todos os recursos
   - Instrumentação de métricas, traces e logs para observabilidade
   - Criaçao/Alteração das tabelas por meio de migrations. (***Foi utilizado o atributo syncronize do TypeORM com true, o que não deve ser feito em produção***)
 
